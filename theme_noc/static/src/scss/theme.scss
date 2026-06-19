@@ -1,0 +1,102 @@
+// =============================================================================
+// theme.scss
+// =============================================================================
+// Overrides de seletores CSS para elementos que ainda usam a cor roxa
+// hard-coded ou que dependem de pseudo-elementos (::before das setas).
+//
+// Usa var() do CSS nativo para se manter sincronizado com a cor definida
+// em primary_variables.scss via compilação SCSS.
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// NAVBAR SUPERIOR — fundo mais escuro para contrastar com o conteúdo
+// -----------------------------------------------------------------------------
+.o_main_navbar {
+    background-color: color-mix(
+        in srgb,
+        var(--o-brand-primary, #c94040) 85%,
+        black
+    ) !important;
+    border-bottom: none !important;
+
+    .o_menu_brand,
+    > ul > li > a,
+    > ul > li > button,
+    .o_nav_entry,
+    .o_dropdown_toggler {
+        color: #fff !important;
+        &:hover,
+        &:focus {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+        }
+    }
+
+    .show > .o_dropdown_toggler {
+        background-color: rgba(255, 255, 255, 0.15) !important;
+    }
+}
+
+// -----------------------------------------------------------------------------
+// STATUSBAR — setas (::before e ::after) que ficam roxas mesmo com a variável
+// -----------------------------------------------------------------------------
+
+// Estágio atual (selecionado) — fundo vermelho, fonte branca
+.o_statusbar_status .o_arrow_button.o_arrow_button_current {
+    color: #fff !important;
+    &::before {
+        border-left-color: var(--o-brand-primary, #c94040) !important;
+    }
+}
+
+// Hover nos estágios não ativos
+.o_statusbar_status .o_arrow_button:not(.o_arrow_button_current):hover {
+    color: var(--o-brand-primary, #c94040) !important;
+    background-color: color-mix(
+        in srgb,
+        var(--o-brand-primary, #c94040) 12%,
+        white
+    ) !important;
+    border-color: var(--o-brand-primary, #c94040) !important;
+
+    &::before {
+        border-left-color: color-mix(
+            in srgb,
+            var(--o-brand-primary, #c94040) 12%,
+            white
+        ) !important;
+    }
+    &::after {
+        border-left-color: transparent !important;
+    }
+}
+
+// Estágios não ativos — texto cinza escuro
+.o_statusbar_status .o_arrow_button:not(.o_arrow_button_current):not(:hover) {
+    color: #555 !important;
+}
+
+// -----------------------------------------------------------------------------
+// SEND MESSAGE / LOG NOTE — botões do chatter que ficam roxos
+// -----------------------------------------------------------------------------
+.o_ChatterTopbar .o_send_message_button,
+.o_ChatterTopbar .btn-primary {
+    background-color: var(--o-brand-primary, #c94040) !important;
+    border-color: var(--o-brand-primary, #c94040) !important;
+    color: #fff !important;
+
+    &:hover {
+        background-color: color-mix(
+            in srgb,
+            var(--o-brand-primary, #c94040) 85%,
+            black
+        ) !important;
+    }
+}
+
+// Fallback para versões que usam classe diferente
+.o-mail-Thread .btn-primary,
+button.o_send_message_button {
+    background-color: var(--o-brand-primary, #c94040) !important;
+    border-color: var(--o-brand-primary, #c94040) !important;
+    color: #fff !important;
+}

@@ -1,0 +1,462 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <template id="portal_create_ticket" name="NOC - Open Ticket">
+        <t t-call="portal.portal_layout">
+
+            <!-- Modal de aviso: Configuração de Rede -->
+            <div
+                class="modal fade"
+                id="networkConfigModal"
+                tabindex="-1"
+                aria-labelledby="networkConfigModalLabel"
+                aria-hidden="true"
+            >
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-warning">
+                            <h5 class="modal-title" id="networkConfigModalLabel">
+                                <i class="fa fa-exclamation-triangle me-2" />
+                                Aviso — Configuração de Rede
+                            </h5>
+                            <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Fechar"
+                            />
+                        </div>
+                        <div class="modal-body">
+                            <p>
+                                Todas as configurações são aplicadas após às
+                                <strong>21 horas</strong>.
+                                Em caso de urgência, solicitar por e-mail em:
+                                <strong>support@yourcompany.com</strong>
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button
+                                type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal"
+                            >Cancelar</button>
+                            <button
+                                type="button"
+                                class="btn btn-primary"
+                                id="confirmNetworkConfig"
+                            >Confirmar e Enviar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container mt-4">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="text-center">Abrir Chamado</h1>
+                    </div>
+                </div>
+            </div>
+
+            <form
+                action="/submitted/ticket"
+                method="POST"
+                class="form-horizontal mt32"
+                enctype="multipart/form-data"
+                id="nocHelpdeskForm"
+                t-att-data-cat-network-config="cat_network_config"
+                t-att-data-cat-cpe-livre="cat_cpe_livre"
+                t-att-data-cat-router-register="cat_router_register"
+                t-att-data-cat-password="cat_password"
+            >
+                <input
+                    type="hidden"
+                    name="csrf_token"
+                    t-att-value="request.csrf_token()"
+                />
+                <!-- Categoria mapeada pelo JS antes do submit -->
+                <input
+                    type="hidden"
+                    name="category"
+                    id="portal_category_hidden"
+                    value="0"
+                />
+                <!-- Tipo selecionado pelo usuário -->
+                <input
+                    type="hidden"
+                    name="portal_type"
+                    id="portal_type_hidden"
+                    value=""
+                />
+
+                <!-- ── Categoria / Tipo ── -->
+                <div class="form-group">
+                    <label
+                        class="col-md-3 col-sm-4 control-label"
+                        for="portal_type_select"
+                    >
+                        Categoria <span class="text-danger">*</span>
+                    </label>
+                    <div class="col-md-7 col-sm-8">
+                        <select
+                            class="form-control"
+                            id="portal_type_select"
+                            required="True"
+                        >
+                            <option value="">Selecione uma categoria</option>
+                            <option value="network_config">Configuração de Rede</option>
+                            <option value="cpe_livre">CPE Livre</option>
+                            <option
+                                value="router_register"
+                            >Cadastro de Roteador</option>
+                            <option value="password">Senha</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- ══════════════════════════════════════
+                     Seção: Configuração de Rede
+                ══════════════════════════════════════ -->
+                <div id="section_network_config" style="display:none;">
+                    <div class="alert alert-warning mx-3 mt-2">
+                        <i class="fa fa-exclamation-triangle me-2" />
+                        Todas as configurações são aplicadas após às <strong
+                        >21 horas</strong>.
+                        Em caso de urgência, solicitar por e-mail em:
+                        <strong>support@yourcompany.com</strong>
+                    </div>
+
+                    <div class="form-group">
+                        <label
+                            class="col-md-3 col-sm-4 control-label"
+                            for="portal_net_equipment_id"
+                        >Equipamento <span class="text-danger">*</span></label>
+                        <div class="col-md-7 col-sm-8">
+                            <select
+                                class="form-control"
+                                id="portal_net_equipment_id"
+                                name="portal_net_equipment_id"
+                            >
+                                <option value="">Selecione um equipamento</option>
+                                <t t-foreach="network_equipments" t-as="equipment">
+                                    <option t-att-value="equipment.id">
+                                        <t t-esc="equipment.name" />
+                                    </option>
+                                </t>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label
+                            class="col-md-3 col-sm-4 control-label"
+                            for="portal_action_plan"
+                        >Plano de Ação <span class="text-danger">*</span></label>
+                        <div class="col-md-7 col-sm-8">
+                            <textarea
+                                class="form-control"
+                                id="portal_action_plan"
+                                name="portal_action_plan"
+                                style="min-height: 100px;"
+                                placeholder="Descreva o plano de ação..."
+                            />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label
+                            class="col-md-3 col-sm-4 control-label"
+                            for="portal_return_plan"
+                        >Plano de Retorno <span class="text-danger">*</span></label>
+                        <div class="col-md-7 col-sm-8">
+                            <textarea
+                                class="form-control"
+                                id="portal_return_plan"
+                                name="portal_return_plan"
+                                style="min-height: 100px;"
+                                placeholder="Descreva o plano de retorno..."
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ══════════════════════════════════════
+                     Seção: CPE Livre / Cadastro de Roteador
+                ══════════════════════════════════════ -->
+                <div id="section_cpe_livre" style="display:none;">
+                    <div class="form-group">
+                        <label
+                            class="col-md-3 col-sm-4 control-label"
+                            for="portal_loopback"
+                        >Loopback <span class="text-danger">*</span></label>
+                        <div class="col-md-7 col-sm-8">
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="portal_loopback"
+                                name="portal_loopback"
+                                placeholder="Ex: 192.168.0.1"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label
+                            class="col-md-3 col-sm-4 control-label"
+                            for="portal_hostname"
+                        >Hostname <span class="text-danger">*</span></label>
+                        <div class="col-md-7 col-sm-8">
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="portal_hostname"
+                                name="portal_hostname"
+                                placeholder="Ex: router01.yourcompany.com"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ══════════════════════════════════════
+                     Seção: Senha
+                ══════════════════════════════════════ -->
+                <div id="section_password" style="display:none;">
+                    <div class="form-group">
+                        <label
+                            class="col-md-3 col-sm-4 control-label"
+                            for="portal_password_system"
+                        >Sistema <span class="text-danger">*</span></label>
+                        <div class="col-md-7 col-sm-8">
+                            <select
+                                class="form-control"
+                                id="portal_password_system"
+                                name="portal_password_system"
+                            >
+                                <option value="">Selecione o sistema</option>
+                                <option value="vco_237">VCO 237</option>
+                                <option value="tacacs">TACACS</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label
+                            class="col-md-3 col-sm-4 control-label"
+                            for="portal_corporate_email"
+                        >Email Corporativo <span class="text-danger">*</span></label>
+                        <div class="col-md-7 col-sm-8">
+                            <input
+                                type="email"
+                                class="form-control"
+                                id="portal_corporate_email"
+                                name="portal_corporate_email"
+                                placeholder="user@yourcompany.com"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label
+                            class="col-md-3 col-sm-4 control-label"
+                            for="portal_password_action"
+                        >Ação <span class="text-danger">*</span></label>
+                        <div class="col-md-7 col-sm-8">
+                            <select
+                                class="form-control"
+                                id="portal_password_action"
+                                name="portal_password_action"
+                            >
+                                <option value="">Selecione a ação</option>
+                                <option value="create_user">Criação de Usuário</option>
+                                <option value="reset_password">Reset de Senha</option>
+                                <option value="delete_user">Exclusão de Usuário</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── Assunto (oculto, preenchido automaticamente pela categoria) ── -->
+                <div class="form-group" style="display:none;">
+                    <label
+                        class="col-md-3 col-sm-4 control-label"
+                        for="subject"
+                    >Assunto</label>
+                    <div class="col-md-7 col-sm-8">
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="subject"
+                            id="subject"
+                        />
+                    </div>
+                </div>
+
+                <!-- ── Descrição ── -->
+                <div class="form-group">
+                    <label
+                        class="col-md-3 col-sm-4 control-label"
+                        for="description"
+                    >Descrição</label>
+                    <div class="col-md-7 col-sm-8">
+                        <textarea
+                            class="form-control"
+                            name="description"
+                            id="description"
+                            style="min-height: 120px;"
+                            placeholder="Informações adicionais (opcional)..."
+                        />
+                    </div>
+                </div>
+
+                <!-- ── Anexos (oculto) ── -->
+                <div class="form-group" style="display:none;">
+                    <label
+                        class="col-md-3 col-sm-4 control-label"
+                        for="attachment"
+                    >Anexos</label>
+                    <div class="col-md-7 col-sm-8">
+                        <div class="btn btn-default btn-file col-md-12">
+                            <input
+                                class="form-control o_website_form_input"
+                                name="attachment"
+                                id="attachment"
+                                type="file"
+                                multiple="multiple"
+                                t-att-max_upload_size="max_upload_size"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── Enviar ── -->
+                <div class="form-group">
+                    <div class="col-md-offset-3 col-sm-offset-4 col-sm-8 col-md-7">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            Enviar Chamado
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- ── JavaScript inline (evita dependência do bundle de assets) ── -->
+            <script type="text/javascript">
+            (function () {
+                var form       = document.getElementById('nocHelpdeskForm');
+                if (!form) return;
+
+                var typeSelect = document.getElementById('portal_type_select');
+                var typeHidden = document.getElementById('portal_type_hidden');
+                var catHidden  = document.getElementById('portal_category_hidden');
+
+                var secNetwork  = document.getElementById('section_network_config');
+                var secCpe      = document.getElementById('section_cpe_livre');
+                var secPassword = document.getElementById('section_password');
+
+                var modalEl    = document.getElementById('networkConfigModal');
+                var confirmBtn = document.getElementById('confirmNetworkConfig');
+
+                var catMap = {
+                    network_config:  form.getAttribute('data-cat-network-config')  || '0',
+                    cpe_livre:       form.getAttribute('data-cat-cpe-livre')       || '0',
+                    router_register: form.getAttribute('data-cat-router-register') || '0',
+                    password:        form.getAttribute('data-cat-password')        || '0'
+                };
+
+                var labelMap = {
+                    network_config:  'Configuração de Rede',
+                    cpe_livre:       'CPE Livre',
+                    router_register: 'Cadastro de Roteador',
+                    password:        'Senha'
+                };
+
+                var subjectInput = document.getElementById('subject');
+
+                function hideAll() {
+                    [secNetwork, secCpe, secPassword].forEach(function (el) {
+                        if (el) el.style.display = 'none';
+                    });
+                }
+
+                function showSection(type) {
+                    hideAll();
+                    typeHidden.value = type || '';
+                    catHidden.value  = catMap[type] || '0';
+                    if (subjectInput) subjectInput.value = labelMap[type] || '';
+
+                    if (type === 'network_config' &amp;&amp; secNetwork)  secNetwork.style.display = '';
+                    else if ((type === 'cpe_livre' || type === 'router_register') &amp;&amp; secCpe) secCpe.style.display = '';
+                    else if (type === 'password' &amp;&amp; secPassword) secPassword.style.display = '';
+                }
+
+                /* Inicializa oculto */
+                hideAll();
+
+                /* Muda seção ao selecionar categoria */
+                if (typeSelect) {
+                    typeSelect.addEventListener('change', function () {
+                        showSection(this.value);
+                    });
+                }
+
+                /* Configuração de Rede: exibir modal antes do submit */
+                var _confirmed = false;
+
+                form.addEventListener('submit', function (e) {
+                    if (typeHidden.value === 'network_config' &amp;&amp; !_confirmed &amp;&amp; modalEl) {
+                        e.preventDefault();
+                        if (window.bootstrap) {
+                            new window.bootstrap.Modal(modalEl).show();
+                        } else {
+                            /* Fallback: confirm nativo caso Bootstrap não esteja carregado */
+                            if (window.confirm(
+                                'Todas as configurações são aplicadas após às 21 horas.\n' +
+                                'Em caso de urgência, solicitar por e-mail em:\n' +
+                                'support@yourcompany.com\n\nDeseja continuar?'
+                            )) {
+                                _confirmed = true;
+                                form.submit();
+                            }
+                        }
+                    }
+                });
+
+                if (confirmBtn &amp;&amp; modalEl) {
+                    confirmBtn.addEventListener('click', function () {
+                        _confirmed = true;
+                        var inst = window.bootstrap &amp;&amp; window.bootstrap.Modal.getInstance(modalEl);
+                        if (inst) inst.hide();
+                        form.submit();
+                    });
+                }
+            })();
+            </script>
+
+        </t>
+    </template>
+
+    <template
+        id="portal_my_home_chamados_heading"
+        inherit_id="portal.portal_my_home"
+        priority="50"
+    >
+        <xpath expr="//h3" position="attributes">
+            <attribute name="t-if">False</attribute>
+        </xpath>
+        <xpath expr="//h3" position="after">
+            <h3>Chamados</h3>
+        </xpath>
+    </template>
+
+    <template
+        id="portal_ticket_new_button_noc"
+        inherit_id="helpdesk_mgmt.portal_ticket_new_button"
+        priority="50"
+    >
+        <xpath expr="//span" position="attributes">
+            <attribute name="t-if">False</attribute>
+        </xpath>
+        <xpath expr="//span" position="after">
+            <span>Criar Novo Chamado</span>
+        </xpath>
+    </template>
+
+</odoo>

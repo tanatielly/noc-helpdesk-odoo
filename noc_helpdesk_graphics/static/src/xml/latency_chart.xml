@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+  <!-- Template principal do componente -->
+  <t t-name="noc_helpdesk_graphics.LatencyChart" owl="1">
+    <div class="o_latency_chart_root">
+
+      <!-- Estado vazio -->
+      <t t-if="!state.hasData">
+        <div class="o_latency_empty">
+          <div class="o_latency_empty_icon">📡</div>
+          <div class="o_latency_empty_title">Nenhum dado de latência carregado</div>
+          <div class="o_latency_empty_sub">
+            Faça upload de um arquivo <strong>CSV</strong> ou <strong
+                        >JSON</strong> acima.<br />
+            Colunas esperadas: <code>timestamp</code> + <code>latency_ms</code>
+          </div>
+        </div>
+      </t>
+
+      <!-- Gráfico -->
+      <t t-if="state.hasData">
+
+        <!-- Barra de título + filtros de janela -->
+        <div class="o_latency_toolbar">
+          <div class="o_latency_toolbar_left">
+            <span class="o_latency_live_dot" />
+            <span class="o_latency_title">Progressão de Latência do Link</span>
+            <span class="o_latency_range" t-esc="state.rangeLabel" />
+          </div>
+          <div class="o_latency_toolbar_right">
+            <t t-foreach="windows" t-as="w" t-key="w.key">
+              <button
+                                type="button"
+                                t-att-class="'o_latency_win_btn' + (state.window === w.key ? ' active' : '')"
+                                t-on-click="setWindow.bind(this, w.key)"
+                                t-esc="w.label"
+                            />
+            </t>
+          </div>
+        </div>
+
+        <!-- KPIs -->
+        <div class="o_latency_kpis">
+          <div t-att-class="'o_latency_kpi ' + kpiStatus(state.kpis.last)">
+            <div class="o_latency_kpi_label">Latência Atual</div>
+            <div class="o_latency_kpi_value"><t t-esc="fmt(state.kpis.last)" /> <span
+                            >ms</span></div>
+            <div class="o_latency_kpi_sub" t-esc="state.kpis.lastTime" />
+          </div>
+          <div class="o_latency_kpi info">
+            <div class="o_latency_kpi_label">Média do Período</div>
+            <div class="o_latency_kpi_value"><t t-esc="fmt(state.kpis.avg)" /> <span
+                            >ms</span></div>
+            <div class="o_latency_kpi_sub"><t
+                                t-esc="state.kpis.samples"
+                            /> amostras</div>
+          </div>
+          <div class="o_latency_kpi warn">
+            <div class="o_latency_kpi_label">Pico Máximo</div>
+            <div class="o_latency_kpi_value"><t t-esc="fmt(state.kpis.max)" /> <span
+                            >ms</span></div>
+            <div class="o_latency_kpi_sub" t-esc="state.kpis.maxTime" />
+          </div>
+          <div class="o_latency_kpi good">
+            <div class="o_latency_kpi_label">Mínimo</div>
+            <div class="o_latency_kpi_value"><t t-esc="fmt(state.kpis.min)" /> <span
+                            >ms</span></div>
+            <div class="o_latency_kpi_sub" t-esc="state.kpis.minTime" />
+          </div>
+        </div>
+
+        <!-- Legenda de thresholds -->
+        <div class="o_latency_legend">
+          <span class="o_latency_legend_item">
+            <span class="o_latency_legend_line" style="background:#6366f1" />
+            Latência
+          </span>
+          <span class="o_latency_legend_item">
+            <span class="o_latency_legend_line" style="background:#f59e0b" />
+            Alerta (<t t-esc="props.thresholdWarn" /> ms)
+          </span>
+          <span class="o_latency_legend_item">
+            <span class="o_latency_legend_line" style="background:#ef4444" />
+            Crítico (<t t-esc="props.thresholdCrit" /> ms)
+          </span>
+        </div>
+
+        <!-- Canvas do gráfico -->
+        <div class="o_latency_canvas_wrap">
+          <canvas t-ref="chartCanvas" />
+        </div>
+
+      </t>
+    </div>
+  </t>
+
+</templates>

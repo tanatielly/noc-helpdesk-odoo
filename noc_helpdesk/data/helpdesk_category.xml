@@ -1,0 +1,31 @@
+<odoo noupdate="1">
+    <record id="helpdesk_ticket_category_switch" model="helpdesk.ticket.category">
+        <field name="name">Switch</field>
+    </record>
+    <record id="helpdesk_ticket_category_router" model="helpdesk.ticket.category">
+        <field name="name">Roteador</field>
+    </record>
+    <record id="helpdesk_ticket_category_ap" model="helpdesk.ticket.category">
+        <field name="name">Access Point</field>
+    </record>
+
+    <!-- Categorias do portal externo -->
+    <record
+        id="helpdesk_ticket_category_network_config"
+        model="helpdesk.ticket.category"
+    >
+        <field name="name">Configuração de Rede</field>
+    </record>
+    <record id="helpdesk_ticket_category_cpe_livre" model="helpdesk.ticket.category">
+        <field name="name">CPE Livre</field>
+    </record>
+    <record
+        id="helpdesk_ticket_category_router_register"
+        model="helpdesk.ticket.category"
+    >
+        <field name="name">Cadastro de Roteador</field>
+    </record>
+    <record id="helpdesk_ticket_category_password" model="helpdesk.ticket.category">
+        <field name="name">Senha</field>
+    </record>
+</odoo>

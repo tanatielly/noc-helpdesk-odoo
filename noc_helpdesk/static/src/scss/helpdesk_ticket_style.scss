@@ -1,0 +1,452 @@
+// Hardcoded purple #7C7BAD overrides (stat button icons, many2one external links, tab underline)
+.o_form_view .oe_stat_button .o_button_icon,
+.o_form_view .o_field_many2one .o_external_button {
+    color: #c94040 !important;
+}
+
+.o_chatter .selected,
+.o_web_client .selected {
+    box-shadow: inset 0 -5px #c94040 !important;
+}
+
+// Override remaining purple values from web_theme_classic and derived SCSS variables
+.o_required_modifier {
+    --o-input-border-color: #c94040 !important;
+    --o-caret-color: #c94040 !important;
+}
+
+.o_field_widget:focus-within {
+    --o-input-border-color: #c94040 !important;
+    --o-caret-color: #c94040 !important;
+}
+
+// Button hover/active states that may retain compiled purple
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.show > .btn-primary.dropdown-toggle {
+    background-color: darken(#c94040, 5%) !important;
+    border-color: darken(#c94040, 5%) !important;
+}
+
+// Links and text that may still be purple
+a:not(.o_main_navbar a):not([role="menuitem"]):not(.btn) {
+    color: #c94040;
+    &:hover {
+        color: darken(#c94040, 5%);
+    }
+}
+
+// Navbar: texto branco, systray transparente
+.o_main_navbar .o_nav_entry,
+.o_main_navbar .o_menu_brand,
+.o_MessagingMenu_toggler,
+.o_main_navbar .o_menu_systray > * > a:not([role="menuitem"]),
+.o_main_navbar .o_menu_systray > * > button {
+    color: #ffffff !important;
+}
+.o_main_navbar .o_menu_systray .btn-primary:not([role="menuitem"]) {
+    background-color: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+}
+
+// ---------------------------------------------------------------------------
+// Cores de fundo por tag na lista de chamados
+// Inclui propagação de cor para elementos filhos (spans, links, widgets de
+// data/hora) que o Odoo renderiza com cor própria e não herdam a cor da linha.
+// O seletor "span" cobre o filho direto que o o_field_datetime renderiza com
+// cor inline — sem ele o "Created on" fica opaco na linha colorida.
+// ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+// Coluna Título: linha única, sem truncamento
+// Usa table-layout: auto (scoped via :has) para a coluna se auto-dimensionar
+// ---------------------------------------------------------------------------
+.o_list_view .o_list_table:has(.o_ticket_name_cell) {
+    table-layout: auto !important;
+}
+
+.o_list_view .o_list_table td.o_ticket_name_cell {
+    white-space: nowrap !important;
+    min-width: 300px;
+}
+
+.o_list_view .o_list_table {
+    // ── Equipamento Isolado — preto/cinza escuro (decoration-muted) ─────────
+    tr.o_data_row.text-muted:not(.o_selected_row) > .o_data_cell {
+        background-color: rgba(45, 45, 45, 0.88);
+        color: #f0f0f0 !important;
+
+        span:not(.badge),
+        a,
+        .o_field_widget,
+        .o_field_date,
+        .o_field_datetime,
+        .o_field_date_range,
+        .o_field_char,
+        .o_field_datetime span,
+        .o_field_date span,
+        .o_field_date_range span,
+        .o_field_widget span {
+            color: #f0f0f0 !important;
+        }
+    }
+
+    // ── Falha Massiva Backbone / Acesso — laranja (decoration-warning) ──────
+    tr.o_data_row.text-warning:not(.o_selected_row) > .o_data_cell {
+        background-color: rgba(230, 120, 0, 0.65);
+        color: #2e1500 !important;
+
+        span:not(.badge),
+        a,
+        .o_field_widget,
+        .o_field_date,
+        .o_field_datetime,
+        .o_field_date_range,
+        .o_field_char,
+        .o_field_datetime span,
+        .o_field_date span,
+        .o_field_date_range span,
+        .o_field_widget span {
+            color: #2e1500 !important;
+        }
+    }
+
+    // ── Indisponível + Porta Agregada — vermelho (decoration-danger) ─────────
+    tr.o_data_row.text-danger:not(.o_selected_row) > .o_data_cell {
+        background-color: rgba(231, 67, 67, 0.785);
+        color: #ffffff !important;
+
+        span:not(.badge),
+        a,
+        .o_field_widget,
+        .o_field_date,
+        .o_field_datetime,
+        .o_field_date_range,
+        .o_field_char,
+        .o_field_datetime span,
+        .o_field_date span,
+        .o_field_date_range span,
+        .o_field_widget span {
+            color: #ffffff !important;
+        }
+    }
+
+    // ── Descarte de Pacote — amarelo/âmbar (decoration-bf → fw-bold) ─────────
+    tr.o_data_row.fw-bold:not(.fst-italic):not(.o_selected_row) > .o_data_cell {
+        background-color: rgba(255, 193, 7, 0.441);
+        color: #3d2e00 !important;
+        font-weight: normal !important;
+
+        span:not(.badge),
+        a,
+        .o_field_widget,
+        .o_field_date,
+        .o_field_datetime,
+        .o_field_date_range,
+        .o_field_char,
+        .o_field_datetime span,
+        .o_field_date span,
+        .o_field_date_range span,
+        .o_field_widget span {
+            color: #3d2e00 !important;
+        }
+    }
+
+    // ── Alta Latência — roxo (decoration-info) ───────────────────────────────
+    tr.o_data_row.text-info:not(.o_selected_row) > .o_data_cell {
+        background-color: rgba(207, 136, 217, 0.65);
+        color: #2c0a3e !important;
+
+        span:not(.badge),
+        a,
+        .o_field_widget,
+        .o_field_date,
+        .o_field_datetime,
+        .o_field_date_range,
+        .o_field_char,
+        .o_field_datetime span,
+        .o_field_date span,
+        .o_field_date_range span,
+        .o_field_widget span {
+            color: #2c0a3e !important;
+        }
+    }
+
+    // ── Sinergia — verde (decoration-success) ────────────────────────────────
+    tr.o_data_row.text-success:not(.o_selected_row) > .o_data_cell {
+        background-color: rgba(40, 167, 69, 0.45);
+        color: #0a2e12 !important;
+
+        span:not(.badge),
+        a,
+        .o_field_widget,
+        .o_field_date,
+        .o_field_datetime,
+        .o_field_date_range,
+        .o_field_char,
+        .o_field_datetime span,
+        .o_field_date span,
+        .o_field_date_range span,
+        .o_field_widget span {
+            color: #0a2e12 !important;
+        }
+    }
+
+    // ── Intermitente — marrom (decoration-it) ────────────────────────────────
+    tr.o_data_row.fst-italic:not(.fw-bold):not(.o_selected_row) > .o_data_cell {
+        background-color: rgba(139, 90, 43, 0.55);
+        color: #fff8f0 !important;
+        font-style: normal !important;
+
+        span:not(.badge),
+        a,
+        .o_field_widget,
+        .o_field_date,
+        .o_field_datetime,
+        .o_field_date_range,
+        .o_field_char,
+        .o_field_datetime span,
+        .o_field_date span,
+        .o_field_date_range span,
+        .o_field_widget span {
+            color: #fff8f0 !important;
+            font-style: normal !important;
+        }
+    }
+
+    // ── Falha de Hardware / Falha de Software — rosa (bf + it combinados) ─────
+    tr.o_data_row.fw-bold.fst-italic:not(.o_selected_row) > .o_data_cell {
+        background-color: rgba(255, 105, 180, 0.45);
+        color: #4d0025 !important;
+        font-weight: normal !important;
+        font-style: normal !important;
+
+        span:not(.badge),
+        a,
+        .o_field_widget,
+        .o_field_date,
+        .o_field_datetime,
+        .o_field_date_range,
+        .o_field_char,
+        .o_field_datetime span,
+        .o_field_date span,
+        .o_field_date_range span,
+        .o_field_widget span {
+            color: #4d0025 !important;
+            font-style: normal !important;
+        }
+    }
+
+    // ── Sistemas TI — azul (decoration-primary) ──────────────────────────────
+    tr.o_data_row.text-primary:not(.o_selected_row) > .o_data_cell {
+        background-color: rgba(13, 110, 253, 0.35);
+        color: #001a4d !important;
+
+        span:not(.badge),
+        a,
+        .o_field_widget,
+        .o_field_date,
+        .o_field_datetime,
+        .o_field_date_range,
+        .o_field_char,
+        .o_field_datetime span,
+        .o_field_date span,
+        .o_field_date_range span,
+        .o_field_widget span {
+            color: #001a4d !important;
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Form fields: alta visibilidade para acessibilidade
+// ---------------------------------------------------------------------------
+.o_form_view .o_form_sheet {
+    font-size: 1.05rem !important;
+
+    // Label das linhas do formulário — maior e mais negrito
+    .o_wrap_field > label,
+    .o_cell > label,
+    .o_td_label label {
+        font-size: 1rem !important;
+        font-weight: 700 !important;
+        color: #3a3a3a !important;
+        letter-spacing: 0.02em;
+    }
+
+    // Char, integer, float, date, datetime — borda completa visível
+    .o_field_char .o_input,
+    .o_field_integer .o_input,
+    .o_field_float .o_input,
+    .o_field_monetary .o_input,
+    .o_field_date .o_input,
+    .o_field_datetime .o_input,
+    .o_field_phone .o_input {
+        border: 2px solid #888 !important;
+        border-radius: 6px !important;
+        background: #fafafa !important;
+        padding: 8px 12px !important;
+        min-height: 44px !important;
+        font-size: 1.05rem !important;
+        color: #1a1a1a !important;
+        transition: border-color 0.15s, box-shadow 0.15s;
+        width: 100%;
+
+        &:focus {
+            border-color: #c94040 !important;
+            box-shadow: 0 0 0 3px rgba(201, 64, 64, 0.18) !important;
+            outline: none;
+            background: #fff !important;
+        }
+    }
+
+    // Many2one — borda completa + seta sempre visível e grande
+    .o_field_many2one,
+    .o_field_many2one_tags {
+        .o_input_dropdown {
+            border: 2px solid #888 !important;
+            border-radius: 6px !important;
+            background: #fafafa !important;
+            min-height: 44px !important;
+            display: flex;
+            align-items: center;
+            padding: 0 8px;
+
+            .o_input {
+                border: none !important;
+                background: transparent !important;
+                box-shadow: none !important;
+                padding: 8px 4px !important;
+                font-size: 1.05rem !important;
+                color: #1a1a1a !important;
+                min-height: 0 !important;
+                flex: 1;
+            }
+
+            .o_dropdown_button {
+                display: inline-flex !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                color: #555 !important;
+                font-size: 1.3rem !important;
+                padding: 0 4px;
+                pointer-events: none;
+            }
+
+            &:focus-within {
+                border-color: #c94040 !important;
+                box-shadow: 0 0 0 3px rgba(201, 64, 64, 0.18) !important;
+                background: #fff !important;
+
+                .o_dropdown_button {
+                    color: #c94040 !important;
+                }
+            }
+        }
+    }
+
+    // Many2many tags — borda completa
+    .o_field_many2many_tags .o_field_tags {
+        border: 2px solid #888 !important;
+        border-radius: 6px !important;
+        background: #fafafa !important;
+        padding: 6px 10px !important;
+        min-height: 44px !important;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 4px;
+
+        .o_input {
+            border: none !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            font-size: 1.05rem !important;
+        }
+
+        &:focus-within {
+            border-color: #c94040 !important;
+            box-shadow: 0 0 0 3px rgba(201, 64, 64, 0.18) !important;
+            background: #fff !important;
+        }
+    }
+
+    // One2many e many2many em lista — seta do dropdown interna visível
+    .o_field_one2many,
+    .o_field_many2many {
+        .o_input_dropdown .o_dropdown_button {
+            display: inline-flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+    }
+
+    // Campos readonly — fundo levemente diferente para indicar não editável
+    .o_field_widget.o_readonly {
+        .o_input,
+        .o_input_dropdown {
+            background: #f0f0f0 !important;
+            border-color: #ccc !important;
+            color: #555 !important;
+            cursor: default;
+        }
+    }
+}
+
+.o_list_tabs_chaos_dialog {
+    .modal-content {
+        border: 1px solid #d9d4dd;
+        border-radius: 12px;
+        background: #ffffff;
+        box-shadow: 0 10px 24px rgba(55, 47, 69, 0.12);
+    }
+
+    .modal-header {
+        background: #f8f7fa;
+        border-bottom: 1px solid #e3dfe8;
+    }
+
+    .modal-title {
+        width: 100%;
+        text-align: center;
+        color: #4c3f5f;
+        font-size: 1.2rem;
+        font-weight: 700;
+        letter-spacing: 0.02rem;
+    }
+
+    .modal-body p {
+        margin: 0;
+        color: #3f334d;
+        background: #fbfafe;
+        border: 1px solid #e5e0ea;
+        padding: 16px;
+        font-size: 1rem;
+        font-weight: 500;
+        text-align: left;
+        line-height: 1.5;
+        border-radius: 8px;
+    }
+
+    .modal-body p .o_ticket_alert_button {
+        border: 1px solid #d8d1df;
+        border-radius: 6px;
+        background: #ffffff;
+        color: #714b67;
+        padding: 10px 12px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.15s ease;
+    }
+
+    .modal-body p .o_ticket_alert_button:hover,
+    .modal-body p .o_ticket_alert_button:focus {
+        background: #ece7f2;
+        border-color: #bfaecb;
+        color: #5d3d56;
+        text-decoration: none;
+        box-shadow: inset 0 0 0 1px rgba(113, 75, 103, 0.08);
+    }
+}

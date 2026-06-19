@@ -1,0 +1,121 @@
+// =============================================================================
+// portal_theme.scss
+// =============================================================================
+// Alinha o tema do portal externo (/new/ticket, /my/tickets, …) com a
+// cor primária usada na interface interna do Odoo: #c94040
+// =============================================================================
+
+$brand: #c94040;
+$brand-dark: #a83535; // ~darken 8 %
+$brand-pale: rgba(201, 64, 64, 0.15);
+
+// ── CSS variables (Bootstrap 5 + Odoo) ──────────────────────────────────────
+:root {
+    --bs-primary: #{$brand};
+    --bs-primary-rgb: 201, 64, 64;
+    --bs-link-color: #{$brand};
+    --bs-link-hover-color: #{$brand-dark};
+    --o-brand-primary: #{$brand};
+}
+
+// ── Botões primários ─────────────────────────────────────────────────────────
+.btn-primary {
+    background-color: $brand !important;
+    border-color: $brand !important;
+    color: #fff !important;
+
+    &:hover,
+    &:focus,
+    &:active,
+    &.active,
+    .show > &.dropdown-toggle {
+        background-color: $brand-dark !important;
+        border-color: $brand-dark !important;
+        color: #fff !important;
+    }
+
+    &:focus,
+    &:focus-visible {
+        box-shadow: 0 0 0 0.2rem rgba(201, 64, 64, 0.4) !important;
+    }
+}
+
+// ── Links ────────────────────────────────────────────────────────────────────
+a:not(.btn) {
+    color: $brand;
+
+    &:hover,
+    &:focus {
+        color: $brand-dark;
+    }
+}
+
+// ── Foco em inputs / selects / textareas ─────────────────────────────────────
+.form-control:focus,
+.form-select:focus {
+    border-color: $brand !important;
+    box-shadow: 0 0 0 0.2rem $brand-pale !important;
+    outline: none !important;
+}
+
+// ── Badge de contagem de chamados (portal home) ──────────────────────────────
+.badge.bg-primary,
+.badge-primary,
+.o_portal_doc_count {
+    background-color: $brand !important;
+    color: #fff !important;
+}
+
+// ── Breadcrumbs e links de navegação do portal ───────────────────────────────
+.o_portal_wrap {
+    .breadcrumb-item a,
+    .o_portal_navbar a {
+        color: $brand;
+
+        &:hover {
+            color: $brand-dark;
+        }
+    }
+}
+
+// ── Navbar do portal (barra superior) ────────────────────────────────────────
+.o_main_navbar,
+nav.navbar {
+    background-color: $brand-dark !important;
+    border-bottom: none !important;
+
+    .navbar-brand,
+    .nav-link,
+    .o_menu_brand,
+    > ul > li > a,
+    > ul > li > button {
+        color: #fff !important;
+
+        &:hover,
+        &:focus {
+            background-color: rgba(255, 255, 255, 0.12) !important;
+            color: #fff !important;
+        }
+    }
+}
+
+// ── Cabeçalho do portal (/my e portal home) ───────────────────────────────────
+.o_portal_wrap .o_portal_navbar {
+    background-color: $brand-dark;
+
+    a,
+    span {
+        color: #fff !important;
+    }
+}
+
+// ── Separador / título de seção ──────────────────────────────────────────────
+.o_portal_wrap h2,
+.o_portal_wrap .o_portal_my_home h2 {
+    color: $brand;
+}
+
+// ── Alert de aviso (Configuração de Rede) — reforça cor do ícone ─────────────
+.alert-warning i.fa {
+    color: #856404;
+}

@@ -1,0 +1,377 @@
+﻿<odoo>
+    <!-- ================================================================
+         Paper format enxuto — sem cabeçalho/rodapé corporativo, margens
+         pequenas (o padrão do Odoo reserva ~75mm só para a área de header)
+         ================================================================ -->
+    <record id="paperformat_relatorio_mensal" model="report.paperformat">
+        <field name="name">Relatório Mensal — Rede Backbone</field>
+        <field name="default" eval="False" />
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">12</field>
+        <field name="margin_bottom">12</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">0</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <!-- ================================================================
+         Action de relatório — Relatório Mensal (Rede Backbone)
+         ================================================================ -->
+    <record id="action_report_relatorio_mensal" model="ir.actions.report">
+        <field name="name">Relatório Mensal — Rede Backbone</field>
+        <field name="model">noc.monthly.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">noc_helpdesk_dashboard.relatorio_mensal_pdf</field>
+        <field name="report_file">noc_helpdesk_dashboard.relatorio_mensal_pdf</field>
+        <field name="paperformat_id" ref="paperformat_relatorio_mensal" />
+    </record>
+
+    <!-- ================================================================
+         Template QWeb principal — visual espelha o card .rm-kpi-card
+         da tela ao vivo (faixa de título escura, borda lateral colorida
+         pelo semáforo, scores grandes, painel Desvios/Ação azul,
+         rodapé light-gray com histórico + Top 5)
+         ================================================================ -->
+    <template id="relatorio_mensal_pdf">
+        <t t-call="web.basic_layout">
+            <div class="page">
+
+                <t
+                    t-set="color_hex"
+                    t-value="{'green': '#16a34a', 'yellow': '#d97706', 'red': '#dc2626', 'gray': '#64748b'}"
+                />
+                <t t-set="teal" t-value="'#0d9488'" />
+                <!-- kpi_specs vem de _get_report_values (models/relatorio_mensal_common.py),
+                     compartilhado com o builder do PowerPoint para nunca divergirem -->
+
+                <!-- ============================================================
+                     Página de capa — resumo executivo
+                     ============================================================ -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h1
+                            class="text-center"
+                            t-attf-style="color:#{teal}; margin-bottom: 4px;"
+                        >Relatório Mensal</h1>
+                        <h4
+                            class="text-center text-muted"
+                            style="margin-top: 0;"
+                        >Rede Backbone — Suporte CAE Telco</h4>
+                        <p class="text-center" style="font-size: 1.1em;">
+                            <t t-esc="report_data.get('month')" />/<t
+                                t-esc="report_data.get('year')"
+                            />
+                        </p>
+                        <hr
+                            t-attf-style="border-top: 2px solid #{teal}; margin: 16px 0 24px;"
+                        />
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h4 style="margin-bottom: 12px;">Resumo dos Indicadores</h4>
+                        <table class="table table-bordered" style="width: 100%;">
+                            <thead>
+                                <tr
+                                    t-attf-style="background-color:#{teal}; color: #fff;"
+                                >
+                                    <th>Indicador</th>
+                                    <th class="text-center">Realizado</th>
+                                    <th class="text-center">Meta</th>
+                                    <th class="text-center">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="kpi_specs" t-as="spec">
+                                    <t
+                                        t-set="s_color"
+                                        t-value="semaforo.get(spec['key'], 'gray')"
+                                    />
+                                    <t
+                                        t-set="s_val"
+                                        t-value="report_data.get('kpis', {}).get(spec['key'])"
+                                    />
+                                    <t
+                                        t-set="s_meta"
+                                        t-value="report_data.get('config', {}).get(spec['meta_field'])"
+                                    />
+                                    <tr>
+                                        <td><t t-esc="spec['title']" /></td>
+                                        <td class="text-center">
+                                            <t t-if="s_val is None">—</t>
+                                            <t t-else=""><t t-esc="s_val" /><t
+                                                    t-if="spec['percent']"
+                                                >%</t></t>
+                                        </td>
+                                        <td class="text-center">
+                                            <t t-if="s_meta is None">—</t>
+                                            <t t-else=""><t t-esc="s_meta" /><t
+                                                    t-if="spec['percent']"
+                                                >%</t></t>
+                                        </td>
+                                        <td class="text-center">
+                                            <span
+                                                t-attf-style="display:inline-block;width:13px;height:13px;border-radius:50%;background:#{color_hex.get(s_color, '#64748b')};"
+                                            />
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ============================================================
+                     Uma página por KPI — visual de card (igual à tela ao vivo)
+                     ============================================================ -->
+                <t t-foreach="kpi_specs" t-as="spec">
+                    <t t-set="kpi_color" t-value="semaforo.get(spec['key'], 'gray')" />
+                    <t
+                        t-set="kpi_color_hex"
+                        t-value="color_hex.get(kpi_color, '#64748b')"
+                    />
+                    <t
+                        t-set="kpi_val"
+                        t-value="report_data.get('kpis', {}).get(spec['key'])"
+                    />
+                    <t
+                        t-set="kpi_meta"
+                        t-value="report_data.get('config', {}).get(spec['meta_field'])"
+                    />
+                    <t
+                        t-set="serie"
+                        t-value="report_data.get('historico', {}).get(spec['key']) or []"
+                    />
+                    <t
+                        t-set="serie_safe"
+                        t-value="[(v if v is not None else 0) for v in serie]"
+                    />
+                    <t
+                        t-set="serie_max"
+                        t-value="max(serie_safe) if serie_safe and max(serie_safe) > 0 else 1"
+                    />
+                    <t
+                        t-set="labels"
+                        t-value="report_data.get('historico_labels', [])"
+                    />
+                    <t
+                        t-set="chart_rows"
+                        t-value="[{'label': l, 'value': v, 'h': max(2, round(v / serie_max * 50))} for l, v in zip(labels, serie_safe)]"
+                    />
+
+                    <div style="page-break-before: always;">
+                        <div
+                            t-attf-style="border-left:6px solid #{kpi_color_hex}; border-radius:8px; padding:16px; border:1px solid #e2e8f0; border-left-width:6px;"
+                        >
+
+                            <!-- Faixa de título escura — espelha .rm-kpi-title -->
+                            <div
+                                t-attf-style="background:#111827; color:#fff; padding:10px 16px; border-radius:6px; text-align:center; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; margin-bottom:16px;"
+                            >
+                                <t t-esc="spec['title']" />
+                            </div>
+
+                            <!-- Scores: Realizado | Meta | Semáforo — espelha .rm-kpi-scores -->
+                            <table
+                                style="width:100%; border-collapse:collapse; margin-bottom:16px;"
+                            >
+                                <tr>
+                                    <td
+                                        style="width:42%; text-align:center; padding:6px;"
+                                    >
+                                        <div
+                                            style="font-size:10px; letter-spacing:0.08em; color:#64748b; text-transform:uppercase;"
+                                        >Realizado</div>
+                                        <div
+                                            t-attf-style="font-size:28px; font-weight:800; color:#{kpi_color_hex};"
+                                        >
+                                            <t t-if="kpi_val is None">—</t>
+                                            <t t-else=""><t t-esc="kpi_val" /><t
+                                                    t-if="spec['percent']"
+                                                >%</t></t>
+                                        </div>
+                                    </td>
+                                    <td
+                                        style="width:42%; text-align:center; padding:6px;"
+                                    >
+                                        <div
+                                            style="font-size:10px; letter-spacing:0.08em; color:#64748b; text-transform:uppercase;"
+                                        >Meta</div>
+                                        <div
+                                            style="font-size:28px; font-weight:800; color:#16a34a;"
+                                        >
+                                            <t t-if="kpi_meta is None">—</t>
+                                            <t t-else=""><t t-esc="kpi_meta" /><t
+                                                    t-if="spec['percent']"
+                                                >%</t></t>
+                                        </div>
+                                    </td>
+                                    <td
+                                        style="width:16%; text-align:center; padding:6px;"
+                                    >
+                                        <span
+                                            t-attf-style="display:inline-block;width:32px;height:32px;border-radius:50%;background:#{kpi_color_hex};border:3px solid #{kpi_color_hex};"
+                                        />
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Desvios / Ação Sistêmica — espelha .rm-analise-panel -->
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                    <div
+                                        style="color:#2563eb; font-weight:700; border-bottom:2px solid #2563eb; padding-bottom:4px; margin-bottom:6px;"
+                                    >Desvios</div>
+                                    <p style="white-space: pre-wrap; font-size:12px;"><t
+                                            t-esc="report_data.get('config', {}).get(spec['analise_field']) or '—'"
+                                        /></p>
+                                </div>
+                                <div class="col-6">
+                                    <div
+                                        style="color:#2563eb; font-weight:700; border-bottom:2px solid #2563eb; padding-bottom:4px; margin-bottom:6px;"
+                                    >Ação Sistêmica</div>
+                                    <p style="white-space: pre-wrap; font-size:12px;"><t
+                                            t-esc="report_data.get('config', {}).get(spec['acao_field']) or '—'"
+                                        /></p>
+                                </div>
+                            </div>
+
+                            <!-- Rodapé light-gray: histórico + Top 5 — espelha .rm-kpi-bottom -->
+                            <div
+                                style="background:#f8fafc; border-radius:8px; padding:12px;"
+                            >
+                                <div class="row">
+                                    <div
+                                        t-attf-class="col-#{6 if spec['top_table'] else 12}"
+                                    >
+                                        <small
+                                            class="text-muted"
+                                        >Histórico (13 meses)</small>
+                                        <table
+                                            style="width: 100%; border-collapse: collapse; margin-top: 4px;"
+                                        >
+                                            <tr>
+                                                <t
+                                                    t-foreach="chart_rows"
+                                                    t-as="row"
+                                                    t-key="row_index"
+                                                >
+                                                    <td
+                                                        style="text-align:center; vertical-align:bottom; height:54px; padding:0 1px;"
+                                                    >
+                                                        <div
+                                                            t-attf-style="margin:0 auto; width:10px; background:#{teal}; height:#{row['h']}px;"
+                                                        />
+                                                    </td>
+                                                </t>
+                                            </tr>
+                                            <tr>
+                                                <t
+                                                    t-foreach="chart_rows"
+                                                    t-as="row"
+                                                    t-key="row_index"
+                                                >
+                                                    <td
+                                                        style="text-align:center; font-size:7px; padding:1px;"
+                                                    ><t t-esc="row['value']" /></td>
+                                                </t>
+                                            </tr>
+                                            <tr>
+                                                <t
+                                                    t-foreach="chart_rows"
+                                                    t-as="row"
+                                                    t-key="row_index"
+                                                >
+                                                    <td
+                                                        style="text-align:center; font-size:6px; color:#888; padding:1px;"
+                                                    ><t t-esc="row['label']" /></td>
+                                                </t>
+                                            </tr>
+                                        </table>
+                                    </div>
+
+                                    <t t-if="spec['top_table']">
+                                        <t
+                                            t-set="top_rows"
+                                            t-value="report_data.get('top_links', {}).get(spec['key']) or []"
+                                        />
+                                        <div class="col-6">
+                                            <strong style="font-size:12px;"><t
+                                                    t-esc="spec['top_title']"
+                                                /></strong>
+                                            <table
+                                                class="table table-sm"
+                                                style="margin-top:4px;"
+                                            >
+                                                <thead>
+                                                    <tr
+                                                        style="background-color:#1e293b; color:#fff;"
+                                                    >
+                                                        <th
+                                                            style="font-size:9px;"
+                                                        >Designação</th>
+                                                        <th
+                                                            style="font-size:9px;"
+                                                        >Operadora</th>
+                                                        <th
+                                                            style="font-size:9px;"
+                                                        >Qtde</th>
+                                                        <th
+                                                            style="font-size:9px;"
+                                                        >%</th>
+                                                        <th
+                                                            style="font-size:9px;"
+                                                        >Duração</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <t t-if="top_rows">
+                                                        <t
+                                                            t-foreach="top_rows"
+                                                            t-as="trow"
+                                                        >
+                                                            <tr style="font-size:9px;">
+                                                                <td><t
+                                                                        t-esc="trow['designacao']"
+                                                                    /></td>
+                                                                <td><t
+                                                                        t-esc="trow['operadora']"
+                                                                    /></td>
+                                                                <td><t
+                                                                        t-esc="trow['qtde']"
+                                                                    /></td>
+                                                                <td><t
+                                                                        t-esc="trow['pct_total']"
+                                                                    />%</td>
+                                                                <td><t
+                                                                        t-esc="trow['duracao_fmt']"
+                                                                    /></td>
+                                                            </tr>
+                                                        </t>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <tr><td
+                                                                colspan="5"
+                                                                class="text-muted"
+                                                                style="font-size:9px;"
+                                                            >Sem ocorrências no mês</td></tr>
+                                                    </t>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </t>
+
+            </div>
+        </t>
+    </template>
+</odoo>

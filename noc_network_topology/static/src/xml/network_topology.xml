@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<templates xml:space="preserve">
+    <t t-name="noc_network_topology.NetworkTopology" owl="1">
+        <div class="o_network_topology">
+            <!-- Filtros: sempre no DOM, ocultos enquanto carrega -->
+            <div
+                class="o_topology_filters d-flex align-items-center gap-2 p-2 border-bottom"
+                t-att-style="state.loading ? 'visibility:hidden' : ''"
+            >
+                <select
+                    class="form-select form-select-sm"
+                    style="max-width:200px;"
+                    t-on-change="(ev) => this.onFilterLocation(ev)"
+                >
+                    <option value="">Todas as localizações</option>
+                    <t t-foreach="state.locations" t-as="loc" t-key="loc">
+                        <option
+                            t-att-value="loc"
+                            t-att-selected="state.filterLocation === loc"
+                        >
+                            <t t-esc="loc" />
+                        </option>
+                    </t>
+                </select>
+                <select
+                    class="form-select form-select-sm"
+                    style="max-width:220px;"
+                    t-on-change="(ev) => this.onFilterVlan(ev)"
+                >
+                    <option value="">Todas as VLANs</option>
+                    <t t-foreach="state.vlans" t-as="vlan" t-key="vlan.id">
+                        <option
+                            t-att-value="vlan.id"
+                            t-att-selected="state.filterVlan === vlan.id"
+                        >
+                            VLAN <t t-esc="vlan.vlan_id" /> — <t t-esc="vlan.name" />
+                        </option>
+                    </t>
+                </select>
+                <div class="d-flex align-items-center gap-3 ms-2 small text-muted">
+                    <span><span
+                            style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#28a745;margin-right:3px;"
+                        />Ativo</span>
+                    <span><span
+                            style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#ffc107;margin-right:3px;"
+                        />Manutenção</span>
+                    <span><span
+                            style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#dc3545;margin-right:3px;"
+                        />Tickets abertos</span>
+                    <span><span
+                            style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#6c757d;margin-right:3px;"
+                        />Inativo</span>
+                    <span><span
+                            style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#6f42c1;margin-right:3px;"
+                        />Site</span>
+                </div>
+                <button
+                    class="btn btn-sm ms-2"
+                    t-att-class="state.showSites ? 'btn-primary' : 'btn-outline-secondary'"
+                    t-on-click="onToggleSites"
+                    title="Mostrar/ocultar sites"
+                >
+                    <i class="fa fa-map-marker me-1" />Sites
+                </button>
+                <t t-if="state.unmapped.length > 0">
+                    <span
+                        class="ms-auto small text-warning"
+                        t-att-title="state.unmapped.join(', ')"
+                    >
+                        <i class="fa fa-exclamation-triangle" /> <t
+                            t-esc="state.unmapped.length"
+                        /> equipamento(s) sem localização reconhecida
+                    </span>
+                </t>
+            </div>
+
+            <!-- Container do mapa: SEMPRE no DOM para que mapRef.el esteja disponível no onMounted -->
+            <div style="position:relative;">
+                <div t-ref="map" style="width:100%;height:520px;" />
+                <!-- Overlay de loading sobre o mapa -->
+                <t t-if="state.loading">
+                    <div
+                        style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.85);z-index:1000;"
+                    >
+                        <div class="text-center text-muted">
+                            <i class="fa fa-spinner fa-spin fa-2x mb-2" />
+                            <div>Carregando mapa...</div>
+                        </div>
+                    </div>
+                </t>
+            </div>
+        </div>
+    </t>
+</templates>

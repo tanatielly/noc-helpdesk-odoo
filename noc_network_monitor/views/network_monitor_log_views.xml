@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- ── LOG TREE ───────────────────────────────────────────────────── -->
+    <record id="view_network_monitor_log_tree" model="ir.ui.view">
+        <field name="name">network.monitor.log.tree</field>
+        <field name="model">network.monitor.log</field>
+        <field name="arch" type="xml">
+            <tree
+                decoration-danger="show_ping_alarm == True"
+                decoration-warning="show_lpkts_alarm == True or show_latency_alarm == True"
+                decoration-success="not show_ping_alarm and not show_lpkts_alarm and not show_latency_alarm"
+            >
+                <field name="collected_at" string="Coletado em" />
+                <field name="circuit_code" string="Circuito" />
+                <field name="circuit_id" optional="show" />
+                <field name="source_ip" string="Origem" />
+                <field name="destiny_ip" string="Destino" />
+                <field
+                    name="ping_status"
+                    widget="badge"
+                    decoration-danger="ping_status == 'ping_down'"
+                    decoration-success="ping_status == 'ping_up'"
+                />
+                <field name="round_trip_avg_ms" string="RTT Méd (ms)" />
+                <field name="packet_loss_pct" string="Perda %" />
+                <field
+                    name="show_ping_alarm"
+                    string="Ping"
+                    widget="boolean"
+                    optional="show"
+                />
+                <field
+                    name="show_latency_alarm"
+                    string="Latência"
+                    widget="boolean"
+                    optional="show"
+                />
+                <field
+                    name="show_lpkts_alarm"
+                    string="Descarte"
+                    widget="boolean"
+                    optional="show"
+                />
+                <field name="ticket_id" optional="show" />
+            </tree>
+        </field>
+    </record>
+
+    <!-- ── LOG FORM ───────────────────────────────────────────────────── -->
+    <record id="view_network_monitor_log_form" model="ir.ui.view">
+        <field name="name">network.monitor.log.form</field>
+        <field name="model">network.monitor.log</field>
+        <field name="arch" type="xml">
+            <form string="Log de Monitoramento" create="false" edit="false">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="circuit_code" readonly="1" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Circuito">
+                            <field name="collected_at" readonly="1" />
+                            <field name="circuit_id" readonly="1" />
+                            <field name="source_ip" readonly="1" />
+                            <field name="destiny_ip" readonly="1" />
+                            <field name="ticket_id" readonly="1" />
+                        </group>
+                        <group string="Alarmes">
+                            <field name="ping_status" readonly="1" />
+                            <field name="show_ping_alarm" readonly="1" />
+                            <field name="show_latency_alarm" readonly="1" />
+                            <field name="show_lpkts_alarm" readonly="1" />
+                        </group>
+                    </group>
+                    <group string="Métricas de Pacotes">
+                        <group>
+                            <field name="send_packets" readonly="1" />
+                            <field name="receive_packets" readonly="1" />
+                            <field name="packet_loss_pct" readonly="1" />
+                        </group>
+                        <group>
+                            <field name="round_trip_min_ms" readonly="1" />
+                            <field name="round_trip_avg_ms" readonly="1" />
+                            <field name="round_trip_max_ms" readonly="1" />
+                            <field name="latency_threshold" readonly="1" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ── LOG SEARCH ─────────────────────────────────────────────────── -->
+    <record id="view_network_monitor_log_search" model="ir.ui.view">
+        <field name="name">network.monitor.log.search</field>
+        <field name="model">network.monitor.log</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="circuit_code" string="Código do Circuito" />
+                <field name="circuit_id" string="Circuito" />
+                <field name="source_ip" string="IP Origem" />
+                <field name="destiny_ip" string="IP Destino" />
+                <separator />
+                <filter
+                    name="filter_ping_alarm"
+                    string="Alarme de Ping"
+                    domain="[('show_ping_alarm', '=', True)]"
+                />
+                <filter
+                    name="filter_latency_alarm"
+                    string="Alarme de Latência"
+                    domain="[('show_latency_alarm', '=', True)]"
+                />
+                <filter
+                    name="filter_lpkts_alarm"
+                    string="Alarme de Descarte"
+                    domain="[('show_lpkts_alarm', '=', True)]"
+                />
+                <filter
+                    name="filter_any_alarm"
+                    string="Qualquer Alarme"
+                    domain="['|', '|',
+                        ('show_ping_alarm', '=', True),
+                        ('show_latency_alarm', '=', True),
+                        ('show_lpkts_alarm', '=', True)
+                    ]"
+                />
+                <separator />
+                <filter
+                    name="filter_today"
+                    string="Hoje"
+                    domain="[('collected_at', '&gt;=', datetime.datetime.combine(context_today(), datetime.time(0,0,0)))]"
+                />
+                <group expand="0" string="Agrupar por">
+                    <filter
+                        name="group_circuit"
+                        string="Circuito"
+                        context="{'group_by': 'circuit_id'}"
+                    />
+                    <filter
+                        name="group_day"
+                        string="Dia"
+                        context="{'group_by': 'collected_at:day'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ── ACTION ─────────────────────────────────────────────────────── -->
+    <record id="action_network_monitor_log" model="ir.actions.act_window">
+        <field name="name">Logs de Monitoramento</field>
+        <field name="res_model">network.monitor.log</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_network_monitor_log_search" />
+    </record>
+
+    <!-- ── EXTEND helpdesk.ticket FORM — aba + botão de logs ──────────── -->
+    <record id="view_helpdesk_ticket_monitor_inherit" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.monitor.inherit</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk_mgmt.ticket_view_form" />
+        <field name="arch" type="xml">
+            <!-- Botão de contagem de logs no button_box -->
+            <div name="button_box" position="inside">
+                <button
+                    name="action_view_monitor_logs"
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-signal"
+                    attrs="{'invisible': [('monitor_log_count', '=', 0)]}"
+                >
+                    <field
+                        name="monitor_log_count"
+                        widget="statinfo"
+                        string="Logs Monitor"
+                    />
+                </button>
+            </div>
+            <!-- Campos de controle do monitor no form -->
+            <xpath expr="//page[@name='other_info']" position="before">
+                <page
+                    string="Monitor de Rede"
+                    attrs="{'invisible': [('monitor_origin', '=', False)]}"
+                >
+                    <group>
+                        <group string="Controle Automático">
+                            <field name="monitor_origin" readonly="1" />
+                            <field name="monitor_normalized_since" readonly="1" />
+                            <field name="monitor_closed_at" readonly="1" />
+                        </group>
+                    </group>
+                    <field name="monitor_log_ids" readonly="1">
+                        <tree>
+                            <field name="collected_at" />
+                            <field
+                                name="ping_status"
+                                widget="badge"
+                                decoration-danger="ping_status == 'ping_down'"
+                                decoration-success="ping_status == 'ping_up'"
+                            />
+                            <field name="round_trip_avg_ms" string="RTT Méd (ms)" />
+                            <field name="packet_loss_pct" string="Perda %" />
+                            <field name="show_ping_alarm" string="Ping" />
+                            <field name="show_latency_alarm" string="Latência" />
+                            <field name="show_lpkts_alarm" string="Descarte" />
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

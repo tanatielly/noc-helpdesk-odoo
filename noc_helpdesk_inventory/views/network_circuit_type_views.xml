@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- ── CIRCUIT TYPE TREE ─────────────────────────────────────────────── -->
+    <record id="view_network_circuit_type_tree" model="ir.ui.view">
+        <field name="name">network.circuit.type.tree</field>
+        <field name="model">network.circuit.type</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="active" invisible="1" />
+            </tree>
+        </field>
+    </record>
+
+    <!-- ── CIRCUIT TYPE FORM ─────────────────────────────────────────────── -->
+    <record id="view_network_circuit_type_form" model="ir.ui.view">
+        <field name="name">network.circuit.type.form</field>
+        <field name="model">network.circuit.type</field>
+        <field name="arch" type="xml">
+            <form string="Tipo de Circuito">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" />
+                        <h1>
+                            <field name="name" placeholder="ex: Fibra Óptica" />
+                        </h1>
+                    </div>
+                    <group>
+                        <field name="active" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ── CIRCUIT TYPE SEARCH ───────────────────────────────────────────── -->
+    <record id="view_network_circuit_type_search" model="ir.ui.view">
+        <field name="name">network.circuit.type.search</field>
+        <field name="model">network.circuit.type</field>
+        <field name="arch" type="xml">
+            <search string="Pesquisar Tipos de Circuito">
+                <field name="name" />
+                <filter
+                    name="filter_active"
+                    string="Ativos"
+                    domain="[('active', '=', True)]"
+                />
+                <filter
+                    name="filter_inactive"
+                    string="Inativos"
+                    domain="[('active', '=', False)]"
+                />
+            </search>
+        </field>
+    </record>
+
+    <!-- ── CIRCUIT TYPE ACTION ───────────────────────────────────────────── -->
+    <record id="action_network_circuit_type" model="ir.actions.act_window">
+        <field name="name">Tipos de Circuito</field>
+        <field name="res_model">network.circuit.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_network_circuit_type_search" />
+        <field name="context">{'search_default_filter_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Nenhum tipo de circuito cadastrado ainda
+            </p>
+            <p>Cadastre os tipos de circuito utilizados no inventário de rede.</p>
+        </field>
+    </record>
+
+</odoo>

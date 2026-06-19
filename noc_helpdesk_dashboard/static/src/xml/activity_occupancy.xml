@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+<t t-name="noc_helpdesk_dashboard.OcupacaoReport" owl="1">
+<div class="nd-wrapper">
+
+    <!-- HEADER -->
+    <div class="nd-header">
+        <div class="nd-brand">
+            <div class="nd-brand-icon">&#128202;</div>
+            <div>
+                <div class="nd-brand-title">Relatório de Ocupação</div>
+                <div
+                            class="nd-brand-sub"
+                        >Controle de Capacidade Mensal por Atividade · NetOps CAE Telco</div>
+            </div>
+        </div>
+        <div class="nd-controls">
+            <div class="nd-period-sel">
+                <button
+                            t-att-class="'nd-period-btn' + (state.mode === 'mensal' ? ' active' : '')"
+                            t-on-click="() => this.setMode('mensal')"
+                        >MENSAL</button>
+                <button
+                            t-att-class="'nd-period-btn' + (state.mode === 'anual' ? ' active' : '')"
+                            t-on-click="() => this.setMode('anual')"
+                        >ANUAL</button>
+            </div>
+            <t t-if="state.mode === 'mensal'">
+                <select
+                            class="nd-filter-select"
+                            t-on-change="(ev) => this.setMes(ev.target.value)"
+                        >
+                    <t t-foreach="months" t-as="m" t-key="m.value">
+                        <option
+                                    t-att-value="m.value"
+                                    t-att-selected="state.mes === m.value ? 'selected' : false"
+                                ><t t-esc="m.label" /></option>
+                    </t>
+                </select>
+            </t>
+            <select
+                        class="nd-filter-select"
+                        t-on-change="(ev) => this.setAno(ev.target.value)"
+                    >
+                <t t-foreach="years" t-as="y" t-key="y">
+                    <option
+                                t-att-value="y"
+                                t-att-selected="state.ano === y ? 'selected' : false"
+                            ><t t-esc="y" /></option>
+                </t>
+            </select>
+        </div>
+    </div>
+
+    <!-- LOADING -->
+    <t t-if="state.loading">
+        <div class="nd-loading">
+            <div class="nd-spinner" />
+            <p>Carregando relatório...</p>
+        </div>
+    </t>
+
+    <!-- ERRO -->
+    <t t-elif="state.error">
+        <div class="nd-error-box">
+            <span class="nd-error-icon">&#9888;</span>
+            <div>
+                <strong>Erro ao carregar relatório</strong>
+                <p><t t-esc="state.error" /></p>
+            </div>
+        </div>
+    </t>
+
+    <!-- TABELA -->
+    <t t-else="">
+
+        <!-- MODO MENSAL -->
+        <t t-if="state.mode === 'mensal'">
+            <div class="nd-table-card">
+                <div class="nd-table-header">
+                    <div>
+                        <div class="nd-card-title">
+                            <span class="nd-dot" style="background:#2563eb" />
+                            <span>Ocupação Mensal</span>
+                        </div>
+                        <div
+                                    class="nd-card-sub"
+                                    style="padding-left:16px;margin-top:3px"
+                                >
+                            Atividades × Capacidade · <t t-esc="mesAnoLabel" />
+                        </div>
+                    </div>
+                    <span class="nd-badge blue">MENSAL</span>
+                </div>
+                <table class="nd-table">
+                    <thead>
+                        <tr>
+                            <th>ATIVIDADE</th>
+                            <th>MÊS/ANO</th>
+                            <th>QUANTIDADE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-if="state.rows.length === 0">
+                            <tr>
+                                <td
+                                            colspan="3"
+                                            style="text-align:center;padding:24px"
+                                            class="nd-muted"
+                                        >
+                                    Nenhuma categoria de ocupação configurada.
+                                </td>
+                            </tr>
+                        </t>
+                        <t t-foreach="state.rows" t-as="row" t-key="row.id">
+                            <tr>
+                                <td class="nd-bold"><t t-esc="row.name" /></td>
+                                <td class="nd-muted" style="font-size:12px"><t
+                                                t-esc="mesAnoLabel"
+                                            /></td>
+                                <td
+                                            class="nd-mono"
+                                            style="color:#2563eb;font-weight:700"
+                                        ><t t-esc="row.quantidade" /></td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+        </t>
+
+        <!-- MODO ANUAL -->
+        <t t-else="">
+            <div class="nd-table-card">
+                <div class="nd-table-header">
+                    <div>
+                        <div class="nd-card-title">
+                            <span class="nd-dot" style="background:#7c3aed" />
+                            <span>Comparativo Anual</span>
+                        </div>
+                        <div
+                                    class="nd-card-sub"
+                                    style="padding-left:16px;margin-top:3px"
+                                >
+                            Atividades × 12 Meses · <t t-esc="state.ano" />
+                        </div>
+                    </div>
+                    <span class="nd-badge purple">ANUAL</span>
+                </div>
+                <div style="overflow-x:auto">
+                    <table class="nd-table nd-table-anual">
+                        <thead>
+                            <tr>
+                                <th>ATIVIDADE</th>
+                                <t t-foreach="months" t-as="m" t-key="m.value">
+                                    <th
+                                                t-att-class="mesAtual === m.value - 1 ? 'nd-col-mes-atual' : ''"
+                                            >
+                                        <t t-esc="m.short" />
+                                    </th>
+                                </t>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-if="state.anualRows.length === 0">
+                                <tr>
+                                    <td
+                                                colspan="13"
+                                                style="text-align:center;padding:24px"
+                                                class="nd-muted"
+                                            >
+                                        Nenhuma categoria de ocupação configurada.
+                                    </td>
+                                </tr>
+                            </t>
+                            <t t-foreach="state.anualRows" t-as="row" t-key="row.id">
+                                <tr>
+                                    <td class="nd-bold"><t t-esc="row.name" /></td>
+                                    <t
+                                                t-foreach="row.meses"
+                                                t-as="qty"
+                                                t-key="qty_index"
+                                            >
+                                        <td
+                                                    t-att-class="'nd-mono' + (mesAtual === qty_index ? ' nd-col-mes-atual' : '')"
+                                                    style="color:#2563eb;font-weight:700"
+                                                ><t t-esc="qty" /></td>
+                                    </t>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </t>
+
+    </t>
+
+    <!-- FOOTER -->
+    <div class="nd-footer">
+        <span>NETOPS HELPDESK · ODOO 16 · Relatório de Ocupação</span>
+        <span>Período: <b><t t-esc="state.mes" />/<t t-esc="state.ano" /></b></span>
+    </div>
+
+</div>
+</t>
+
+</templates>

@@ -1,0 +1,155 @@
+﻿<odoo noupdate="0">
+        <!-- Tags do portal externo (priority=0 → sempre primeiro na lista, exibidas em cinza) -->
+        <record
+        id="helpdesk_ticket_tag_portal_network_config"
+        model="helpdesk.ticket.tag"
+    >
+            <field name="priority">0</field>
+            <field name="name">Configuração de Rede</field>
+            <field name="color">0</field>
+        </record>
+        <record id="helpdesk_ticket_tag_portal_cpe_livre" model="helpdesk.ticket.tag">
+            <field name="priority">0</field>
+            <field name="name">CPE Livre</field>
+            <field name="color">0</field>
+        </record>
+        <record
+        id="helpdesk_ticket_tag_portal_router_register"
+        model="helpdesk.ticket.tag"
+    >
+            <field name="priority">0</field>
+            <field name="name">Cadastro de Roteador</field>
+            <field name="color">0</field>
+        </record>
+        <record id="helpdesk_ticket_tag_portal_password" model="helpdesk.ticket.tag">
+            <field name="priority">0</field>
+            <field name="name">Senha</field>
+            <field name="color">0</field>
+        </record>
+
+        <!-- Atualiza prioridades dos registros existentes -->
+        <record
+        id="helpdesk_ticket_tag_isp_network_failure"
+        model="helpdesk.ticket.tag"
+    >
+            <field name="priority">4</field>
+            <field name="name">ISP Network Failure</field>
+            <field name="color">1</field>
+        </record>
+        <record id="helpdesk_ticket_tag_unavailable" model="helpdesk.ticket.tag">
+            <field name="priority">5</field>
+            <field name="name">Indisponível</field>
+            <field name="color">1</field>
+        </record>
+        <record id="helpdesk_ticket_tag_discarded_packet" model="helpdesk.ticket.tag">
+            <field name="priority">8</field>
+            <field name="name">Descarte de Pacote</field>
+            <field name="color">3</field>
+        </record>
+        <record id="helpdesk_ticket_tag_high_latency" model="helpdesk.ticket.tag">
+            <field name="priority">9</field>
+            <field name="name">Alta Latência</field>
+            <field name="color">11</field>
+        </record>
+
+        <!-- Novas tags -->
+        <record
+        id="helpdesk_ticket_tag_equipamento_isolado"
+        model="helpdesk.ticket.tag"
+    >
+            <field name="priority">1</field>
+            <field name="name">Equipamento Isolado</field>
+            <field name="color">0</field>
+        </record>
+        <record
+        id="helpdesk_ticket_tag_falha_massiva_backbone"
+        model="helpdesk.ticket.tag"
+    >
+            <field name="priority">2</field>
+            <field name="name">Falha Massiva Backbone</field>
+            <field name="color">2</field>
+        </record>
+        <record
+        id="helpdesk_ticket_tag_falha_massiva_acesso"
+        model="helpdesk.ticket.tag"
+    >
+            <field name="priority">3</field>
+            <field name="name">Falha Massiva Acesso</field>
+            <field name="color">2</field>
+        </record>
+        <record id="helpdesk_ticket_tag_porta_agregada" model="helpdesk.ticket.tag">
+            <field name="priority">7</field>
+            <field name="name">Porta Agregada</field>
+            <field name="color">1</field>
+        </record>
+        <!-- FAPs — Formulários de Atividade (priority=10, cor marrom via decoration-it) -->
+        <record id="helpdesk_ticket_tag_fap" model="helpdesk.ticket.tag">
+            <field name="priority">10</field>
+            <field name="name">FAP - Formulário de Atividade Programada</field>
+            <field name="color">3</field>
+        </record>
+        <record id="helpdesk_ticket_tag_fanp" model="helpdesk.ticket.tag">
+            <field name="priority">10</field>
+            <field name="name">FANP - Formulário de Atividade Não Programada</field>
+            <field name="color">3</field>
+        </record>
+        <record id="helpdesk_ticket_tag_fape" model="helpdesk.ticket.tag">
+            <field name="priority">10</field>
+            <field
+            name="name"
+        >FAPE - Formulário de Atividade Programada Emergencial</field>
+            <field name="color">3</field>
+        </record>
+        <record id="helpdesk_ticket_tag_fapi" model="helpdesk.ticket.tag">
+            <field name="priority">10</field>
+            <field name="name">FAPI - Formulário de Atividade Programada Interna</field>
+            <field name="color">3</field>
+        </record>
+
+        <record
+        id="helpdesk_ticket_tag_manutencao_programada"
+        model="helpdesk.ticket.tag"
+    >
+            <field name="priority">11</field>
+            <field name="name">Manutenção Programada Informativa</field>
+            <field name="color">10</field>
+        </record>
+        <record id="helpdesk_ticket_tag_plano_melhoria" model="helpdesk.ticket.tag">
+            <field name="priority">12</field>
+            <field name="name">Plano de Melhoria</field>
+            <field name="color">10</field>
+        </record>
+        <record id="helpdesk_ticket_tag_sinergia" model="helpdesk.ticket.tag">
+            <field name="priority">13</field>
+            <field name="name">Sinergia</field>
+            <field name="color">10</field>
+        </record>
+        <record id="helpdesk_ticket_tag_sistemas_ti" model="helpdesk.ticket.tag">
+            <field name="priority">14</field>
+            <field name="name">Sistemas TI</field>
+            <field name="color">4</field>
+        </record>
+        <record id="helpdesk_ticket_tag_intermitente" model="helpdesk.ticket.tag">
+            <field name="priority">6</field>
+            <field name="name">Intermitente</field>
+            <field name="color">8</field>
+        </record>
+        <record
+        id="helpdesk_ticket_tag_rma_cisco_logicalis"
+        model="helpdesk.ticket.tag"
+    >
+            <field name="priority">17</field>
+            <field name="name">RMA / Cisco / Logicalis</field>
+            <field name="color">7</field>
+        </record>
+        <record id="helpdesk_ticket_tag_falha_hardware" model="helpdesk.ticket.tag">
+            <field name="priority">15</field>
+            <field name="name">Falha de Hardware</field>
+            <field name="color">6</field>
+        </record>
+        <record id="helpdesk_ticket_tag_falha_software" model="helpdesk.ticket.tag">
+            <field name="priority">16</field>
+            <field name="name">Falha de Software</field>
+            <field name="color">6</field>
+        </record>
+</odoo>

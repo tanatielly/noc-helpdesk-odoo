@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- ═══ LIST VIEW ═══ -->
+    <record id="view_noc_activity_category_list" model="ir.ui.view">
+        <field name="name">noc.activity.category.list</field>
+        <field name="model">noc.activity.category</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence" widget="handle" />
+                <field name="name" />
+                <field name="tipo_contagem" />
+                <field name="capacidade_mensal" />
+                <field name="active" />
+            </tree>
+        </field>
+    </record>
+
+    <!-- ═══ FORM VIEW ═══ -->
+    <record id="view_noc_activity_category_form" model="ir.ui.view">
+        <field name="name">noc.activity.category.form</field>
+        <field name="model">noc.activity.category</field>
+        <field name="arch" type="xml">
+            <form string="Categoria de Ocupação">
+                <sheet>
+                    <group>
+                        <field name="name" />
+                        <field name="sequence" />
+                        <field name="tipo_contagem" />
+                        <field name="capacidade_mensal" />
+                        <field
+                            name="tag_ids"
+                            widget="many2many_tags"
+                            attrs="{'invisible': [('tipo_contagem', '!=', 'ticket_count')]}"
+                        />
+                        <field name="active" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ═══ ACTION: Categorias de Ocupação ═══ -->
+    <record id="action_noc_activity_category" model="ir.actions.act_window">
+        <field name="name">Categorias de Ocupação</field>
+        <field name="res_model">noc.activity.category</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- ═══ CLIENT ACTION: Relatório de Ocupação ═══ -->
+    <record id="action_noc_activity_occupancy_report" model="ir.actions.client">
+        <field name="name">Relatório de Ocupação</field>
+        <field name="tag">noc_activity_occupancy_report</field>
+        <field name="target">current</field>
+    </record>
+
+</odoo>

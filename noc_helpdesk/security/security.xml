@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="group_document_ata" model="res.groups">
+        <field name="name">Acesso ATA</field>
+        <field name="category_id" ref="base.module_category_hidden" />
+    </record>
+
+    <!-- ── Férias: record rules ── -->
+
+    <!-- Usuários comuns só veem suas próprias solicitações -->
+    <record id="rule_helpdesk_ferias_user_own" model="ir.rule">
+        <field name="name">Férias: usuário vê apenas as próprias</field>
+        <field name="model_id" ref="model_helpdesk_ferias" />
+        <field name="groups" eval="[(4, ref('helpdesk_mgmt.group_helpdesk_user'))]" />
+        <field name="domain_force">[('user_id', '=', user.id)]</field>
+        <field name="perm_read" eval="True" />
+        <field name="perm_write" eval="True" />
+        <field name="perm_create" eval="True" />
+        <field name="perm_unlink" eval="False" />
+    </record>
+
+    <!-- Managers leem todas as solicitações (escrita restrita aos próprios via regra do helpdesk_user) -->
+    <record id="rule_helpdesk_ferias_manager_all" model="ir.rule">
+        <field name="name">Férias: manager lê todas</field>
+        <field name="model_id" ref="model_helpdesk_ferias" />
+        <field
+            name="groups"
+            eval="[(4, ref('helpdesk_mgmt.group_helpdesk_manager'))]"
+        />
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="perm_read" eval="True" />
+        <field name="perm_write" eval="False" />
+        <field name="perm_create" eval="False" />
+        <field name="perm_unlink" eval="False" />
+    </record>
+
+</odoo>

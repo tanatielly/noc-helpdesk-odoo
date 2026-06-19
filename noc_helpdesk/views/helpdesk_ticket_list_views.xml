@@ -1,0 +1,278 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+        <!-- Campos da lista de chamados — prioridade 200 garante ordem final após todas as heranças -->
+        <record id="view_helpdesk_ticket_menu_inherit_noc_base" model="ir.ui.view">
+            <field name="name">helpdesk.ticket.menu.inherit.noc.base</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="inherit_id" ref="helpdesk_mgmt.ticket_view_tree" />
+            <field name="priority">200</field>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="replace">
+                    <tree
+                    default_order="tag_priority asc, id asc"
+                    expand="1"
+                    js_class="helpdesk_live_list"
+                    decoration-muted="is_equipamento_isolado or is_portal_ticket"
+                    decoration-warning="is_falha_massiva"
+                    decoration-danger="is_unavailable or is_porta_agregada or is_isp_network_failure"
+                    decoration-info="is_high_latency"
+                    decoration-bf="is_discarded_packet or is_falha_hardware or is_falha_software"
+                    decoration-success="is_sinergia or is_manutencao_programada or is_plano_melhoria"
+                    decoration-primary="is_sistemas_ti"
+                    decoration-it="is_fap or is_intermitente or is_falha_hardware or is_falha_software"
+                >
+                        <field name="sequence" widget="handle" />
+                        <field
+                        name="create_date"
+                        widget="datetime"
+                        string="Data de Criação"
+                        readonly="1"
+                        optional="show"
+                    />
+                        <field
+                        name="stage_id"
+                        widget="badge"
+                        decoration-success="not unattended and not closed"
+                        decoration-info="unattended == True"
+                        decoration-muted="closed == True"
+                    />
+                        <field name="name" class="o_ticket_name_cell" />
+                        <field name="tag_id" />
+                        <field name="designation_speed" />
+                        <field
+                        name="network_path"
+                        string="Origem → Destino"
+                        optional="show"
+                    />
+                        <field
+                        name="last_update_info"
+                        widget="last_update_datetime"
+                        string="Última Atualização"
+                        optional="show"
+                    />
+                        <field
+                        name="user_short_name"
+                        string="Usuário Responsável"
+                        optional="show"
+                    />
+                        <field
+                        name="provider_id"
+                        domain="[('noc_type', '=', 'provider'), ('is_company', '=', True)]"
+                        options="{'no_create': True}"
+                    />
+                        <field name="external_ticket_number" />
+                        <field
+                        name="activity_ids"
+                        widget="list_activity"
+                        optional="hide"
+                        string="Agendamentos de Atividades"
+                    />
+                        <field
+                        name="number"
+                        decoration-bf="1"
+                        string="Chamado Interno"
+                    />
+                        <field name="priority" widget="priority" invisible="1" />
+                        <field name="kanban_state" invisible="1" />
+                        <field name="partner_id" invisible="1" />
+                        <field name="partner_name" invisible="1" />
+                        <field name="tag_ids" invisible="1" />
+                        <field name="unattended" invisible="1" />
+                        <field name="closed" invisible="1" />
+                        <field name="is_isp_network_failure" invisible="1" />
+                        <field name="is_high_latency" invisible="1" />
+                        <field name="is_unavailable" invisible="1" />
+                        <field name="is_discarded_packet" invisible="1" />
+                        <field name="is_falha_massiva" invisible="1" />
+                        <field name="is_porta_agregada" invisible="1" />
+                        <field name="is_equipamento_isolado" invisible="1" />
+                        <field name="is_sinergia" invisible="1" />
+                        <field name="is_sistemas_ti" invisible="1" />
+                        <field name="is_intermitente" invisible="1" />
+                        <field name="is_manutencao_programada" invisible="1" />
+                        <field name="is_plano_melhoria" invisible="1" />
+                        <field name="is_portal_ticket" invisible="1" />
+                        <field name="is_falha_hardware" invisible="1" />
+                        <field name="is_falha_software" invisible="1" />
+                        <field name="is_fap" invisible="1" />
+                    </tree>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Estiliza cor de fundo na lista de chamados -->
+        <record id="helpdesk_ticket_tree_view_list_tabs_decorations" model="ir.ui.view">
+            <field name="name">helpdesk.ticket.tree.list.tabs.decorations</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="inherit_id" ref="helpdesk_mgmt.ticket_view_tree" />
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute
+                    name="decoration-muted"
+                >is_equipamento_isolado or is_portal_ticket</attribute>
+                    <attribute name="decoration-warning">is_falha_massiva</attribute>
+                    <attribute
+                    name="decoration-danger"
+                >is_unavailable or is_porta_agregada</attribute>
+                    <attribute name="decoration-info">is_high_latency</attribute>
+                    <attribute name="decoration-bf">is_discarded_packet</attribute>
+                    <attribute
+                    name="decoration-success"
+                >is_sinergia or is_manutencao_programada or is_plano_melhoria</attribute>
+                    <attribute name="decoration-primary">is_sistemas_ti</attribute>
+                    <attribute
+                    name="decoration-bf"
+                >is_discarded_packet or is_falha_hardware or is_falha_software</attribute>
+                    <attribute
+                    name="decoration-it"
+                >is_intermitente or is_falha_hardware or is_falha_software</attribute>
+                </xpath>
+                <xpath expr="//tree" position="inside">
+                    <field name="is_high_latency" invisible="1" />
+                    <field name="is_unavailable" invisible="1" />
+                    <field name="is_discarded_packet" invisible="1" />
+                    <field name="is_falha_massiva" invisible="1" />
+                    <field name="is_porta_agregada" invisible="1" />
+                    <field name="is_equipamento_isolado" invisible="1" />
+                    <field name="is_sinergia" invisible="1" />
+                    <field name="is_sistemas_ti" invisible="1" />
+                    <field name="is_intermitente" invisible="1" />
+                    <field name="is_manutencao_programada" invisible="1" />
+                    <field name="is_plano_melhoria" invisible="1" />
+                    <field name="is_portal_ticket" invisible="1" />
+                    <field name="is_falha_hardware" invisible="1" />
+                    <field name="is_falha_software" invisible="1" />
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Mostra os chamados por prioridade de tag -->
+        <record id="inherited_helpdesk_ticket_tree" model="ir.ui.view">
+            <field name="name">helpdesk.ticket.tree.inherited</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="inherit_id" ref="helpdesk_mgmt.ticket_view_tree" />
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="default_order">tag_priority asc, id asc</attribute>
+                    <attribute name="expand">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Altera o campo last_stage_update para quando foi a última atualização em formato data/hora -->
+        <record id="view_ticket_last_update" model="ir.ui.view">
+            <field name="name">ticket_last_update</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="inherit_id" ref="helpdesk_mgmt.ticket_view_tree" />
+            <field name="priority">99</field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='last_stage_update']" position="replace">
+                    <field
+                    name="last_update_info"
+                    widget="last_update_datetime"
+                    string="Última Atualização"
+                    optional="show"
+                />
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Esconde o campo kanban_state -->
+        <record id="view_kanban_state" model="ir.ui.view">
+            <field name="name">kanban_state</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="inherit_id" ref="helpdesk_mgmt.ticket_view_tree" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='kanban_state']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='priority']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Exibe o campo create_date em formato data/hora -->
+        <record id="view_ticket_create_date" model="ir.ui.view">
+            <field name="name">ticket_create_date</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="inherit_id" ref="helpdesk_mgmt.ticket_view_tree" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='create_date']" position="attributes">
+                    <attribute name="widget">datetime</attribute>
+                    <attribute name="string">Data de Criação</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Ativa o live update via controller customizado (js_class) -->
+        <record id="helpdesk_ticket_live_list_controller" model="ir.ui.view">
+            <field name="name">helpdesk.ticket.live.list.controller</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="inherit_id" ref="helpdesk_mgmt.ticket_view_tree" />
+            <field name="priority">101</field>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="js_class">helpdesk_live_list</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Ativa o live update via controller customizado na view kanban -->
+        <record id="helpdesk_ticket_live_kanban_controller" model="ir.ui.view">
+            <field name="name">helpdesk.ticket.live.kanban.controller</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="inherit_id" ref="helpdesk_mgmt.view_helpdesk_ticket_kanban" />
+            <field name="priority">101</field>
+            <field name="arch" type="xml">
+                <xpath expr="//kanban" position="attributes">
+                    <attribute name="js_class">helpdesk_live_kanban</attribute>
+                </xpath>
+            </field>
+        </record>
+
+    <!-- Busca global: pesquisa em todos os campos sem precisar selecionar filtro -->
+    <record id="helpdesk_ticket_view_search_inherit_noc_global" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.view.search.inherit.noc.global</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk_mgmt.helpdesk_ticket_view_search" />
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <!-- Remove campos individuais: o campo "Pesquisar" abaixo já cobre tudo -->
+            <xpath expr="//field[@name='number']" position="replace" />
+            <xpath expr="//field[@name='partner_id']" position="replace" />
+            <xpath expr="//field[@name='commercial_partner_id']" position="replace" />
+            <xpath expr="//field[@name='user_id']" position="replace" />
+            <xpath expr="//field[@name='tag_ids']" position="replace" />
+            <xpath expr="//field[@name='stage_id']" position="replace" />
+            <xpath expr="//field[@name='description']" position="replace" />
+            <xpath expr="//field[@name='name']" position="replace">
+                <field
+                    name="name"
+                    string="Pesquisar"
+                    filter_domain="[
+                        '|', '|', '|', '|', '|', '|', '|', '|', '|', '|', '|', '|', '|', '|', '|',
+                        ('name', 'ilike', self),
+                        ('number', 'ilike', self),
+                        ('external_ticket_number', 'ilike', self),
+                        ('partner_name', 'ilike', self),
+                        ('provider_id', 'ilike', self),
+                        ('client_id', 'ilike', self),
+                        ('tag_id', 'ilike', self),
+                        ('failure_cause', 'ilike', self),
+                        ('traffic_loss', 'ilike', self),
+                        ('data_origin', 'ilike', self),
+                        ('data_destination', 'ilike', self),
+                        ('phone_number', 'ilike', self),
+                        ('rma_number', 'ilike', self),
+                        ('serial_number', 'ilike', self),
+                        ('hostname', 'ilike', self),
+                        ('message_ids.body', 'ilike', self)
+                    ]"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>

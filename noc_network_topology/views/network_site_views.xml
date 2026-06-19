@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- ── Client action: Mapa de Sites ─────────────────────────────────── -->
+
+    <record id="action_network_site_map" model="ir.actions.client">
+        <field name="name">Mapa de Sites</field>
+        <field name="tag">network_site_map</field>
+    </record>
+
+    <!-- ── Menu item ─────────────────────────────────────────────────────── -->
+
+    <menuitem
+        id="menu_network_site_map"
+        name="Mapa de Sites"
+        parent="noc_helpdesk_inventory.menu_network_inventory_root"
+        action="action_network_site_map"
+        sequence="27"
+    />
+
+    <!-- ── Herança do formulário de site: coordenadas + geocodificação ───── -->
+
+    <record id="view_network_site_form_topology" model="ir.ui.view">
+        <field name="name">network.site.form.topology</field>
+        <field name="model">network.site</field>
+        <field
+            name="inherit_id"
+            ref="noc_helpdesk_inventory.view_network_site_form"
+        />
+        <field name="arch" type="xml">
+
+            <!-- Stat button: geocodificar todos os sites sem coordenadas -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button
+                    name="action_geocode_all_sites"
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-globe"
+                    title="Geocodificar todos os sites sem coordenadas"
+                >
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_text">Geocodificar</span>
+                        <span class="o_stat_text">todos</span>
+                    </div>
+                </button>
+            </xpath>
+
+            <!-- Exibição das coordenadas e botão de re-geocodificação -->
+            <xpath expr="//field[@name='address']" position="after">
+                <label string="Coordenadas" for="geo_coords_display" />
+                <div>
+                    <field
+                        name="geo_coords_display"
+                        readonly="1"
+                        nolabel="1"
+                        class="text-muted"
+                    />
+                    <button
+                        name="action_geocode"
+                        type="object"
+                        string="↺ Re-geocodificar"
+                        class="btn btn-link btn-sm p-0 ms-2 text-muted"
+                        title="Buscar coordenadas pelo endereço via OpenStreetMap"
+                    />
+                </div>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

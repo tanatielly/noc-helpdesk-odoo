@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="res_config_settings_view_form_helpdesk" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.helpdesk</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div
+                    class="app_settings_block"
+                    data-string="Helpdesk"
+                    string="Helpdesk"
+                    data-key="noc_helpdesk"
+                >
+                    <h2>Helpdesk</h2>
+                    <h3>Turnos e Plantão</h3>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label
+                                    for="noc_helpdesk_shift_day_start_hour"
+                                    string="Hora Início Turno Diurno"
+                                />
+                                <div class="text-muted">
+                                    Hora (0–23) em que o turno diurno começa. Padrão: 7.
+                                </div>
+                                <div class="content-group mt8">
+                                    <field
+                                        name="noc_helpdesk_shift_day_start_hour"
+                                        class="o_light_label"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label
+                                    for="noc_helpdesk_shift_night_start_hour"
+                                    string="Hora Início Turno Noturno"
+                                />
+                                <div class="text-muted">
+                                    Hora (0–23) em que o turno noturno começa. Padrão: 19.
+                                </div>
+                                <div class="content-group mt8">
+                                    <field
+                                        name="noc_helpdesk_shift_night_start_hour"
+                                        class="o_light_label"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label
+                                    for="noc_helpdesk_shift_change_window_minutes"
+                                    string="Janela de Troca de Turno (min)"
+                                />
+                                <div class="text-muted">
+                                    Minutos após o início do turno em que a troca ainda está em andamento. Padrão: 30.
+                                </div>
+                                <div class="content-group mt8">
+                                    <field
+                                        name="noc_helpdesk_shift_change_window_minutes"
+                                        class="o_light_label"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label
+                                    for="noc_helpdesk_noc_team_id"
+                                    string="Equipe NOC"
+                                />
+                                <div class="text-muted">
+                                    Equipe usada como referência para aprovação de férias e escala.
+                                </div>
+                                <div class="content-group mt8">
+                                    <field
+                                        name="noc_helpdesk_noc_team_id"
+                                        class="o_light_label"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h3>Notificações</h3>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label
+                                    for="noc_helpdesk_new_ticket_interval_minutes"
+                                    string="Intervalo de Verificação de Novos Chamados (min)"
+                                />
+                                <div class="text-muted">
+                                    Minutos entre notificações de chamados novos não atribuídos. Padrão: 30.
+                                </div>
+                                <div class="content-group mt8">
+                                    <field
+                                        name="noc_helpdesk_new_ticket_interval_minutes"
+                                        class="o_light_label"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label
+                                    for="noc_helpdesk_teams_webhook_url"
+                                    string="Webhook MS Teams (Chamados Críticos)"
+                                />
+                                <div class="text-muted">
+                                    URL do webhook Teams para alertas de chamados críticos. Deixe em branco para desativar.
+                                </div>
+                                <div class="content-group mt8">
+                                    <field
+                                        name="noc_helpdesk_teams_webhook_url"
+                                        class="o_light_label"
+                                        placeholder="https://outlook.office.com/webhook/..."
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="helpdesk_ticket_form_graphics" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.graphics</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk_mgmt.ticket_view_form" />
+        <field name="arch" type="xml">
+
+            <xpath expr="//page[@name='other_info']" position="before">
+                <page string="Gráficos" name="graficos">
+
+                    <!-- Campo invisível necessário para os attrs -->
+                    <field name="latency_source" invisible="1" />
+
+                    <group string="Dados de Latência" col="4">
+
+                        <!-- Indicador de fonte ativa -->
+                        <div colspan="4" class="o_latency_source_badge_wrap">
+                            <span
+                                attrs="{'invisible': [('latency_source', '!=', 'monitor')]}"
+                                class="badge badge-success o_latency_source_badge"
+                            >
+                                📡 Alimentado pelo Monitor de Rede
+                            </span>
+                            <span
+                                attrs="{'invisible': [('latency_source', '!=', 'file')]}"
+                                class="badge badge-info o_latency_source_badge"
+                            >
+                                📂 Arquivo carregado manualmente
+                            </span>
+                        </div>
+
+                        <!-- Upload de arquivo — visível apenas quando não há monitor ativo -->
+                        <field
+                            name="latency_file"
+                            widget="binary"
+                            filename="latency_filename"
+                            string="Arquivo CSV/JSON"
+                            attrs="{'invisible': [('latency_source', '=', 'monitor')]}"
+                        />
+                        <field name="latency_filename" invisible="1" />
+
+                        <field name="latency_threshold_warn" />
+                        <field name="latency_threshold_crit" />
+                    </group>
+
+                    <group
+                        string="Resumo"
+                        attrs="{'invisible': [('latency_samples', '=', 0)]}"
+                    >
+                        <group>
+                            <field name="latency_last" />
+                            <field name="latency_avg" />
+                        </group>
+                        <group>
+                            <field name="latency_max" />
+                            <field name="latency_min" />
+                            <field name="latency_samples" />
+                        </group>
+                    </group>
+
+                    <div class="o_latency_chart_wrapper" colspan="4">
+                        <field name="latency_data_json" widget="latency_chart" />
+                    </div>
+
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <template id="login" inherit_id="web.login" name="NOC - Login Form">
+        <xpath
+            expr="//div[contains(@class,'field-login')]/label[@for='login']"
+            position="attributes"
+        >
+            <attribute name="t-if">False</attribute>
+        </xpath>
+        <xpath
+            expr="//div[contains(@class,'field-login')]/label[@for='login']"
+            position="after"
+        >
+            <label for="login" class="form-label">Usuário</label>
+        </xpath>
+        <xpath
+            expr="//div[contains(@class,'field-login')]/input[@name='login']"
+            position="attributes"
+        >
+            <attribute name="placeholder">Usuário</attribute>
+        </xpath>
+    </template>
+</odoo>

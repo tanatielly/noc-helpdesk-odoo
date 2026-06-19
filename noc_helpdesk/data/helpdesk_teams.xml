@@ -1,0 +1,7 @@
+<odoo noupdate="1">
+    <record id="helpdesk_team_support" model="helpdesk.ticket.team">
+        <field name="name">Plantão</field>
+        <field name="company_id" ref="base.main_company" />
+    </record>
+
+</odoo>

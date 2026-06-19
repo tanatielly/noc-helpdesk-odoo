@@ -1,0 +1,20 @@
+﻿// =============================================================================
+// primary_variables.scss
+// =============================================================================
+// Injected into web._assets_primary_variables with "prepend".
+// Compiled BEFORE everything in Odoo 16, ensuring that
+// $o-brand-primary overrides the default purple (#875A7B) across the app.
+//
+// To change the color: set $MY_COLOR below, then update the module:
+//   ./odoo-bin -u theme_noc
+// =============================================================================
+
+// ▼▼▼ SET YOUR BRAND COLOR HERE ▼▼▼
+$MY_COLOR: #1565C0;
+// ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+
+// The three variables Odoo 16 uses to paint the entire interface.
+// No !default — we want to force the override.
+$o-community-color: $MY_COLOR;
+$o-brand-odoo: $MY_COLOR;
+$o-brand-primary: $MY_COLOR;

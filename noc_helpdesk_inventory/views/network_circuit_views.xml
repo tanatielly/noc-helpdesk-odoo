@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- ── CIRCUIT FORM ───────────────────────────────────────────────── -->
+    <record id="view_network_circuit_form" model="ir.ui.view">
+        <field name="name">network.circuit.form</field>
+        <field name="model">network.circuit</field>
+        <field name="arch" type="xml">
+            <form string="Circuito de Rede">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button
+                            name="action_view_tickets"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-ticket"
+                        >
+                            <field
+                                name="ticket_count"
+                                widget="statinfo"
+                                string="Chamados"
+                            />
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" string="Código do Circuito" />
+                        <h1>
+                            <field name="name" placeholder="ex: CIR-2024-001" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Identificação">
+                            <field name="circuit_type_id" />
+                            <field
+                                name="provider_id"
+                                string="Operadora"
+                                domain="[('noc_type', '=', 'provider'), ('is_company', '=', True)]"
+                            />
+                            <field name="link_designation" />
+                            <field name="link_speed" />
+                            <field name="centro_funcional" />
+                        </group>
+                        <group string="Endpoints">
+                            <field name="origin_id" />
+                            <field name="origin_interface" />
+                            <field name="destination_id" />
+                            <field name="destination_interface" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Observações">
+                            <field
+                                name="notes"
+                                placeholder="Informações adicionais sobre o circuito..."
+                                nolabel="1"
+                            />
+                        </page>
+                        <page string="Chamados">
+                            <field name="ticket_ids" readonly="1">
+                                <tree>
+                                    <field name="name" />
+                                    <field name="stage_id" />
+                                    <field name="create_date" string="Aberto em" />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" />
+                    <field name="message_ids" />
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- ── CIRCUIT TREE ───────────────────────────────────────────────── -->
+    <record id="view_network_circuit_tree" model="ir.ui.view">
+        <field name="name">network.circuit.tree</field>
+        <field name="model">network.circuit</field>
+        <field name="arch" type="xml">
+            <tree js_class="ctrl_click_list">
+                <field name="name" />
+                <field name="circuit_type_id" />
+                <field name="link_designation" />
+                <field name="origin_id" />
+                <field name="destination_id" />
+                <field name="ticket_count" string="Chamados" />
+                <field name="active" invisible="1" />
+            </tree>
+        </field>
+    </record>
+
+    <!-- ── CIRCUIT SEARCH ─────────────────────────────────────────────── -->
+    <record id="view_network_circuit_search" model="ir.ui.view">
+        <field name="name">network.circuit.search</field>
+        <field name="model">network.circuit</field>
+        <field name="arch" type="xml">
+            <search string="Pesquisar Circuitos">
+                <field
+                    name="name"
+                    string="Pesquisar"
+                    filter_domain="[
+                        '|', '|', '|', '|', '|', '|', '|', '|', '|',
+                        ('name', 'ilike', self),
+                        ('link_designation', 'ilike', self),
+                        ('origin_id', 'ilike', self),
+                        ('destination_id', 'ilike', self),
+                        ('provider_id', 'ilike', self),
+                        ('origin_interface', 'ilike', self),
+                        ('destination_interface', 'ilike', self),
+                        ('link_speed', 'ilike', self),
+                        ('centro_funcional', 'ilike', self),
+                        ('circuit_type_id', 'ilike', self)
+                    ]"
+                />
+                <field name="circuit_type_id" />
+                <separator />
+                <filter
+                    name="filter_active"
+                    string="Ativos"
+                    domain="[('active', '=', True)]"
+                />
+                <filter
+                    name="filter_inactive"
+                    string="Inativos"
+                    domain="[('active', '=', False)]"
+                />
+                <group expand="0" string="Agrupar por">
+                    <filter
+                        name="group_type"
+                        string="Tipo de Circuito"
+                        context="{'group_by': 'circuit_type_id'}"
+                    />
+                    <filter
+                        name="group_origin"
+                        string="Equipamento Origem"
+                        context="{'group_by': 'origin_id'}"
+                    />
+                    <filter
+                        name="group_destination"
+                        string="Equipamento Destino"
+                        context="{'group_by': 'destination_id'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ── CIRCUIT ACTION ─────────────────────────────────────────────── -->
+    <record id="action_network_circuit" model="ir.actions.act_window">
+        <field name="name">Circuitos de Rede</field>
+        <field name="res_model">network.circuit</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_network_circuit_search" />
+        <field name="context">{'search_default_filter_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Nenhum circuito cadastrado ainda
+            </p>
+            <p>Cadastre os circuitos que interligam seus equipamentos de rede.</p>
+        </field>
+    </record>
+
+    <!-- ── EXTEND network.equipment FORM — adiciona aba Circuitos ─────── -->
+    <record id="view_network_equipment_form_circuit_inherit" model="ir.ui.view">
+        <field name="name">network.equipment.form.circuit.inherit</field>
+        <field name="model">network.equipment</field>
+        <field
+            name="inherit_id"
+            ref="noc_helpdesk_inventory.view_network_equipment_form"
+        />
+        <field name="arch" type="xml">
+            <!-- Botão stat de circuitos no button_box -->
+            <div name="button_box" position="inside">
+                <button
+                    name="action_view_circuits"
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-sitemap"
+                >
+                    <field name="circuit_count" widget="statinfo" string="Circuitos" />
+                </button>
+            </div>
+            <!-- Nova aba Circuitos no notebook -->
+            <notebook position="inside">
+                <page string="Circuitos">
+                    <field name="circuit_ids" readonly="1">
+                        <tree>
+                            <field name="name" />
+                            <field name="origin_id" />
+                            <field name="destination_id" />
+                            <field name="ticket_count" string="Chamados" />
+                        </tree>
+                    </field>
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+    <!-- ── EXTEND helpdesk.ticket FORM — campo circuito ──────────────── -->
+    <record id="view_helpdesk_ticket_circuit_inherit" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.circuit.inherit</field>
+        <field name="model">helpdesk.ticket</field>
+        <field
+            name="inherit_id"
+            ref="noc_helpdesk_inventory.view_helpdesk_ticket_form_network"
+        />
+        <field name="arch" type="xml">
+            <!-- Insere circuit_id no topo do grupo de equipamentos de rede -->
+            <group name="network_routing" position="before">
+                <group string="Circuito" name="network_circuit">
+                    <field name="circuit_id" options="{'no_create_edit': True}" />
+                    <field name="net_origin_interface" />
+                    <field name="net_destination_interface" />
+                </group>
+            </group>
+        </field>
+    </record>
+
+</odoo>

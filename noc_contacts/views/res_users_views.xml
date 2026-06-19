@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_users_form_noc" model="ir.ui.view">
+        <field name="name">res.users.form.noc</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form" />
+        <field name="arch" type="xml">
+            <xpath
+                expr="//div[contains(@class,'oe_title')]//label[@for='login']"
+                position="attributes"
+            >
+                <attribute name="string">Login do Usuário</attribute>
+            </xpath>
+            <xpath
+                expr="//div[contains(@class,'oe_title')]//field[@name='login']"
+                position="attributes"
+            >
+                <attribute name="placeholder" />
+            </xpath>
+            <xpath
+                expr="//div[contains(@class,'oe_title')]/field[@name='email']"
+                position="before"
+            >
+                <label for="email" string="E-mail do Usuário" />
+            </xpath>
+            <xpath
+                expr="//div[contains(@class,'oe_title')]/field[@name='email']"
+                position="attributes"
+            >
+                <attribute name="invisible">0</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

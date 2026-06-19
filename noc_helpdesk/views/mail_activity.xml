@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Popup de agendamento de atividade -->
+    <record id="mail_activity_view_form_popup_datetime" model="ir.ui.view">
+        <field name="name">mail.activity.view.form.popup.datetime</field>
+        <field name="model">mail.activity</field>
+        <field name="inherit_id" ref="mail.mail_activity_view_form_popup" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='date_deadline']" position="before">
+                <field
+                    name="date_start"
+                    widget="datetime"
+                    string="Data/Hora de Início"
+                />
+            </xpath>
+            <xpath expr="//field[@name='date_deadline']" position="attributes">
+                <attribute name="widget">datetime</attribute>
+                <attribute name="string">Data/Hora Limite</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Lista de atividades -->
+    <record id="mail_activity_view_tree_datetime" model="ir.ui.view">
+        <field name="name">mail.activity.view.tree.datetime</field>
+        <field name="model">mail.activity</field>
+        <field name="inherit_id" ref="mail.mail_activity_view_tree" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='date_deadline']" position="before">
+                <field
+                    name="date_start"
+                    widget="datetime"
+                    string="Data de Início"
+                    optional="show"
+                />
+            </xpath>
+            <xpath expr="//field[@name='date_deadline']" position="attributes">
+                <attribute name="widget">datetime</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

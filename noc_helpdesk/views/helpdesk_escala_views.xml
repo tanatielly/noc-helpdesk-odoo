@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- ── Escala Config ── -->
+    <record id="view_helpdesk_escala_config_form" model="ir.ui.view">
+        <field name="name">helpdesk.escala.config.form</field>
+        <field name="model">helpdesk.escala.config</field>
+        <field name="arch" type="xml">
+            <form string="Configuração da Escala de Plantão">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Configuração da Escala</h1>
+                    </div>
+                    <group>
+                        <field name="reference_monday" />
+                    </group>
+                    <div class="alert alert-info" role="alert">
+                        <strong>Como funciona:</strong>
+                        <ul>
+                            <li><strong
+                                >Semana Cheia:</strong> Segunda / Quarta / Sexta / Sábado / Domingo</li>
+                            <li><strong>Semana Vazia:</strong> Terça / Quinta</li>
+                            <li
+                            >A semana alterna automaticamente a cada segunda-feira a partir da data de referência.</li>
+                            <li
+                            >Às 07h e 19h o sistema assume o plantão automaticamente conforme a escala.</li>
+                        </ul>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_helpdesk_escala_config" model="ir.actions.act_window">
+        <field name="name">Configuração da Escala</field>
+        <field name="res_model">helpdesk.escala.config</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+    </record>
+
+    <!-- ── Escala Entries (4 registros fixos) ── -->
+    <record id="view_helpdesk_escala_list" model="ir.ui.view">
+        <field name="name">helpdesk.escala.list</field>
+        <field name="model">helpdesk.escala</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="week_type" />
+                <field name="shift" />
+                <field name="user1_id" string="1º Responsável" />
+                <field name="user2_id" string="2º Responsável" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_helpdesk_escala_form" model="ir.ui.view">
+        <field name="name">helpdesk.escala.form</field>
+        <field name="model">helpdesk.escala</field>
+        <field name="arch" type="xml">
+            <form string="Escala de Plantão">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="week_type" />
+                            <field name="shift" />
+                        </group>
+                        <group>
+                            <field name="user1_id" />
+                            <field name="user2_id" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_helpdesk_escala" model="ir.actions.act_window">
+        <field name="name">Escala de Plantão</field>
+        <field name="res_model">helpdesk.escala</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- ── user2_id no formulário do ticket ── -->
+    <record id="view_helpdesk_ticket_form_user2" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.user2</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk_mgmt.ticket_view_form" />
+        <field name="arch" type="xml">
+            <field name="user_id" position="after">
+                <field name="user2_id" invisible="1" />
+                <field name="user2_short_name" readonly="1" />
+            </field>
+        </field>
+    </record>
+
+    <!-- ── Menus ── -->
+    <menuitem
+        id="helpdesk_ticket_menu_config"
+        name="Configurações"
+        parent="helpdesk_mgmt.helpdesk_ticket_main_menu"
+        sequence="99"
+        groups="helpdesk_mgmt.group_helpdesk_manager"
+    />
+
+    <menuitem
+        id="helpdesk_ticket_menu_escala_config"
+        name="Configuração da Escala"
+        parent="helpdesk_ticket_menu_config"
+        action="action_helpdesk_escala_config"
+        sequence="1"
+        groups="helpdesk_mgmt.group_helpdesk_manager"
+    />
+
+    <menuitem
+        id="helpdesk_ticket_menu_escala"
+        name="Escala de Plantão"
+        parent="helpdesk_ticket_menu_config"
+        action="action_helpdesk_escala"
+        sequence="2"
+        groups="helpdesk_mgmt.group_helpdesk_manager"
+    />
+
+</odoo>

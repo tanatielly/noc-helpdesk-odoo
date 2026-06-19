@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- ── FORM ──────────────────────────────────────────────────────────── -->
+
+    <record id="view_network_equipment_form" model="ir.ui.view">
+        <field name="name">network.equipment.form</field>
+        <field name="model">network.equipment</field>
+        <field name="arch" type="xml">
+            <form string="Equipamento de Rede">
+                <header>
+                    <button
+                        name="action_set_active"
+                        string="Marcar como Ativo"
+                        type="object"
+                        class="btn-primary"
+                        attrs="{'invisible': [('status', '=', 'active')]}"
+                    />
+                    <button
+                        name="action_set_maintenance"
+                        string="Colocar em Manutenção"
+                        type="object"
+                        attrs="{'invisible': [('status', '=', 'maintenance')]}"
+                    />
+                    <field
+                        name="status"
+                        widget="statusbar"
+                        statusbar_visible="active,maintenance,inactive,obsolete"
+                    />
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button
+                            name="action_view_tickets"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-ticket"
+                        >
+                            <field
+                                name="ticket_count"
+                                widget="statinfo"
+                                string="Chamados"
+                            />
+
+                        </button>
+
+                        <button
+                            name="action_view_reopen_tickets"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-refresh"
+                        >
+                            <field
+                                name="reopen"
+                                widget="statinfo"
+                                string="Incidentes"
+                            />
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" string="Nome / Hostname" />
+                        <h1>
+                            <field name="name" placeholder="ex: SW-CORE-01" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Identificação">
+                            <field name="equipment_type" />
+                            <field name="brand" />
+                            <field name="model_name" string="Modelo" />
+                            <field name="site_ids" widget="many2many_tags" />
+                            <field name="location" />
+                            <field name="is_danger" />
+                            <field name="is_deactivating" />
+                        </group>
+                        <group string="Rede">
+                            <field name="ip_address" />
+                            <field name="mac_address" />
+                            <field name="port_count" />
+                            <field name="vlan_ids" widget="many2many_tags" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Observações">
+                            <field
+                                name="notes"
+                                placeholder="Descreva detalhes relevantes..."
+                                nolabel="1"
+                            />
+                        </page>
+                        <page string="Chamados como Origem">
+                            <field name="origin_ticket_ids" readonly="1">
+                                <tree>
+                                    <field name="name" />
+                                    <field name="net_destination_id" />
+                                    <field name="stage_id" />
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Chamados como Destino">
+                            <field name="destination_ticket_ids" readonly="1">
+                                <tree>
+                                    <field name="name" />
+                                    <field name="net_origin_id" />
+                                    <field name="stage_id" />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" />
+                    <field name="message_ids" />
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- ── TREE (lista) ──────────────────────────────────────────────────── -->
+    <record id="view_network_equipment_tree" model="ir.ui.view">
+        <field name="name">network.equipment.tree</field>
+        <field name="model">network.equipment</field>
+        <field name="arch" type="xml">
+            <tree
+                js_class="ctrl_click_list"
+                decoration-success="status == 'active' and not is_danger and not is_deactivating"
+                decoration-warning="status == 'maintenance'"
+                decoration-danger="is_danger or is_deactivating"
+                decoration-muted="status in ('inactive', 'obsolete')"
+            >
+                <field name="name" />
+                <field name="equipment_type" />
+                <field name="brand" />
+                <field name="model_name" />
+                <field name="site_ids" widget="many2many_tags" optional="hide" />
+                <field name="ip_address" />
+                <field name="mac_address" optional="hide" />
+                <field name="location" />
+                <field name="port_count" optional="hide" />
+                <field name="vlan_ids" widget="many2many_tags" />
+                <field
+                    name="status"
+                    widget="badge"
+                    decoration-success="status == 'active'"
+                    decoration-warning="status == 'maintenance'"
+                    decoration-danger="status == 'inactive'"
+                    decoration-muted="status == 'obsolete'"
+                />
+                <field name="is_danger" optional="show" />
+                <field name="is_deactivating" optional="show" />
+                <field name="ticket_count" string="Chamados" />
+            </tree>
+        </field>
+    </record>
+
+    <!-- ── KANBAN ─────────────────────────────────────────────────────────── -->
+    <record id="view_network_equipment_kanban" model="ir.ui.view">
+        <field name="name">network.equipment.kanban</field>
+        <field name="model">network.equipment</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name" />
+                <field name="equipment_type" />
+                <field name="brand" />
+                <field name="model_name" />
+                <field name="ip_address" />
+                <field name="location" />
+                <field name="status" />
+                <field name="ticket_count" />
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="o_kanban_record_body">
+                                <strong><field name="name" /></strong>
+                                <div class="text-muted">
+                                    <field name="brand" /> <field name="model_name" />
+                                </div>
+                                <div>IP: <field name="ip_address" /></div>
+                                <div><field name="location" /></div>
+                            </div>
+                            <div class="o_kanban_record_bottom">
+                                <div class="oe_kanban_bottom_left">
+                                    <field
+                                        name="status"
+                                        widget="label_selection"
+                                        options="{'classes': {
+                                               'active':      'success',
+                                               'maintenance': 'warning',
+                                               'inactive':    'danger',
+                                               'obsolete':    'secondary'
+                                           }}"
+                                    />
+                                </div>
+                                <div class="oe_kanban_bottom_right">
+                                    <t t-if="record.ticket_count.raw_value">
+                                        <span class="badge">
+                                            <t
+                                                t-esc="record.ticket_count.raw_value"
+                                            /> chamados
+                                        </span>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- ── SEARCH ─────────────────────────────────────────────────────────── -->
+    <record id="view_network_equipment_search" model="ir.ui.view">
+        <field name="name">network.equipment.search</field>
+        <field name="model">network.equipment</field>
+        <field name="arch" type="xml">
+            <search string="Pesquisar Equipamentos">
+                <field
+                    name="name"
+                    string="Pesquisar"
+                    filter_domain="[
+                        '|', '|', '|', '|', '|', '|',
+                        ('name', 'ilike', self),
+                        ('ip_address', 'ilike', self),
+                        ('brand', 'ilike', self),
+                        ('model_name', 'ilike', self),
+                        ('location', 'ilike', self),
+                        ('mac_address', 'ilike', self),
+                        ('notes', 'ilike', self)
+                    ]"
+                />
+                <separator />
+                <filter
+                    name="filter_active"
+                    string="Ativos"
+                    domain="[('status', '=', 'active')]"
+                />
+                <filter
+                    name="filter_maintenance"
+                    string="Em Manutenção"
+                    domain="[('status', '=', 'maintenance')]"
+                />
+                <filter
+                    name="filter_inactive"
+                    string="Inativos"
+                    domain="[('status', 'in', ('inactive', 'obsolete'))]"
+                />
+                <separator />
+                <filter
+                    name="filter_danger"
+                    string="Perigo"
+                    domain="[('is_danger', '=', True)]"
+                />
+                <filter
+                    name="filter_deactivating"
+                    string="Em Desativação"
+                    domain="[('is_deactivating', '=', True)]"
+                />
+                <separator />
+                <filter
+                    name="filter_switch"
+                    string="Switches"
+                    domain="[('equipment_type', '=', 'switch')]"
+                />
+                <filter
+                    name="filter_router"
+                    string="Roteadores"
+                    domain="[('equipment_type', '=', 'router')]"
+                />
+                <filter
+                    name="filter_firewall"
+                    string="Firewalls"
+                    domain="[('equipment_type', '=', 'firewall')]"
+                />
+                <group expand="0" string="Agrupar por">
+                    <filter
+                        name="group_type"
+                        string="Tipo"
+                        context="{'group_by': 'equipment_type'}"
+                    />
+                    <filter
+                        name="group_status"
+                        string="Status"
+                        context="{'group_by': 'status'}"
+                    />
+                    <filter
+                        name="group_location"
+                        string="Localização"
+                        context="{'group_by': 'location'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ── VLAN ──────────────────────────────────────────────────────────── -->
+    <record id="view_network_vlan_tree" model="ir.ui.view">
+        <field name="name">network.vlan.tree</field>
+        <field name="model">network.vlan</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="vlan_id" string="ID" />
+                <field name="name" />
+                <field name="description" />
+                <field name="equipment_ids" widget="many2many_tags" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_network_vlan_form" model="ir.ui.view">
+        <field name="name">network.vlan.form</field>
+        <field name="model">network.vlan</field>
+        <field name="arch" type="xml">
+            <form string="VLAN">
+                <sheet>
+                    <group>
+                        <field name="vlan_id" string="ID da VLAN" />
+                        <field name="name" />
+                        <field name="description" />
+                        <field name="equipment_ids" widget="many2many_tags" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ── ACTIONS ────────────────────────────────────────────────────────── -->
+    <record id="action_network_equipment" model="ir.actions.act_window">
+        <field name="name">Equipamentos de Rede</field>
+        <field name="res_model">network.equipment</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="search_view_id" ref="view_network_equipment_search" />
+        <field name="context">{'search_default_filter_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Nenhum equipamento cadastrado ainda
+            </p>
+            <p>Cadastre seus switches, roteadores e firewalls.</p>
+        </field>
+    </record>
+
+    <record id="action_network_vlan" model="ir.actions.act_window">
+        <field name="name">Interfaces e VLANs</field>
+        <field name="res_model">network.vlan</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

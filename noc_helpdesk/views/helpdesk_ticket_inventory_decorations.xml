@@ -1,0 +1,220 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <delete
+        model="ir.ui.view"
+        search="[('name', '=', 'helpdesk.ticket.form.inherit.inventory'), ('model', '=', 'network.equipment')]"
+    />
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- ORIGIN TICKETS -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <record
+        id="view_network_equipment_form_origin_tickets_decorations"
+        model="ir.ui.view"
+    >
+        <field name="name">network.equipment.form.origin.tickets.decorations</field>
+        <field name="model">network.equipment</field>
+        <field
+            name="inherit_id"
+            ref="noc_helpdesk_inventory.view_network_equipment_form"
+        />
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+
+            <!-- Adiciona atributos de decoração na tree -->
+            <xpath expr="//field[@name='origin_ticket_ids']/tree" position="attributes">
+                <attribute name="decoration-muted">is_equipamento_isolado</attribute>
+                <attribute name="decoration-warning">is_falha_massiva</attribute>
+                <attribute
+                    name="decoration-danger"
+                >is_unavailable or is_porta_agregada</attribute>
+                <attribute name="decoration-info">is_high_latency</attribute>
+                <attribute name="decoration-bf">is_discarded_packet</attribute>
+                <attribute name="decoration-success">is_sinergia</attribute>
+                <attribute name="decoration-primary">is_sistemas_ti</attribute>
+            </xpath>
+
+            <!-- Adiciona campos de controle invisíveis -->
+            <xpath
+                expr="//field[@name='origin_ticket_ids']/tree/field[@name='stage_id']"
+                position="after"
+            >
+                <field name="is_equipamento_isolado" invisible="1" />
+                <field name="is_falha_massiva" invisible="1" />
+                <field name="is_unavailable" invisible="1" />
+                <field name="is_porta_agregada" invisible="1" />
+                <field name="is_high_latency" invisible="1" />
+                <field name="is_discarded_packet" invisible="1" />
+                <field name="is_sinergia" invisible="1" />
+                <field name="is_sistemas_ti" invisible="1" />
+                <field name="tag_id" />
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- DESTINATION TICKETS -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <record
+        id="view_network_equipment_form_destination_tickets_decorations"
+        model="ir.ui.view"
+    >
+        <field
+            name="name"
+        >network.equipment.form.destination.tickets.decorations</field>
+        <field name="model">network.equipment</field>
+        <field
+            name="inherit_id"
+            ref="noc_helpdesk_inventory.view_network_equipment_form"
+        />
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+
+            <xpath
+                expr="//field[@name='destination_ticket_ids']/tree"
+                position="attributes"
+            >
+                <attribute name="decoration-muted">is_equipamento_isolado</attribute>
+                <attribute name="decoration-warning">is_falha_massiva</attribute>
+                <attribute
+                    name="decoration-danger"
+                >is_unavailable or is_porta_agregada</attribute>
+                <attribute name="decoration-info">is_high_latency</attribute>
+                <attribute name="decoration-bf">is_discarded_packet</attribute>
+                <attribute name="decoration-success">is_sinergia</attribute>
+                <attribute name="decoration-primary">is_sistemas_ti</attribute>
+            </xpath>
+
+            <xpath
+                expr="//field[@name='destination_ticket_ids']/tree/field[@name='stage_id']"
+                position="after"
+            >
+                <field name="is_equipamento_isolado" invisible="1" />
+                <field name="is_falha_massiva" invisible="1" />
+                <field name="is_unavailable" invisible="1" />
+                <field name="is_porta_agregada" invisible="1" />
+                <field name="is_high_latency" invisible="1" />
+                <field name="is_discarded_packet" invisible="1" />
+                <field name="is_sinergia" invisible="1" />
+                <field name="is_sistemas_ti" invisible="1" />
+                <field name="tag_id" />
+
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- CIRCUIT TICKETS                                         -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <record id="view_network_circuit_form_tickets_decorations" model="ir.ui.view">
+        <field name="name">network.circuit.form.tickets.decorations</field>
+        <field name="model">network.circuit</field>
+        <field
+            name="inherit_id"
+            ref="noc_helpdesk_inventory.view_network_circuit_form"
+        />
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='ticket_ids']/tree" position="attributes">
+                <attribute name="decoration-muted">is_equipamento_isolado</attribute>
+                <attribute name="decoration-warning">is_falha_massiva</attribute>
+                <attribute
+                    name="decoration-danger"
+                >is_unavailable or is_porta_agregada</attribute>
+                <attribute name="decoration-info">is_high_latency</attribute>
+                <attribute name="decoration-bf">is_discarded_packet</attribute>
+                <attribute name="decoration-success">is_sinergia</attribute>
+                <attribute name="decoration-primary">is_sistemas_ti</attribute>
+            </xpath>
+
+            <xpath
+                expr="//field[@name='ticket_ids']/tree/field[@name='stage_id']"
+                position="after"
+            >
+                <field name="is_equipamento_isolado" invisible="1" />
+                <field name="is_falha_massiva" invisible="1" />
+                <field name="is_unavailable" invisible="1" />
+                <field name="is_porta_agregada" invisible="1" />
+                <field name="is_high_latency" invisible="1" />
+                <field name="is_discarded_packet" invisible="1" />
+                <field name="is_sinergia" invisible="1" />
+                <field name="is_sistemas_ti" invisible="1" />
+                <field name="tag_id" />
+            </xpath>
+
+        </field>
+    </record>
+
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- FORM TICKET — visibilidade e obrigatoriedade por tipo  -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+
+    <record id="view_helpdesk_ticket_form_network_attrs" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.network.attrs</field>
+        <field name="model">helpdesk.ticket</field>
+        <field
+            name="inherit_id"
+            ref="noc_helpdesk_inventory.view_helpdesk_ticket_form_network"
+        />
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <!-- Campos ocultos necessários para avaliação de attrs -->
+            <page name="equipments" position="inside">
+                <field name="is_falha_massiva" invisible="1" />
+                <field name="is_equipamento_isolado" invisible="1" />
+                <field name="is_unavailable" invisible="1" />
+                <field name="is_high_latency" invisible="1" />
+            </page>
+            <!-- Ocultar grupo de equipamentos em falha massiva -->
+            <group name="network_routing" position="attributes">
+                <attribute
+                    name="attrs"
+                >{'invisible': [('is_falha_massiva', '=', True)]}</attribute>
+            </group>
+            <!-- Equipamento Origem obrigatório para Equipamento Isolado -->
+            <field name="net_origin_id" position="attributes">
+                <attribute
+                    name="attrs"
+                >{'required': [('is_equipamento_isolado', '=', True)]}</attribute>
+            </field>
+            <!-- Ocultar grupo Falha Massiva quando não é falha massiva -->
+            <group name="network_falha_massiva" position="attributes">
+                <attribute
+                    name="attrs"
+                >{'invisible': [('is_falha_massiva', '=', False)]}</attribute>
+            </group>
+        </field>
+    </record>
+
+    <record id="view_helpdesk_ticket_circuit_attrs" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.circuit.attrs</field>
+        <field name="model">helpdesk.ticket</field>
+        <field
+            name="inherit_id"
+            ref="noc_helpdesk_inventory.view_helpdesk_ticket_circuit_inherit"
+        />
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <!-- Ocultar grupo Circuito em falha massiva -->
+            <group name="network_circuit" position="attributes">
+                <attribute
+                    name="attrs"
+                >{'invisible': [('is_falha_massiva', '=', True)]}</attribute>
+            </group>
+            <!-- Circuito obrigatório para Indisponível, Alta Latência, Descarte de Pacotes -->
+            <field name="circuit_id" position="attributes">
+                <attribute name="attrs">{'required': ['|', '|',
+                    ('is_unavailable', '=', True),
+                    ('is_high_latency', '=', True),
+                    ('is_discarded_packet', '=', True)
+                ]}</attribute>
+            </field>
+        </field>
+    </record>
+
+</odoo>

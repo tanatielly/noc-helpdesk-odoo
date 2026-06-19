@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_helpdesk_ticket_user,helpdesk.ticket user,model_helpdesk_ticket,helpdesk_mgmt.group_helpdesk_user,1,1,1,0
+access_helpdesk_ticket_manager,helpdesk.ticket manager,model_helpdesk_ticket,helpdesk_mgmt.group_helpdesk_manager,1,1,1,1
+access_network_monitor_log_user,network.monitor.log user,model_network_monitor_log,helpdesk_mgmt.group_helpdesk_user,1,0,0,0
+access_network_monitor_log_manager,network.monitor.log manager,model_network_monitor_log,helpdesk_mgmt.group_helpdesk_manager,1,1,1,1
+access_res_config_settings_user,res.config.settings user,model_res_config_settings,helpdesk_mgmt.group_helpdesk_user,1,0,0,0
+access_res_config_settings_manager,res.config.settings manager,model_res_config_settings,helpdesk_mgmt.group_helpdesk_manager,1,1,1,1

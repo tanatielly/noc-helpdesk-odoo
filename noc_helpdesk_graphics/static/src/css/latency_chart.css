@@ -1,0 +1,239 @@
+/* ── Wrapper geral ─────────────────────────────────────────────────────────── */
+.o_latency_chart_root {
+    padding: 0 0 16px;
+}
+
+.o_latency_chart_wrapper {
+    margin-top: 8px;
+}
+
+/* ── Estado vazio ──────────────────────────────────────────────────────────── */
+.o_latency_empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 56px 24px;
+    text-align: center;
+    gap: 10px;
+    background: #fafbfc;
+    border: 2px dashed #d1d5db;
+    border-radius: 12px;
+    margin: 8px 0;
+}
+
+.o_latency_empty_icon {
+    font-size: 42px;
+    opacity: 0.45;
+}
+.o_latency_empty_title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #6b7280;
+}
+.o_latency_empty_sub {
+    font-size: 13px;
+    color: #9ca3af;
+    line-height: 1.7;
+}
+.o_latency_empty_sub code {
+    background: #f3f4f6;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #4f46e5;
+}
+
+/* ── Toolbar ───────────────────────────────────────────────────────────────── */
+.o_latency_toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    padding: 12px 18px;
+    border-radius: 10px 10px 0 0;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.o_latency_toolbar_left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.o_latency_toolbar_right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.o_latency_live_dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.3);
+    animation: o_lat_pulse 2s ease-in-out infinite;
+    will-change: box-shadow;
+    flex-shrink: 0;
+}
+
+@keyframes o_lat_pulse {
+    0%,
+    100% {
+        box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 0 6px rgba(74, 222, 128, 0.08);
+    }
+}
+
+.o_latency_title {
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+}
+
+.o_latency_range {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 11px;
+    font-family: monospace;
+}
+
+/* Botões de janela */
+.o_latency_win_btn {
+    padding: 4px 11px;
+    border: 1.5px solid rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+}
+.o_latency_win_btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.55);
+}
+.o_latency_win_btn.active {
+    background: #fff;
+    color: #4f46e5;
+    border-color: #fff;
+}
+
+/* ── KPIs ──────────────────────────────────────────────────────────────────── */
+.o_latency_kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0;
+    border-left: 1px solid #e5e7eb;
+    border-right: 1px solid #e5e7eb;
+}
+
+@media (max-width: 768px) {
+    .o_latency_kpis {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.o_latency_kpi {
+    padding: 14px 18px;
+    border-right: 1px solid #e5e7eb;
+    border-bottom: 1px solid #e5e7eb;
+    border-left: 4px solid transparent;
+    background: #fff;
+    transition: background 0.15s;
+}
+.o_latency_kpi:last-child {
+    border-right: none;
+}
+.o_latency_kpi.good {
+    border-left-color: #22c55e;
+}
+.o_latency_kpi.warn {
+    border-left-color: #f59e0b;
+}
+.o_latency_kpi.bad {
+    border-left-color: #ef4444;
+}
+.o_latency_kpi.info {
+    border-left-color: #6366f1;
+}
+
+.o_latency_kpi_label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: #9ca3af;
+    margin-bottom: 6px;
+}
+
+.o_latency_kpi_value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #111827;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+}
+.o_latency_kpi_value span {
+    font-size: 12px;
+    font-weight: 400;
+    color: #9ca3af;
+    margin-left: 2px;
+}
+
+.o_latency_kpi_sub {
+    font-size: 10px;
+    color: #d1d5db;
+    margin-top: 4px;
+    font-family: monospace;
+}
+
+/* ── Legenda ───────────────────────────────────────────────────────────────── */
+.o_latency_legend {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 8px 18px;
+    background: #fafbfc;
+    border-left: 1px solid #e5e7eb;
+    border-right: 1px solid #e5e7eb;
+    border-bottom: 1px solid #e5e7eb;
+    flex-wrap: wrap;
+}
+
+.o_latency_legend_item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.o_latency_legend_line {
+    display: inline-block;
+    width: 20px;
+    height: 3px;
+    border-radius: 2px;
+}
+
+/* ── Canvas ────────────────────────────────────────────────────────────────── */
+.o_latency_canvas_wrap {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    padding: 18px 18px 12px;
+    height: 280px;
+    position: relative;
+}
+
+.o_latency_canvas_wrap canvas {
+    width: 100% !important;
+    height: 100% !important;
+}

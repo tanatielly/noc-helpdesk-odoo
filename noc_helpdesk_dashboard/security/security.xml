@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="group_ocupacao_report" model="res.groups">
+        <field name="name">Relatório de Ocupação</field>
+        <field name="category_id" ref="base.module_category_hidden" />
+    </record>
+
+    <record id="group_relatorio_mensal" model="res.groups">
+        <field name="name">Relatório Mensal</field>
+        <field name="category_id" ref="base.module_category_hidden" />
+    </record>
+
+    <record id="base.group_user" model="res.groups">
+        <field
+            name="implied_ids"
+            eval="[
+                (4, ref('noc_helpdesk_dashboard.group_ocupacao_report')),
+                (4, ref('noc_helpdesk_dashboard.group_relatorio_mensal')),
+            ]"
+        />
+    </record>
+</odoo>

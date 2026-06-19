@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <menuitem
+        id="menu_network_inventory_root"
+        name="Inventário de Rede"
+        parent="helpdesk_mgmt.helpdesk_ticket_main_menu"
+        sequence="32"
+    />
+
+    <menuitem
+        id="menu_network_equipment"
+        name="Equipamentos"
+        parent="menu_network_inventory_root"
+        action="action_network_equipment"
+        sequence="10"
+    />
+
+    <menuitem
+        id="menu_network_circuit"
+        name="Circuitos"
+        parent="menu_network_inventory_root"
+        action="action_network_circuit"
+        sequence="20"
+    />
+
+    <menuitem
+        id="menu_network_site"
+        name="Sites"
+        parent="menu_network_inventory_root"
+        action="action_network_site"
+        sequence="25"
+    />
+
+    <menuitem
+        id="menu_network_vlan"
+        name="Interfaces e VLANs"
+        parent="menu_network_inventory_root"
+        action="action_network_vlan"
+        sequence="30"
+    />
+
+    <menuitem
+        id="menu_network_config"
+        name="Configuração"
+        parent="menu_network_inventory_root"
+        sequence="99"
+    />
+
+    <menuitem
+        id="menu_network_circuit_type"
+        name="Tipos de Circuito"
+        parent="menu_network_config"
+        action="action_network_circuit_type"
+        sequence="10"
+    />
+
+</odoo>

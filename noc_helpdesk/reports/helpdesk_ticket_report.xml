@@ -1,0 +1,390 @@
+﻿<odoo>
+    <!-- ================================================================
+         Action de relatório — aparece no menu "Imprimir" do chamado
+         ================================================================ -->
+    <record id="action_report_helpdesk_ticket" model="ir.actions.report">
+        <field name="name">Relatório de Chamado</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">noc_helpdesk.report_helpdesk_ticket_document</field>
+        <field name="report_file">noc_helpdesk.report_helpdesk_ticket_document</field>
+        <field name="print_report_name">(object.name or 'Chamado')</field>
+        <field name="binding_model_id" ref="helpdesk_mgmt.model_helpdesk_ticket" />
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- ================================================================
+         Template QWeb principal
+         ================================================================ -->
+    <template id="report_helpdesk_ticket_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+
+                    <div class="page">
+
+                        <!-- Título -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h2 class="text-center">Relatório de Chamado</h2>
+                                <hr />
+                            </div>
+                        </div>
+
+                        <!--Informações Gerais-->
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <h4>Informações do Chamado</h4>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <table class="table table-sm table-bordered">
+                                    <tr>
+                                        <th
+                                            style="width:40%; background-color:#f5f5f5;"
+                                        >Número</th>
+                                        <td><t t-esc="doc.id" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th style="background-color:#f5f5f5;">Nome</th>
+                                        <td><t t-esc="doc.name" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th style="background-color:#f5f5f5;">Etapa</th>
+                                        <td><t t-esc="doc.stage_id.name" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th
+                                            style="background-color:#f5f5f5;"
+                                        >Tipo de Evento</th>
+                                        <td><t t-esc="doc.tag_id.name or '—'" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th
+                                            style="background-color:#f5f5f5;"
+                                        >Tráfego / Loss</th>
+                                        <td><t t-esc="doc.traffic_loss or '—'" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th
+                                            style="background-color:#f5f5f5;"
+                                        >Data de Abertura</th>
+                                        <td>
+                                            <t
+                                                t-esc="doc.create_date"
+                                                t-options='{"widget": "datetime", "format": "dd/MM/yyyy HH:mm"}'
+                                            />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th
+                                            style="background-color:#f5f5f5;"
+                                        >Última Atualização</th>
+                                        <td>
+                                            <t
+                                                t-esc="doc.write_date"
+                                                t-options='{"widget": "datetime", "format": "dd/MM/yyyy HH:mm"}'
+                                            />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-6">
+                                <table class="table table-sm table-bordered">
+                                    <tr>
+                                        <th
+                                            style="width:40%; background-color:#f5f5f5;"
+                                        >Responsável</th>
+                                        <td><t t-esc="doc.user_id.name or '—'" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th
+                                            style="background-color:#f5f5f5;"
+                                        >Provedora</th>
+                                        <td><t
+                                                t-esc="doc.provider_id.name or '—'"
+                                            /></td>
+                                    </tr>
+                                    <tr>
+                                        <th
+                                            style="background-color:#f5f5f5;"
+                                        >Cliente</th>
+                                        <td><t t-esc="doc.client_id.name or '—'" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th
+                                            style="background-color:#f5f5f5;"
+                                        >ID do Circuito</th>
+                                        <td><t t-esc="doc.client_circuit or '—'" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th
+                                            style="background-color:#f5f5f5;"
+                                        >Designação / Velocidade</th>
+                                        <td><t
+                                                t-esc="doc.designation_speed or '—'"
+                                            /></td>
+                                    </tr>
+                                    <tr>
+                                        <th
+                                            style="background-color:#f5f5f5;"
+                                        >Equipamento Origem</th>
+                                        <td><t
+                                                t-esc="doc.net_origin_id.name or '—'"
+                                            /></td>
+                                    </tr>
+                                    <tr>
+                                        <th
+                                            style="background-color:#f5f5f5;"
+                                        >Equipamento Destino</th>
+                                        <td><t
+                                                t-esc="doc.net_destination_id.name or '—'"
+                                            /></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!--Descrição-->
+                        <t t-if="doc.description">
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <h4>Descrição</h4>
+                                    <div
+                                        class="border rounded p-2"
+                                        style="background-color:#fafafa;"
+                                    >
+                                        <t t-out="doc.description" />
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+
+                        <!--Clientes Afetados-->
+                        <t t-if="doc.client_ids">
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <h4>Clientes Afetados</h4>
+                                    <table class="table table-sm table-bordered">
+                                        <thead style="background-color:#f5f5f5;">
+                                            <tr>
+                                                <th>Nome</th>
+                                                <th>ID do Circuito</th>
+                                                <th>Designação</th>
+                                                <th>Velocidade</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="doc.client_ids" t-as="client">
+                                                <tr>
+                                                    <td><t t-esc="client.name" /></td>
+                                                    <td><t
+                                                            t-esc="client.circuit_id or '—'"
+                                                        /></td>
+                                                    <td><t
+                                                            t-esc="client.designation or '—'"
+                                                        /></td>
+                                                    <td><t
+                                                            t-esc="client.bandwidth or '—'"
+                                                        /></td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </t>
+
+                        <!-- Mensagens Enviadas -->
+                        <t
+                            t-set="sent_messages"
+                            t-value="doc.message_ids.filtered(
+                            lambda m: m.message_type in ('comment', 'email')
+                            and m.subtype_id
+                            and not m.subtype_id.internal
+                        ).sorted(key=lambda m: m.date)"
+                        />
+
+                        <div class="row mb-3 mt-2">
+                            <div class="col-12">
+                                <h4>Atualizações</h4>
+                            </div>
+                        </div>
+
+                        <t t-if="sent_messages">
+                            <t t-foreach="sent_messages" t-as="msg">
+                                <div
+                                    class="mb-3 border rounded"
+                                    style="page-break-inside: avoid;"
+                                >
+                                    <div
+                                        class="p-2 d-flex justify-content-between"
+                                        style="background-color: #e8f4fd;"
+                                    >
+                                        <div>
+                                            <strong><t
+                                                    t-esc="msg.author_id.name or 'Sistema'"
+                                                /></strong>
+                                        </div>
+                                        <small class="text-muted">
+                                            <t
+                                                t-esc="msg.date"
+                                                t-options='{"widget": "datetime", "format": "dd/MM/yyyy HH:mm"}'
+                                            />
+                                        </small>
+                                    </div>
+                                    <div class="p-2">
+                                        <t t-out="msg.body" />
+                                    </div>
+                                    <t t-if="msg.attachment_ids">
+                                        <div
+                                            class="p-2 border-top"
+                                            style="background-color:#f8f9fa;"
+                                        >
+                                            <small><strong>Anexos:</strong></small>
+                                            <ul class="mb-0" style="font-size: 0.85em;">
+                                                <t
+                                                    t-foreach="msg.attachment_ids"
+                                                    t-as="att"
+                                                >
+                                                    <li><t t-esc="att.name" /></li>
+                                                </t>
+                                            </ul>
+                                        </div>
+                                    </t>
+                                </div>
+                            </t>
+                        </t>
+                        <t t-else="">
+                            <p class="text-muted"><em
+                                >Nenhuma mensagem registrada.</em></p>
+                        </t>
+
+                        <!-- Notas Internas -->
+                        <t
+                            t-set="internal_notes"
+                            t-value="doc.message_ids.filtered(
+                            lambda m: m.message_type in ('comment', 'email')
+                            and m.subtype_id
+                            and m.subtype_id.internal
+                        ).sorted(key=lambda m: m.date)"
+                        />
+
+                        <div class="row mb-3 mt-4">
+                            <div class="col-12">
+                                <h4>Testes de Rede</h4>
+                            </div>
+                        </div>
+
+                        <t t-if="internal_notes">
+                            <t t-foreach="internal_notes" t-as="msg">
+                                <div
+                                    class="mb-3 border rounded"
+                                    style="page-break-inside: avoid;"
+                                >
+                                    <div
+                                        class="p-2 d-flex justify-content-between"
+                                        style="background-color: #fff3cd;"
+                                    >
+                                        <div>
+                                            <strong><t
+                                                    t-esc="msg.author_id.name or 'Sistema'"
+                                                /></strong>
+                                        </div>
+                                        <small class="text-muted">
+                                            <t
+                                                t-esc="msg.date"
+                                                t-options='{"widget": "datetime", "format": "dd/MM/yyyy HH:mm"}'
+                                            />
+                                        </small>
+                                    </div>
+                                    <div class="p-2">
+                                        <t t-out="msg.body" />
+                                    </div>
+                                    <t t-if="msg.attachment_ids">
+                                        <div
+                                            class="p-2 border-top"
+                                            style="background-color:#f8f9fa;"
+                                        >
+                                            <small><strong>Anexos:</strong></small>
+                                            <ul class="mb-0" style="font-size: 0.85em;">
+                                                <t
+                                                    t-foreach="msg.attachment_ids"
+                                                    t-as="att"
+                                                >
+                                                    <li><t t-esc="att.name" /></li>
+                                                </t>
+                                            </ul>
+                                        </div>
+                                    </t>
+                                </div>
+                            </t>
+                        </t>
+                        <t t-else="">
+                            <p class="text-muted"><em
+                                >Nenhuma nota interna registrada.</em></p>
+                        </t>
+
+                        <!--Todos os Anexos do Chamado-->
+                        <t
+                            t-set="all_attachments"
+                            t-value="env['ir.attachment'].sudo().search([
+                            ('res_model', '=', 'helpdesk.ticket'),
+                            ('res_id', '=', doc.id),
+                        ])"
+                        />
+                        <t t-if="all_attachments">
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <h4>Anexos do Chamado</h4>
+                                    <table class="table table-sm table-bordered">
+                                        <thead style="background-color:#f5f5f5;">
+                                            <tr>
+                                                <th>Nome do Arquivo</th>
+                                                <th>Tipo</th>
+                                                <th>Tamanho</th>
+                                                <th>Enviado por</th>
+                                                <th>Data</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="all_attachments" t-as="att">
+                                                <tr>
+                                                    <td><t t-esc="att.name" /></td>
+                                                    <td><t
+                                                            t-esc="att.mimetype or '—'"
+                                                        /></td>
+                                                    <td>
+                                                        <t t-if="att.file_size">
+                                                            <t
+                                                                t-esc="'%.1f KB' % (att.file_size / 1024.0)"
+                                                            />
+                                                        </t>
+                                                        <t t-else="">—</t>
+                                                    </td>
+                                                    <td><t
+                                                            t-esc="att.create_uid.name or '—'"
+                                                        /></td>
+                                                    <td>
+                                                        <t
+                                                            t-esc="att.create_date"
+                                                            t-options='{"widget": "datetime", "format": "dd/MM/yyyy HH:mm"}'
+                                                        />
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </t>
+
+                    </div><!-- /page -->
+
+                </t><!-- /web.external_layout -->
+            </t><!-- /foreach docs -->
+        </t><!-- /web.html_container -->
+    </template>
+
+</odoo>

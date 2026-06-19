@@ -1,0 +1,533 @@
+﻿<odoo>
+    <!-- Atualiza registro legado no banco antes do cascade de noc_base (conteúdo migrado para noc_base) -->
+    <record id="view_helpdesk_ticket_form_inherit_hardware_fields" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.inherit.hardware.fields</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk_mgmt.ticket_view_form" />
+        <field name="active" eval="False" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='tag_ids']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Campos do formulário do chamado -->
+    <record id="view_helpdesk_ticket_form_inherit_noc_base" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.inherit.noc.base</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk_mgmt.ticket_view_form" />
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <!-- Número pequeno sem HT no cabeçalho; título como campo normal com label -->
+            <xpath expr="//div[@name='title']" position="replace">
+                <div class="oe_title pe-0 w-100 mw-100" name="title">
+                    <h1 class="d-flex flex-row align-items-center gap-2">
+                        <span class="text-muted fs-5 text-nowrap">
+                            <field name="number_short" readonly="1" />
+                        </span>
+                        <field
+                            name="kanban_state"
+                            class="d-flex align-items-center"
+                            widget="state_selection"
+                        />
+                    </h1>
+                </div>
+            </xpath>
+
+            <!-- Move o campo name para o grupo principal como campo labelado -->
+            <xpath expr="//group[@name='main']" position="before">
+                <group>
+                    <field name="name" string="Título" />
+                </group>
+            </xpath>
+
+            <xpath expr="//field[@name='priority']" position="after">
+                <field name="designation_speed" />
+            </xpath>
+
+            <xpath expr="//field[@name='team_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='category_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute
+                    name="placeholder"
+                >Insira título/descrição do chamado</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field
+                    name="provider_id"
+                    domain="[('noc_type', '=', 'provider'), ('is_company', '=', True)]"
+                    options="{'no_create': True}"
+                />
+            </xpath>
+
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='provider_id']" position="after">
+                <field name="external_ticket_number" />
+                <field name="is_rma_cisco_logicalis" invisible="1" />
+                <field
+                    name="rma_number"
+                    attrs="{'invisible': [('is_rma_cisco_logicalis', '=', False)]}"
+                />
+                <field
+                    name="serial_number"
+                    attrs="{'invisible': [('is_rma_cisco_logicalis', '=', False)]}"
+                />
+                <field
+                    name="hostname"
+                    attrs="{'invisible': [('is_rma_cisco_logicalis', '=', False)]}"
+                />
+                <!-- campos invisíveis obrigatórios para attrs -->
+                <field name="first_contact_type" invisible="1" />
+                <field name="first_contact_id" invisible="1" />
+
+                <div attrs="{'invisible': [('first_contact_id', '=', False)]}">
+                    <separator string="Primeiro Contato" />
+                    <field name="first_contact_name" readonly="1" nolabel="1" />
+                    <field
+                        name="first_contact_email"
+                        nolabel="1"
+                        attrs="{'invisible': [('first_contact_type', '!=', 'email')]}"
+                    />
+                    <field
+                        name="first_contact_phone"
+                        nolabel="1"
+                        attrs="{'invisible': [('first_contact_type', '!=', 'phone')]}"
+                    />
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='channel_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='sequence']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='partner_name']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='partner_email']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='priority']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='tag_ids']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='create_date']" position="after">
+                <field name="ticket_creator_id" readonly="1" />
+            </xpath>
+
+            <xpath expr="//field[@name='user_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="user_short_name" readonly="1" />
+            </xpath>
+
+            <xpath expr="//field[@name='provider_id']" position="before">
+                <field name="tag_id" string="Tipo de Evento" />
+            </xpath>
+
+            <xpath expr="//sheet" position="inside">
+                <group
+                    string="Agendamento de Visita"
+                    attrs="{'invisible': [('stage_id', '!=', %(noc_helpdesk.helpdesk_ticket_stage_visit)d)]}"
+                >
+
+                    <group>
+                        <field
+                            name="visit_date_time"
+                            attrs="{'required': [('stage_id', '=', %(noc_helpdesk.helpdesk_ticket_stage_visit)d)]}"
+                        />
+                        <field
+                            name="operator_name"
+                            attrs="{'required': [('stage_id', '=', %(noc_helpdesk.helpdesk_ticket_stage_visit)d)]}"
+                        />
+                        <field name="visit_equipment_domain_ids" invisible="1" />
+                        <field
+                            name="visit_equipment_id"
+                            string="Equipamento da Visita"
+                            domain="[('id', 'in', visit_equipment_domain_ids)]"
+                        />
+
+                        <field
+                            name="visit_equipment_address"
+                            string="Endereço"
+                            readonly="1"
+                        />
+                    </group>
+
+                </group>
+            </xpath>
+
+
+        </field>
+    </record>
+
+    <!-- Campos do portal externo (visíveis apenas quando criado pelo portal) -->
+    <record id="view_helpdesk_ticket_form_inherit_portal_fields" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.inherit.portal.fields</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk_mgmt.ticket_view_form" />
+        <field name="arch" type="xml">
+
+            <!-- Oculta o grupo principal de campos quando vier do portal -->
+            <xpath expr="//group[@name='main']" position="attributes">
+                <attribute
+                    name="attrs"
+                >{'invisible': [('portal_type', '!=', False)]}</attribute>
+            </xpath>
+
+            <xpath expr="//notebook" position="before">
+
+                <!-- campo oculto necessário para avaliação de attrs -->
+                <field name="portal_type" invisible="1" />
+
+                <group
+                    string="Informações do Portal"
+                    attrs="{'invisible': [('portal_type', '=', False)]}"
+                >
+                    <group>
+                        <field
+                            name="portal_submitter_id"
+                            string="Aberto por"
+                            widget="many2one_avatar_user"
+                            readonly="1"
+                        />
+                        <field
+                            name="user_id"
+                            string="Responsável"
+                            widget="many2one_avatar_user"
+                        />
+                    </group>
+
+                    <!-- ── Configuração de Rede ── -->
+                    <group
+                        string="Configuração de Rede"
+                        attrs="{'invisible': [('portal_type', '!=', 'network_config')]}"
+                    >
+                        <field name="portal_action_plan" readonly="1" />
+                        <field name="portal_return_plan" readonly="1" />
+                    </group>
+
+                    <!-- ── CPE Livre ── -->
+                    <group
+                        string="CPE Livre"
+                        attrs="{'invisible': [('portal_type', '!=', 'cpe_livre')]}"
+                    >
+                        <field name="portal_loopback" readonly="1" />
+                        <field name="portal_hostname" readonly="1" />
+                    </group>
+
+                    <!-- ── Cadastro de Roteador ── -->
+                    <group
+                        string="Cadastro de Roteador"
+                        attrs="{'invisible': [('portal_type', '!=', 'router_register')]}"
+                    >
+                        <field name="portal_loopback" readonly="1" />
+                        <field name="portal_hostname" readonly="1" />
+                    </group>
+
+                    <!-- ── Senha ── -->
+                    <group
+                        string="Senha"
+                        attrs="{'invisible': [('portal_type', '!=', 'password')]}"
+                    >
+                        <field name="portal_password_system" readonly="1" />
+                        <field name="portal_corporate_email" readonly="1" />
+                        <field name="portal_password_action" readonly="1" />
+                    </group>
+                </group>
+
+            </xpath>
+        </field>
+    </record>
+
+
+    <!-- Campos de início/fim para Manutenção Programada Informativa -->
+    <record
+        id="view_helpdesk_ticket_form_inherit_manutencao_programada"
+        model="ir.ui.view"
+    >
+        <field name="name">helpdesk.ticket.form.inherit.manutencao.programada</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk_mgmt.ticket_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <field name="is_manutencao_programada" invisible="1" />
+                <group
+                    string="Manutenção Programada"
+                    attrs="{'invisible': [('is_manutencao_programada', '=', False)]}"
+                >
+                    <group>
+                        <field
+                            name="activity_start_datetime"
+                            string="Início da Atividade"
+                        />
+                        <field name="activity_end_datetime" string="Fim da Atividade" />
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Campos de início/fim para FANP, FAP, FAPE e FAPI -->
+    <record id="view_helpdesk_ticket_form_inherit_fap_atividade" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.inherit.fap.atividade</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk_mgmt.ticket_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <field name="is_fap" invisible="1" />
+                <group
+                    string="Datas da Atividade"
+                    attrs="{'invisible': [('is_fap', '=', False)]}"
+                >
+                    <group>
+                        <field
+                            name="activity_start_datetime"
+                            string="Início da Atividade"
+                        />
+                        <field name="activity_end_datetime" string="Fim da Atividade" />
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Data completa (DD/MM/AAAA HH:mm) e create_date como primeiro campo -->
+    <record id="view_helpdesk_ticket_form_inherit_date_fields" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.inherit.date.fields</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk_mgmt.ticket_view_form" />
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <!-- Remove create_date da posição original -->
+            <xpath
+                expr="//group[@name='main']/group[1]/field[@name='create_date']"
+                position="replace"
+            />
+            <!-- Reinsere create_date como primeiro campo do grupo principal -->
+            <xpath
+                expr="//group[@name='main']/group[1]/field[@name='active']"
+                position="before"
+            >
+                <field
+                    name="create_date"
+                    widget="datetime"
+                    string="Data de Criação"
+                    readonly="1"
+                />
+            </xpath>
+            <!-- Widget datetime nos campos de data em Other Information -->
+            <xpath
+                expr="//page[@name='other_info']//field[@name='last_stage_update']"
+                position="attributes"
+            >
+                <attribute name="widget">datetime</attribute>
+            </xpath>
+            <xpath
+                expr="//page[@name='other_info']//field[@name='assigned_date']"
+                position="attributes"
+            >
+                <attribute name="widget">datetime</attribute>
+            </xpath>
+            <xpath
+                expr="//page[@name='other_info']//field[@name='closed_date']"
+                position="attributes"
+            >
+                <attribute name="widget">datetime</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Aba Other Information: data de entrada em validação -->
+    <record id="view_helpdesk_ticket_form_inherit_validation_date" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.inherit.validation.date</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk_mgmt.ticket_view_form" />
+        <field name="arch" type="xml">
+            <xpath
+                expr="//page[@name='other_info']//field[@name='closed_date']"
+                position="before"
+            >
+                <field name="validation_date" widget="datetime" readonly="1" />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_helpdesk_ticket_form_inherit_reopen_date" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.inherit.reopen.date</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk_mgmt.ticket_view_form" />
+        <field name="arch" type="xml">
+            <xpath
+                expr="//page[@name='other_info']//field[@name='closed_date']"
+                position="before"
+            >
+                <field name="reopen_date" widget="datetime" readonly="1" />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_helpdesk_ticket_form_inherit_failure_cause" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.inherit.failure.cause</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk_mgmt.ticket_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='create_date']" position="after">
+                <field name="is_portal_ticket" invisible="1" />
+                <field
+                    name="failure_cause"
+                    attrs="{'required': [('stage_id', '=', %(helpdesk_mgmt.helpdesk_ticket_stage_done)d), ('is_portal_ticket', '=', False)]}"
+                />
+                <field
+                    name="product_name"
+                    attrs="{'invisible': [('is_rma_cisco_logicalis', '=', False)]}"
+                />
+                <field
+                    name="contract_number"
+                    attrs="{'invisible': [('is_rma_cisco_logicalis', '=', False)]}"
+                />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_helpdesk_ticket_form_inherit_share_teams" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.inherit.share.teams</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk_mgmt.ticket_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button
+                    name="action_share_on_teams"
+                    type="object"
+                    string="Compartilhar no Teams"
+                    icon="fa-share-alt"
+                    class="btn-secondary"
+                />
+            </xpath>
+        </field>
+    </record>
+
+    <record
+        id="view_helpdesk_ticket_form_inherit_traffic_restriction"
+        model="ir.ui.view"
+    >
+        <field name="name">helpdesk.ticket.form.inherit.traffic.restriction</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk_mgmt.ticket_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="after">
+                <!-- campos invisíveis obrigatórios para avaliação de attrs -->
+                <field name="is_intermitente" invisible="1" />
+                <field name="is_discarded_packet" invisible="1" />
+
+                <!-- Banner vermelho: Restrição ATIVA -->
+                <div
+                    class="alert alert-danger mb-0 px-3 py-2 d-flex align-items-center border-0 rounded-0"
+                    role="status"
+                    attrs="{'invisible': ['|', '&amp;', ('is_intermitente', '=', False), ('is_discarded_packet', '=', False), ('traffic_restriction', '=', False)]}"
+                >
+                    <field
+                        name="traffic_restriction"
+                        widget="boolean_toggle"
+                        nolabel="1"
+                    />
+                    <span class="ms-2 fw-bold">⚠ Restrição de Tráfego ATIVA</span>
+                </div>
+
+                <!-- Banner verde: Restrição INATIVA -->
+                <div
+                    class="alert alert-success mb-0 px-3 py-2 d-flex align-items-center border-0 rounded-0"
+                    role="status"
+                    attrs="{'invisible': ['|', '&amp;', ('is_intermitente', '=', False), ('is_discarded_packet', '=', False), ('traffic_restriction', '=', True)]}"
+                >
+                    <field
+                        name="traffic_restriction"
+                        widget="boolean_toggle"
+                        nolabel="1"
+                    />
+                    <span class="ms-2">Restrição de Tráfego</span>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_helpdesk_ticket_form_inherit_attachments" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.inherit.attachments</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk_mgmt.ticket_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Arquivos" name="attachments">
+                    <field
+                        name="attachment_ids"
+                        widget="many2many_binary"
+                        nolabel="1"
+                    />
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_helpdesk_ticket_form_inherit_related_tickets" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.inherit.related.tickets</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk_mgmt.ticket_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Chamados Correlacionados" name="related_tickets">
+                    <field name="related_ticket_ids" nolabel="1">
+                        <tree>
+                            <field name="name" string="Título" />
+                            <field name="tag_id" string="Tipo de Evento" />
+                            <field name="stage_id" string="Estágio" />
+                            <field name="user_id" string="Responsável" />
+                            <button
+                                name="action_open_form"
+                                type="object"
+                                icon="fa-external-link"
+                                title="Abrir chamado"
+                                string=""
+                            />
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_helpdesk_ticket_form_inherit_reopen_count" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.inherit.reopen.count</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk_mgmt.ticket_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="after">
+                <div
+                    attrs="{'invisible': [('reopen_count', '=', 0)]}"
+                    style="background-color: #fff3cd; border-bottom: 1px solid #ffc107; padding: 4px 16px; font-size: 12px; color: #856404;"
+                >
+                    <field name="reopen_count" readonly="1" nolabel="1" />
+                    <span> reincidência(s)</span>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

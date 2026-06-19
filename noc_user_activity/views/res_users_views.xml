@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <!-- Adiciona coluna "Última Atividade" na lista de usuários -->
+    <record id="view_users_tree_noc_activity" model="ir.ui.view">
+        <field name="name">res.users.tree.noc.activity</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_tree" />
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="inside">
+                <field name="last_activity" optional="show" />
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Botão inteligente no form de usuário: histórico de sessões -->
+    <record id="view_users_form_noc_activity" model="ir.ui.view">
+        <field name="name">res.users.form.noc.activity</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button
+                    name="%(noc_user_activity.action_res_users_session_log)d"
+                    type="action"
+                    class="oe_stat_button"
+                    icon="fa-clock-o"
+                    groups="base.group_system"
+                    context="{'default_user_id': active_id, 'search_default_user_id': active_id}"
+                >
+                    <field
+                        name="session_log_count"
+                        widget="statinfo"
+                        string="Sessões"
+                    />
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

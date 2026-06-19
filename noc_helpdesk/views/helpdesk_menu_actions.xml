@@ -1,0 +1,80 @@
+<!-- Actions -->
+<odoo>
+    <record id="helpdesk_mgmt.helpdesk_ticket_menu" model="ir.ui.menu">
+        <field name="action" eval="False" />
+    </record>
+    <!-- Todos -->
+    <record id="helpdesk_ticket_action_all" model="ir.actions.act_window">
+        <field name="name">Todos os Chamados</field>
+        <field name="res_model">helpdesk.ticket</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{'group_by': ['tag_id']}</field>
+    </record>
+
+    <!-- Abertos -->
+    <record id="helpdesk_ticket_action_open" model="ir.actions.act_window">
+        <field name="name">Abertos</field>
+        <field name="res_model">helpdesk.ticket</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[]</field>
+        <field
+            name="context"
+        >{'group_by': ['tag_id'], 'helpdesk_active_filter': 'open'}</field>
+    </record>
+
+    <!-- Alta Latência -->
+    <record id="helpdesk_ticket_action_high_latency" model="ir.actions.act_window">
+        <field name="name">Alta Latência</field>
+        <field name="res_model">helpdesk.ticket</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{'helpdesk_active_filter': 'high_latency'}</field>
+    </record>
+
+    <!-- Indisponíveis -->
+    <record id="helpdesk_ticket_action_unavailable" model="ir.actions.act_window">
+        <field name="name">Indisponíveis</field>
+        <field name="res_model">helpdesk.ticket</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{'helpdesk_active_filter': 'unavailable'}</field>
+    </record>
+
+    <!-- Descarte de Pacote -->
+    <record id="helpdesk_ticket_action_discarded_packet" model="ir.actions.act_window">
+        <field name="name">Descarte de Pacote</field>
+        <field name="res_model">helpdesk.ticket</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{'helpdesk_active_filter': 'discarded_packet'}</field>
+    </record>
+
+    <!-- Fechados -->
+    <record id="helpdesk_ticket_action_closed" model="ir.actions.act_window">
+        <field name="name">Fechados</field>
+        <field name="res_model">helpdesk.ticket</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{'helpdesk_active_filter': 'closed'}</field>
+    </record>
+
+    <!-- Meus Tickets -->
+    <record id="helpdesk_ticket_action_mine" model="ir.actions.act_window">
+        <field name="name">Meus Tickets</field>
+        <field name="res_model">helpdesk.ticket</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{'helpdesk_active_filter': 'mine'}</field>
+    </record>
+
+    <record id="engine_url_action" model="ir.actions.act_url">
+        <field name="name">Engine Monitoring</field>
+        <field
+            name="url"
+        >http://200.159.229.50/apps/engineMonitoring/index.php?ldp_alarm_filter=Black</field>
+        <field name="target">new</field>
+
+    </record>
+
+</odoo>

@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- ═══ LIST VIEW ═══ -->
+    <record id="view_noc_monthly_report_list" model="ir.ui.view">
+        <field name="name">noc.monthly.report.list</field>
+        <field name="model">noc.monthly.report</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="meta_falha_massiva" />
+                <field name="meta_eventos_amarelos" />
+                <field name="meta_disponibilidade_backbone" />
+                <field name="meta_descartes_pacotes" />
+                <field name="meta_latencia" />
+                <field name="total_backbone_circuits" />
+            </tree>
+        </field>
+    </record>
+
+    <!-- ═══ FORM VIEW ═══ -->
+    <record id="view_noc_monthly_report_form" model="ir.ui.view">
+        <field name="name">noc.monthly.report.form</field>
+        <field name="model">noc.monthly.report</field>
+        <field name="arch" type="xml">
+            <form string="Configuração do Relatório Mensal">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1" /></h1>
+                    </div>
+                    <group string="Período">
+                        <group>
+                            <field name="month" />
+                            <field name="year" />
+                        </group>
+                    </group>
+                    <group string="Metas">
+                        <group>
+                            <field name="meta_falha_massiva" />
+                            <field name="meta_eventos_amarelos" />
+                            <field name="meta_disponibilidade_backbone" />
+                        </group>
+                        <group>
+                            <field name="meta_descartes_pacotes" />
+                            <field name="meta_latencia" />
+                        </group>
+                    </group>
+                    <group string="Configuração — Disponibilidade Backbone">
+                        <group>
+                            <field name="total_backbone_circuits" />
+                            <field
+                                name="backbone_circuit_type_ids"
+                                widget="many2many_tags"
+                            />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Falha Massiva">
+                            <group>
+                                <field name="analise_falha_massiva" />
+                                <field name="acao_falha_massiva" />
+                            </group>
+                        </page>
+                        <page string="Eventos Amarelos — Indisponibilidade">
+                            <group>
+                                <field name="analise_eventos_amarelos" />
+                                <field name="acao_eventos_amarelos" />
+                            </group>
+                        </page>
+                        <page string="Disponibilidade Backbone">
+                            <group>
+                                <field name="analise_disponibilidade" />
+                                <field name="acao_disponibilidade" />
+                            </group>
+                        </page>
+                        <page string="Descartes de Pacotes">
+                            <group>
+                                <field name="analise_descartes" />
+                                <field name="acao_descartes" />
+                            </group>
+                        </page>
+                        <page string="Latência">
+                            <group>
+                                <field name="analise_latencia" />
+                                <field name="acao_latencia" />
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ═══ ACTION: Configuração do Relatório Mensal ═══ -->
+    <record id="action_noc_monthly_report_config" model="ir.actions.act_window">
+        <field name="name">Configuração do Relatório Mensal</field>
+        <field name="res_model">noc.monthly.report</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

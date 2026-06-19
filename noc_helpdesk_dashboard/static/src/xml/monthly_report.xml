@@ -1,0 +1,244 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+<t t-name="noc_helpdesk_dashboard.RelatórioMensal" owl="1">
+<div class="rm-wrapper">
+
+    <!-- HEADER -->
+    <div class="rm-header">
+        <div class="rm-brand">
+            <div class="rm-brand-icon">📊</div>
+            <div>
+                <div class="rm-brand-title">Relatório Mensal — Rede Backbone</div>
+                <div class="rm-brand-sub">NOC Team</div>
+            </div>
+        </div>
+        <div class="rm-controls">
+            <select
+                        class="rm-select"
+                        t-on-change="(ev) => this.setMonth(ev.target.value)"
+                    >
+                <t t-foreach="state.availableMonths" t-as="mo" t-key="mo.value">
+                    <option
+                                t-att-value="mo.value"
+                                t-att-selected="mo.value === state.selectedMonth"
+                            >
+                        <t t-esc="mo.label" />
+                    </option>
+                </t>
+            </select>
+            <button
+                        class="rm-btn-print"
+                        t-on-click="printReport"
+                        title="Imprimir / Exportar PDF"
+                    >🖨️ Imprimir</button>
+            <button
+                        class="rm-btn-ppt"
+                        t-on-click="exportPpt"
+                        title="Exportar para PowerPoint"
+                    >📊 Exportar PPT</button>
+            <t t-if="state.canEdit">
+                <button
+                            t-attf-class="rm-btn-save #{state.isDirty ? 'rm-btn-save--dirty' : ''}"
+                            t-att-disabled="state.saving"
+                            t-on-click="saveConfig"
+                        >
+                    <t t-if="state.saving">⏳ Salvando...</t>
+                    <t t-elif="state.isDirty">💾 Salvar Análise ●</t>
+                    <t t-else="">💾 Salvar Análise</t>
+                </button>
+            </t>
+        </div>
+    </div>
+
+    <!-- LOADING -->
+    <t t-if="state.loading">
+        <div class="rm-loading">Carregando dados...</div>
+    </t>
+
+    <!-- ERROR -->
+    <t t-elif="state.error">
+        <div class="rm-error"><t t-esc="state.error" /></div>
+    </t>
+
+    <!-- CONTENT -->
+    <t t-elif="state.data">
+        <div class="rm-grid">
+
+            <t t-call="noc_helpdesk_dashboard.KpiCard">
+                <t t-set="kpi_key" t-value="'falha_massiva'" />
+                <t t-set="chart_id" t-value="'rm-chart-falha-massiva'" />
+                <t t-set="kpi_title" t-value="'FALHA MASSIVA BACKBONE'" />
+                <t t-set="kpi_meta_field" t-value="'meta_falha_massiva'" />
+                <t t-set="analise_field" t-value="'analise_falha_massiva'" />
+                <t t-set="acao_field" t-value="'acao_falha_massiva'" />
+                <t t-set="show_percent" t-value="false" />
+                <t t-set="show_top_table" t-value="false" />
+            </t>
+
+            <t t-call="noc_helpdesk_dashboard.KpiCard">
+                <t t-set="kpi_key" t-value="'eventos_amarelos'" />
+                <t t-set="chart_id" t-value="'rm-chart-eventos-amarelos'" />
+                <t
+                            t-set="kpi_title"
+                            t-value="'EVENTOS AMARELOS — INDISPONIBILIDADE DE LINKS'"
+                        />
+                <t t-set="kpi_meta_field" t-value="'meta_eventos_amarelos'" />
+                <t t-set="analise_field" t-value="'analise_eventos_amarelos'" />
+                <t t-set="acao_field" t-value="'acao_eventos_amarelos'" />
+                <t t-set="show_percent" t-value="false" />
+                <t t-set="show_top_table" t-value="true" />
+                <t t-set="top_table_title" t-value="'TOP 5 — Links Indisponíveis'" />
+                <t t-set="top_table_key" t-value="'eventos_amarelos'" />
+            </t>
+
+            <t t-call="noc_helpdesk_dashboard.KpiCard">
+                <t t-set="kpi_key" t-value="'disponibilidade'" />
+                <t t-set="chart_id" t-value="'rm-chart-disponibilidade'" />
+                <t t-set="kpi_title" t-value="'DISPONIBILIDADE DA REDE BACKBONE'" />
+                <t t-set="kpi_meta_field" t-value="'meta_disponibilidade_backbone'" />
+                <t t-set="analise_field" t-value="'analise_disponibilidade'" />
+                <t t-set="acao_field" t-value="'acao_disponibilidade'" />
+                <t t-set="show_percent" t-value="true" />
+                <t t-set="show_top_table" t-value="false" />
+            </t>
+
+            <t t-call="noc_helpdesk_dashboard.KpiCard">
+                <t t-set="kpi_key" t-value="'descartes_pacotes'" />
+                <t t-set="chart_id" t-value="'rm-chart-descartes-pacotes'" />
+                <t t-set="kpi_title" t-value="'DESCARTES DE PACOTES'" />
+                <t t-set="kpi_meta_field" t-value="'meta_descartes_pacotes'" />
+                <t t-set="analise_field" t-value="'analise_descartes'" />
+                <t t-set="acao_field" t-value="'acao_descartes'" />
+                <t t-set="show_percent" t-value="false" />
+                <t t-set="show_top_table" t-value="true" />
+                <t t-set="top_table_title" t-value="'TOP 5 — Links com Descartes'" />
+                <t t-set="top_table_key" t-value="'descartes_pacotes'" />
+            </t>
+
+            <t t-call="noc_helpdesk_dashboard.KpiCard">
+                <t t-set="kpi_key" t-value="'latencia'" />
+                <t t-set="chart_id" t-value="'rm-chart-latencia'" />
+                <t t-set="kpi_title" t-value="'LATÊNCIA'" />
+                <t t-set="kpi_meta_field" t-value="'meta_latencia'" />
+                <t t-set="analise_field" t-value="'analise_latencia'" />
+                <t t-set="acao_field" t-value="'acao_latencia'" />
+                <t t-set="show_percent" t-value="false" />
+                <t t-set="show_top_table" t-value="true" />
+                <t t-set="top_table_title" t-value="'TOP 5 — Links com Latência'" />
+                <t t-set="top_table_key" t-value="'latencia'" />
+            </t>
+
+        </div><!-- .rm-grid -->
+    </t><!-- t-elif state.data -->
+
+</div><!-- .rm-wrapper -->
+</t>
+
+<!-- ══ Subtemplate: KPI Card ══ -->
+<t t-name="noc_helpdesk_dashboard.KpiCard" owl="1">
+    <div t-attf-class="rm-kpi-card #{this.semaforo(kpi_key)}">
+        <div class="rm-kpi-top">
+            <div class="rm-kpi-title"><t t-esc="kpi_title" /></div>
+            <div class="rm-kpi-scores">
+                <div class="rm-score-block">
+                    <div class="rm-score-label">REALIZADO</div>
+                    <div t-attf-class="rm-score-val #{this.semaforo(kpi_key)}">
+                        <t t-if="show_percent">
+                            <t t-if="state.data.kpis[kpi_key] !== null">
+                                <t t-esc="state.data.kpis[kpi_key]" />%
+                            </t>
+                            <t t-else="">—</t>
+                        </t>
+                        <t t-else="">
+                            <t t-esc="state.data.kpis[kpi_key]" />
+                        </t>
+                    </div>
+                </div>
+                <div class="rm-score-block">
+                    <div class="rm-score-label">META</div>
+                    <div class="rm-score-val green">
+                        <t t-esc="state.data.config[kpi_meta_field]" /><t
+                                t-if="show_percent"
+                            >%</t>
+                    </div>
+                </div>
+                <div class="rm-semaforo-col">
+                    <div
+                            t-attf-class="rm-semaforo-icon rm-s-#{this.semaforo(kpi_key)}"
+                        />
+                </div>
+            </div>
+            <div class="rm-analise-panel">
+                <div class="rm-analise-col">
+                    <div class="rm-analise-head">Desvios:<button
+                                class="rm-btn-sugerir"
+                                t-on-click="() => this.sugerir(analise_field)"
+                                title="Preencher automaticamente"
+                            >↺</button></div>
+                    <textarea
+                            class="rm-analise-text"
+                            t-att-readonly="!state.canEdit"
+                            t-on-input="(ev) => this.updateText(analise_field, ev.target.value)"
+                        ><t t-esc="state.cfg[analise_field]" /></textarea>
+                </div>
+                <div class="rm-analise-col">
+                    <div class="rm-analise-head">Ação Sistêmica:<button
+                                class="rm-btn-sugerir"
+                                t-on-click="() => this.sugerir(acao_field)"
+                                title="Preencher automaticamente"
+                            >↺</button></div>
+                    <textarea
+                            class="rm-analise-text"
+                            t-att-readonly="!state.canEdit"
+                            t-on-input="(ev) => this.updateText(acao_field, ev.target.value)"
+                        ><t t-esc="state.cfg[acao_field]" /></textarea>
+                </div>
+            </div>
+        </div>
+        <div t-attf-class="rm-kpi-bottom #{show_top_table ? 'rm-kpi-bottom-2col' : ''}">
+            <canvas t-att-id="chart_id" class="rm-chart" />
+            <t t-if="show_top_table">
+                <div class="rm-top-table-wrap">
+                    <div class="rm-top-table-title"><t t-esc="top_table_title" /></div>
+                    <t t-call="noc_helpdesk_dashboard.TopLinksTable">
+                        <t t-set="rows" t-value="state.data.top_links[top_table_key]" />
+                    </t>
+                </div>
+            </t>
+        </div>
+    </div>
+</t>
+
+<!-- ══ Subtemplate: Top Links Table ══ -->
+<t t-name="noc_helpdesk_dashboard.TopLinksTable" owl="1">
+    <table class="rm-top-table">
+        <thead>
+            <tr>
+                <th>Designação</th>
+                <th>Operadora</th>
+                <th>Qtde</th>
+                <th>% Total</th>
+                <th>Duração</th>
+            </tr>
+        </thead>
+        <tbody>
+            <t t-if="rows and rows.length">
+                <t t-foreach="rows" t-as="row" t-key="row_index">
+                    <tr>
+                        <td><t t-esc="row.designacao" /></td>
+                        <td><t t-esc="row.operadora" /></td>
+                        <td><t t-esc="row.qtde" /></td>
+                        <td><t t-esc="row.pct_total" />%</td>
+                        <td><t t-esc="row.duracao_fmt" /></td>
+                    </tr>
+                </t>
+            </t>
+            <t t-else="">
+                <tr><td colspan="5" class="rm-no-data">Sem ocorrências no mês</td></tr>
+            </t>
+        </tbody>
+    </table>
+</t>
+
+</templates>

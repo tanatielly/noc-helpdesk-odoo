@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_helpdesk_ticket_user,helpdesk.ticket user,model_helpdesk_ticket,helpdesk_mgmt.group_helpdesk_user,1,1,1,0
+access_helpdesk_ticket_manager,helpdesk.ticket manager,model_helpdesk_ticket,helpdesk_mgmt.group_helpdesk_manager,1,1,1,1
+access_network_equipment_user,network.equipment user,model_network_equipment,helpdesk_mgmt.group_helpdesk_user,1,1,1,0
+access_network_equipment_manager,network.equipment manager,model_network_equipment,helpdesk_mgmt.group_helpdesk_manager,1,1,1,1
+access_network_vlan_user,network.vlan user,model_network_vlan,helpdesk_mgmt.group_helpdesk_user,1,1,1,0
+access_network_vlan_manager,network.vlan manager,model_network_vlan,helpdesk_mgmt.group_helpdesk_manager,1,1,1,1
+access_network_circuit_user,network.circuit user,model_network_circuit,helpdesk_mgmt.group_helpdesk_user,1,1,1,0
+access_network_circuit_manager,network.circuit manager,model_network_circuit,helpdesk_mgmt.group_helpdesk_manager,1,1,1,1
+access_network_circuit_type_user,network.circuit.type user,model_network_circuit_type,helpdesk_mgmt.group_helpdesk_user,1,0,0,0
+access_network_circuit_type_manager,network.circuit.type manager,model_network_circuit_type,helpdesk_mgmt.group_helpdesk_manager,1,1,1,1
+access_network_site_user,network.site user,model_network_site,helpdesk_mgmt.group_helpdesk_user,1,1,1,0
+access_network_site_manager,network.site manager,model_network_site,helpdesk_mgmt.group_helpdesk_manager,1,1,1,1

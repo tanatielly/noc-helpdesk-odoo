@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+        <record id="ir_cron_helpdesk_stale_ticket_notification" model="ir.cron">
+            <field name="name">Helpdesk - Notify Stale Tickets</field>
+            <field name="model_id" ref="noc_helpdesk.model_helpdesk_ticket" />
+            <field name="state">code</field>
+            <field name="code">model.cron_notify_inactive_tickets()</field>
+            <field name="interval_number">5</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="ir_cron_helpdesk_new_ticket_notification" model="ir.cron">
+            <field name="name">Helpdesk - Notify New Tickets</field>
+            <field name="model_id" ref="noc_helpdesk.model_helpdesk_ticket" />
+            <field name="state">code</field>
+            <field name="code">model.cron_notify_new_tickets()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="active">True</field>
+        </record>
+
+
+        <record id="ir_cron_manutencao_programada_notification" model="ir.cron">
+            <field name="name">Helpdesk - Notify Manutenção Programada</field>
+            <field name="model_id" ref="noc_helpdesk.model_helpdesk_ticket" />
+            <field name="state">code</field>
+            <field name="code">model.cron_notify_manutencao_programada()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="ir_cron_activity_start_notification" model="ir.cron">
+            <field name="name">Mail Activity - Notify Activity Start</field>
+            <field name="model_id" ref="mail.model_mail_activity" />
+            <field name="state">code</field>
+            <field name="code">model.cron_notify_activity_start()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="ir_cron_plantao_shift_change" model="ir.cron">
+            <field name="name">Helpdesk - Notify Plantão Shift Change</field>
+            <field name="model_id" ref="noc_helpdesk.model_helpdesk_ticket" />
+            <field name="state">code</field>
+            <field name="code">model.cron_notify_plantao_shift_change()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="active">True</field>
+        </record>
+
+</odoo>

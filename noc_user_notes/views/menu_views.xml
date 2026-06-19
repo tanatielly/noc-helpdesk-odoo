@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <menuitem
+        id="menu_user_notes"
+        name="Minhas Anotações"
+        parent="helpdesk_mgmt.helpdesk_ticket_main_menu"
+        action="action_user_note"
+        sequence="35"
+    />
+
+</odoo>

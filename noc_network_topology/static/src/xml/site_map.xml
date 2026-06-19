@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<templates xml:space="preserve">
+    <t t-name="noc_network_topology.NetworkSiteMap" owl="1">
+        <div
+            class="o_network_site_map d-flex flex-column"
+            style="height:100%;min-height:560px;"
+        >
+
+            <!-- ── Barra superior ─────────────────────────────────────── -->
+            <div
+                class="d-flex align-items-center gap-3 px-3 py-2 border-bottom bg-light flex-shrink-0"
+            >
+                <span class="fw-semibold">Mapa de Sites</span>
+                <span class="text-muted small">
+                    <t t-esc="state.sites.length" /> site(s)
+                </span>
+                <div class="d-flex align-items-center gap-3 ms-3 small text-muted">
+                    <span><span
+                            style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#0056b3;margin-right:3px;"
+                        />Site</span>
+                    <span><span
+                            style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#dc3545;margin-right:3px;"
+                        />Selecionado</span>
+                    <span><span
+                            style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#ffc107;margin-right:3px;"
+                        />Chamado aberto</span>
+                    <span><span
+                            style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#fd7e14;margin-right:3px;"
+                        />Link em risco (≤ 2 restantes)</span>
+                    <span><span
+                            style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#dc3545;margin-right:3px;"
+                        />Equip. isolado / Falha massiva</span>
+                    <span>
+                        <svg
+                            width="22"
+                            height="8"
+                            style="vertical-align:middle;margin-right:3px;"
+                        >
+                            <line
+                                x1="0"
+                                y1="4"
+                                x2="22"
+                                y2="4"
+                                stroke="#adb5bd"
+                                stroke-width="2"
+                                stroke-dasharray="6 5"
+                            />
+                        </svg>Circuito
+                    </span>
+                </div>
+                <t t-if="state.unmappedSites.length > 0">
+                    <span
+                        class="ms-auto text-warning small"
+                        t-att-title="'Sites sem coordenadas: ' + state.unmappedSites.join(', ')"
+                    >
+                        <i class="fa fa-exclamation-triangle me-1" />
+                        <t t-esc="state.unmappedSites.length" /> site(s) sem localização
+                    </span>
+                </t>
+            </div>
+
+            <!-- ── Conteúdo: mapa + painel topologia ─────────────────── -->
+            <!-- position:relative sem overflow:hidden (igual ao NetworkTopology) -->
+            <div style="position:relative;">
+                <div t-ref="map" style="width:100%;height:520px;" />
+
+                <t t-if="state.loading">
+                    <div
+                        style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.85);z-index:1000;"
+                    >
+                        <div class="text-center text-muted">
+                            <i class="fa fa-spinner fa-spin fa-2x mb-2" />
+                            <div>Carregando mapa...</div>
+                        </div>
+                    </div>
+                </t>
+
+                <!-- Painel de topologia: overlay absoluto sobre o mapa -->
+                <t t-if="state.selectedSite">
+                    <div
+                        class="d-flex flex-column border-start bg-white"
+                        style="position:absolute;top:0;right:0;width:44%;min-width:380px;max-width:600px;height:520px;z-index:500;overflow:hidden;"
+                    >
+
+                        <!-- Cabeçalho -->
+                        <div
+                            class="d-flex align-items-start justify-content-between px-3 py-2 border-bottom bg-white flex-shrink-0"
+                        >
+                            <div>
+                                <strong t-esc="state.selectedSite.name" />
+                                <div
+                                    class="text-muted small"
+                                    t-if="state.selectedSite.address"
+                                    t-esc="state.selectedSite.address"
+                                />
+                                <div class="text-muted small">
+                                    <t
+                                        t-esc="state.selectedSite.equipment_count || 0"
+                                    /> equipamento(s)
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2 ms-2">
+                                <button
+                                    class="btn btn-sm btn-outline-primary"
+                                    t-on-click="() => this.openSiteForm(state.selectedSite)"
+                                    title="Abrir cadastro do site"
+                                >
+                                    <i class="fa fa-external-link" />
+                                </button>
+                                <button
+                                    class="btn btn-sm btn-outline-secondary"
+                                    t-on-click="closeSitePanel"
+                                    title="Fechar"
+                                >
+                                    <i class="fa fa-times" />
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Legenda -->
+                        <div
+                            class="d-flex align-items-center gap-3 px-3 py-1 border-bottom flex-shrink-0"
+                            style="font-size:11px;color:#6c757d;"
+                        >
+                            <span><span
+                                    style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#28a745;margin-right:2px;"
+                                />Ativo</span>
+                            <span><span
+                                    style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#ffc107;margin-right:2px;"
+                                />Manutenção</span>
+                            <span><span
+                                    style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#dc3545;margin-right:2px;"
+                                />Tickets</span>
+                            <span><span
+                                    style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#6c757d;margin-right:2px;"
+                                />Inativo</span>
+                        </div>
+
+                        <!-- Área da topologia SVG -->
+                        <div
+                            class="flex-grow-1 position-relative"
+                            style="min-height:0;"
+                        >
+                            <t t-if="state.loadingTopology">
+                                <div
+                                    style="position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.9);z-index:10;"
+                                >
+                                    <div class="text-center text-muted">
+                                        <i class="fa fa-spinner fa-spin fa-lg mb-1" />
+                                        <div class="small">Carregando topologia...</div>
+                                    </div>
+                                </div>
+                            </t>
+                            <t
+                                t-if="!state.loadingTopology and state.siteEquipment.length === 0"
+                            >
+                                <div
+                                    class="d-flex flex-column align-items-center justify-content-center h-100 text-muted"
+                                    style="padding:40px;"
+                                >
+                                    <i class="fa fa-plug fa-2x mb-2" />
+                                    <span>Nenhum equipamento vinculado</span>
+                                    <small
+                                        class="mt-1"
+                                    >Abra o site e vincule equipamentos na aba Equipamentos</small>
+                                </div>
+                            </t>
+                            <div
+                                t-ref="cy"
+                                style="width:100%;height:100%;min-height:400px;"
+                            />
+                        </div>
+
+                        <!-- Rodapé -->
+                        <div
+                            class="border-top px-3 py-1 flex-shrink-0"
+                            style="font-size:11px;color:#adb5bd;text-align:center;"
+                        >
+                            Clique em um equipamento para abrir o cadastro
+                        </div>
+                    </div>
+                </t>
+            </div>
+        </div>
+    </t>
+</templates>

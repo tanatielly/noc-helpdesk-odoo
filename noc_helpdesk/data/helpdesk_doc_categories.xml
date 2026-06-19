@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="0">
+    <record id="document_page_category_ata" model="document.page">
+        <field name="name">ATA</field>
+        <field name="type">category</field>
+        <field
+            name="groups_id"
+            eval="[(6, 0, [ref('noc_helpdesk.group_document_ata')])]"
+        />
+    </record>
+
+    <record id="document_page_category_area_tecnica" model="document.page">
+        <field name="name">Orientações e Procedimentos</field>
+        <field name="type">category</field>
+    </record>
+
+    <record id="document_page_category_informativo" model="document.page">
+        <field name="name">Informativo</field>
+        <field name="type">category</field>
+    </record>
+
+    <record id="document_page_category_escalonamento" model="document.page">
+        <field name="name">Escalonamento da Operadora</field>
+        <field name="type">category</field>
+    </record>
+
+    <record id="document_page_category_guia_consulta_cae" model="document.page">
+        <field name="name">Guia de Consulta CAE</field>
+        <field name="type">category</field>
+    </record>
+
+    <record id="document_page_category_notas_atualizacao" model="document.page">
+        <field name="name">Notas de Atualização</field>
+        <field name="type">category</field>
+    </record>
+
+    <record id="document_page_category_template_tacacs" model="document.page">
+        <field name="name">Template TACACS</field>
+        <field name="type">category</field>
+    </record>
+
+</odoo>

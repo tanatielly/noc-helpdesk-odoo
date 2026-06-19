@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <!-- Tree -->
+    <record id="view_res_users_session_log_tree" model="ir.ui.view">
+        <field name="name">res.users.session.log.tree</field>
+        <field name="model">res.users.session.log</field>
+        <field name="arch" type="xml">
+            <tree create="false" edit="false" delete="false">
+                <field name="user_id" />
+                <field name="login_date" />
+                <field name="logout_date" />
+                <field name="duration_minutes" string="Duração (min)" digits="[16,1]" />
+                <field
+                    name="logout_type"
+                    widget="badge"
+                    decoration-info="logout_type == 'active'"
+                    decoration-success="logout_type == 'manual'"
+                    decoration-danger="logout_type == 'timeout'"
+                    decoration-muted="logout_type == 'unknown'"
+                />
+                <field name="ip_address" />
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form -->
+    <record id="view_res_users_session_log_form" model="ir.ui.view">
+        <field name="name">res.users.session.log.form</field>
+        <field name="model">res.users.session.log</field>
+        <field name="arch" type="xml">
+            <form string="Sessão de Usuário" create="false" edit="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="user_id" />
+                            <field name="ip_address" />
+                            <field name="session_sid" />
+                        </group>
+                        <group>
+                            <field name="login_date" />
+                            <field name="logout_date" />
+                            <field name="duration_minutes" digits="[16,1]" />
+                            <field
+                                name="logout_type"
+                                widget="badge"
+                                decoration-info="logout_type == 'active'"
+                                decoration-success="logout_type == 'manual'"
+                                decoration-danger="logout_type == 'timeout'"
+                                decoration-muted="logout_type == 'unknown'"
+                            />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search -->
+    <record id="view_res_users_session_log_search" model="ir.ui.view">
+        <field name="name">res.users.session.log.search</field>
+        <field name="model">res.users.session.log</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Sessões">
+                <field name="user_id" />
+                <field name="ip_address" />
+                <filter
+                    name="filter_today"
+                    string="Hoje"
+                    domain="[('login_date','&gt;=', datetime.datetime.combine(context_today(), datetime.time(0,0,0))), ('login_date','&lt;=', datetime.datetime.combine(context_today(), datetime.time(23,59,59)))]"
+                />
+                <filter
+                    name="filter_this_week"
+                    string="Esta semana"
+                    domain="[('login_date','&gt;=', (context_today() - datetime.timedelta(days=context_today().weekday())).strftime('%Y-%m-%d 00:00:00'))]"
+                />
+                <separator />
+                <filter
+                    name="filter_manual"
+                    string="Logout manual"
+                    domain="[('logout_type','=','manual')]"
+                />
+                <filter
+                    name="filter_timeout"
+                    string="Timeout"
+                    domain="[('logout_type','=','timeout')]"
+                />
+                <filter
+                    name="filter_open"
+                    string="Sessões abertas"
+                    domain="[('logout_date','=',False)]"
+                />
+                <group expand="0" string="Agrupar por">
+                    <filter
+                        name="group_user"
+                        string="Usuário"
+                        context="{'group_by': 'user_id'}"
+                    />
+                    <filter
+                        name="group_logout_type"
+                        string="Tipo de Logout"
+                        context="{'group_by': 'logout_type'}"
+                    />
+                    <filter
+                        name="group_day"
+                        string="Dia de Login"
+                        context="{'group_by': 'login_date:day'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Graph -->
+    <record id="view_res_users_session_log_graph" model="ir.ui.view">
+        <field name="name">res.users.session.log.graph</field>
+        <field name="model">res.users.session.log</field>
+        <field name="arch" type="xml">
+            <graph string="Atividade de Usuários" type="bar">
+                <field name="user_id" type="row" />
+                <field name="login_date" interval="day" type="col" />
+                <field name="duration_minutes" type="measure" />
+            </graph>
+        </field>
+    </record>
+
+    <!-- Pivot -->
+    <record id="view_res_users_session_log_pivot" model="ir.ui.view">
+        <field name="name">res.users.session.log.pivot</field>
+        <field name="model">res.users.session.log</field>
+        <field name="arch" type="xml">
+            <pivot string="Atividade de Usuários">
+                <field name="user_id" type="row" />
+                <field name="login_date" interval="day" type="col" />
+                <field name="duration_minutes" type="measure" />
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_res_users_session_log" model="ir.actions.act_window">
+        <field name="name">Histórico de Sessões</field>
+        <field name="res_model">res.users.session.log</field>
+        <field name="view_mode">tree,graph,pivot,form</field>
+        <field name="context">{}</field>
+    </record>
+
+</odoo>

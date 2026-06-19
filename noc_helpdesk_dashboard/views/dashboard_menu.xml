@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- ═══ CLIENT ACTION: Relatório Mensal ═══ -->
+    <record id="action_noc_monthly_report" model="ir.actions.client">
+        <field name="name">Relatório Mensal</field>
+        <field name="tag">noc_monthly_report</field>
+        <field name="target">current</field>
+    </record>
+
+    <!-- ═══ CLIENT ACTION: Dashboard de Eventos ═══ -->
+    <record id="action_network_helpdesk_dashboard" model="ir.actions.client">
+        <field name="name">Dashboard de Falhas de Link</field>
+        <field name="tag">network_helpdesk_dashboard</field>
+        <field name="target">current</field>
+    </record>
+
+    <!-- ═══ QWEB TEMPLATE ═══ -->
+    <template id="dashboard_main" name="Network Helpdesk Dashboard">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div id="network_helpdesk_dashboard_root" />
+            </t>
+        </t>
+    </template>
+
+    <!-- Converte o menu folha "Dashboards" em menu pai (sem ação direta) -->
+    <record id="noc_helpdesk.helpdesk_ticket_menu_dashboards" model="ir.ui.menu">
+        <field name="action" eval="False" />
+    </record>
+
+    <!-- ═══ SUBMENU: Dashboard de Eventos ═══ -->
+    <menuitem
+        id="menu_dashboard_eventos"
+        name="Dashboard de Eventos"
+        parent="noc_helpdesk.helpdesk_ticket_menu_dashboards"
+        action="action_network_helpdesk_dashboard"
+        sequence="1"
+    />
+
+    <!-- ═══ SUBMENU: Relatório Mensal ═══ -->
+    <menuitem
+        id="menu_relatorio_mensal"
+        name="Relatório Mensal"
+        parent="noc_helpdesk.helpdesk_ticket_menu_dashboards"
+        action="action_noc_monthly_report"
+        sequence="2"
+        groups="noc_helpdesk_dashboard.group_relatorio_mensal"
+    />
+
+    <!-- ═══ SUBMENU: Relatório de Ocupação ═══ -->
+    <menuitem
+        id="menu_relatorio_ocupacao"
+        name="Relatório de Ocupação"
+        parent="noc_helpdesk.helpdesk_ticket_menu_dashboards"
+        action="action_noc_activity_occupancy_report"
+        sequence="3"
+        groups="noc_helpdesk_dashboard.group_ocupacao_report"
+    />
+
+    <!-- ═══ SUBMENU: Mapa de Sites ═══ -->
+    <menuitem
+        id="menu_dashboard_mapa_sites"
+        name="Mapa de Sites"
+        parent="noc_helpdesk.helpdesk_ticket_menu_dashboards"
+        action="noc_network_topology.action_network_site_map"
+        sequence="4"
+    />
+
+    <!-- ═══ SUBMENU: Configuração ═══ -->
+    <menuitem
+        id="menu_ocupacao_config"
+        name="Configuração"
+        parent="noc_helpdesk.helpdesk_ticket_menu_dashboards"
+        sequence="10"
+    />
+
+    <!-- ═══ SUBMENU: Categorias de Ocupação (apenas managers) ═══ -->
+    <menuitem
+        id="menu_ocupacao_categorias"
+        name="Categorias de Ocupação"
+        parent="menu_ocupacao_config"
+        action="action_noc_activity_category"
+        sequence="1"
+        groups="helpdesk_mgmt.group_helpdesk_manager"
+    />
+
+    <!-- ═══ SUBMENU: Configuração do Relatório Mensal (apenas managers) ═══ -->
+    <menuitem
+        id="menu_relatorio_mensal_config"
+        name="Relatório Mensal — Config."
+        parent="menu_ocupacao_config"
+        action="noc_helpdesk_dashboard.action_noc_monthly_report_config"
+        sequence="2"
+        groups="helpdesk_mgmt.group_helpdesk_manager"
+    />
+
+</odoo>

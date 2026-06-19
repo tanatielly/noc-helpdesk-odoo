@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="res_config_settings_view_form_network_topology" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.network.topology</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div
+                    class="app_settings_block"
+                    data-string="Topologia de Rede"
+                    string="Topologia de Rede"
+                    data-key="noc_network_topology"
+                >
+                    <h2>Topologia de Rede</h2>
+                    <h3>Geocodificação</h3>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label
+                                    for="noc_network_topology_nominatim_url"
+                                    string="URL do Serviço de Geocodificação"
+                                />
+                                <div class="text-muted">
+                                    Endpoint compatível com a API Nominatim. Padrão: OpenStreetMap.
+                                </div>
+                                <div class="content-group mt8">
+                                    <field
+                                        name="noc_network_topology_nominatim_url"
+                                        class="o_light_label"
+                                        placeholder="https://nominatim.openstreetmap.org/search"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label
+                                    for="noc_network_topology_contact_email"
+                                    string="E-mail de Contato (User-Agent)"
+                                />
+                                <div class="text-muted">
+                                    Incluído no cabeçalho User-Agent conforme exigido pelos termos de uso do Nominatim.
+                                </div>
+                                <div class="content-group mt8">
+                                    <field
+                                        name="noc_network_topology_contact_email"
+                                        class="o_light_label"
+                                        placeholder="seu@email.com"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label
+                                    for="noc_network_topology_country_codes"
+                                    string="Códigos de País"
+                                />
+                                <div class="text-muted">
+                                    Códigos ISO 3166-1 alpha-2 separados por vírgula (ex.: br). Deixe em branco para busca global.
+                                </div>
+                                <div class="content-group mt8">
+                                    <field
+                                        name="noc_network_topology_country_codes"
+                                        class="o_light_label"
+                                        placeholder="br"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label
+                                    for="noc_network_topology_geocoding_timeout"
+                                    string="Timeout da Requisição (s)"
+                                />
+                                <div class="text-muted">
+                                    Segundos máximos aguardados por resposta. Padrão: 8.
+                                </div>
+                                <div class="content-group mt8">
+                                    <field
+                                        name="noc_network_topology_geocoding_timeout"
+                                        class="o_light_label"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label
+                                    for="noc_network_topology_geocoding_rate_delay"
+                                    string="Intervalo entre Requisições em Lote (s)"
+                                />
+                                <div class="text-muted">
+                                    Segundos de espera entre requisições durante geocodificação em lote. Padrão: 1.1.
+                                </div>
+                                <div class="content-group mt8">
+                                    <field
+                                        name="noc_network_topology_geocoding_rate_delay"
+                                        class="o_light_label"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

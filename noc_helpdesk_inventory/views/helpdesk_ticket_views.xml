@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_helpdesk_ticket_form_network" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.network</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk_mgmt.ticket_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='description']" position="after">
+                <page name="equipments" string="Equipamentos">
+                    <group string="Equipamentos de Rede" name="network_routing">
+                        <group>
+                            <field
+                                name="net_origin_id"
+                                options="{'no_create': False}"
+                                placeholder="Equipamento de origem..."
+                            />
+                            <field
+                                name="net_destination_id"
+                                options="{'no_create': False}"
+                                placeholder="Equipamento de destino..."
+                            />
+                            <field
+                                name="network_path"
+                                readonly="1"
+                                attrs="{'invisible': [('network_path', 'in', [False, ''])]}"
+                            />
+                        </group>
+                    </group>
+                    <group
+                        string="Falha Massiva — Impacto"
+                        name="network_falha_massiva"
+                    >
+                        <group>
+                            <field
+                                name="falha_massiva_equipment_ids"
+                                widget="many2many_tags"
+                            />
+                            <field
+                                name="falha_massiva_site_ids"
+                                widget="many2many_tags"
+                            />
+                            <field
+                                name="falha_massiva_circuit_ids"
+                                widget="many2many_tags"
+                            />
+                        </group>
+                    </group>
+                </page>
+
+            </xpath>
+            <xpath expr="//page[@name='description']" position="attributes">
+                <attribute
+                    name="attrs"
+                >{'invisible': [('description', 'in', [False, ''])]}</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="view_helpdesk_ticket_tree_network" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.tree.network</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk_mgmt.ticket_view_tree" />
+        <field name="arch" type="xml">
+            <!-- Âncora em 'name' que existe no helpdesk_mgmt base,
+                 sem depender de campos do noc_helpdesk -->
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="network_path" string="Origem → Destino" optional="show" />
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

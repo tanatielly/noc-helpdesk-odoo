@@ -1,0 +1,21 @@
+<!-- data/mail_activity_type_data.xml -->
+<odoo noupdate="1">
+        <record id="mail_activity_type_network_config" model="mail.activity.type">
+            <field name="name">Configurar Rede</field>
+        </record>
+        <record id="mail_activity_type_router_config" model="mail.activity.type">
+            <field name="name">Configurar Roteador</field>
+        </record>
+        <record id="mail_activity_type_fap" model="mail.activity.type">
+            <field name="name">FAP</field>
+        </record>
+        <record id="mail_activity_type_fape" model="mail.activity.type">
+            <field name="name">FAPE</field>
+        </record>
+        <record id="mail_activity_type_fapi" model="mail.activity.type">
+            <field name="name">FAPI</field>
+        </record>
+        <record id="mail_activity_type_famp" model="mail.activity.type">
+            <field name="name">FAMP</field>
+        </record>
+</odoo>

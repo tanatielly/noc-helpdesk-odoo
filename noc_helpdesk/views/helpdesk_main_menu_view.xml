@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Menu principal chamados -->
+    <menuitem
+        id="helpdesk_ticket_menu"
+        name="Chamados"
+        parent="helpdesk_mgmt.helpdesk_ticket_main_menu"
+        action="helpdesk_ticket_action_open"
+        sequence="11"
+    />
+
+    <!-- Menu documentação/ATA -->
+    <record id="action_document_page_ata" model="ir.actions.act_window">
+        <field name="name">ATA</field>
+        <field name="res_model">document.page</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[("parent_id.name", "=", "ATA")]</field>
+    </record>
+
+    <record id="action_document_page_area_tecnica" model="ir.actions.act_window">
+        <field name="name">Orientações e Procedimentos</field>
+        <field name="res_model">document.page</field>
+        <field name="view_mode">tree,form</field>
+        <field
+            name="domain"
+        >[("parent_id.name", "=", "Orientações e Procedimentos")]</field>
+    </record>
+
+    <record id="action_document_page_informativo" model="ir.actions.act_window">
+        <field name="name">Informativo</field>
+        <field name="res_model">document.page</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[("parent_id.name", "=", "Informativo")]</field>
+    </record>
+
+    <record id="action_document_page_escalonamento" model="ir.actions.act_window">
+        <field name="name">Escalonamento da Operadora</field>
+        <field name="res_model">document.page</field>
+        <field name="view_mode">tree,form</field>
+        <field
+            name="domain"
+        >[("parent_id.name", "=", "Escalonamento da Operadora")]</field>
+    </record>
+
+    <menuitem
+        id="helpdesk_ticket_menu_documentation"
+        name="Documentação"
+        parent="helpdesk_mgmt.helpdesk_ticket_main_menu"
+        sequence="21"
+    />
+
+    <menuitem
+        id="helpdesk_ticket_menu_ata"
+        name="ATA"
+        parent="helpdesk_ticket_menu_documentation"
+        action="action_document_page_ata"
+        sequence="22"
+        groups="noc_helpdesk.group_document_ata"
+    />
+
+    <menuitem
+        id="helpdesk_ticket_menu_area_tecnica"
+        name="Orientações e Procedimentos"
+        parent="helpdesk_ticket_menu_documentation"
+        action="action_document_page_area_tecnica"
+        sequence="23"
+    />
+
+    <menuitem
+        id="helpdesk_ticket_menu_informativo"
+        name="Informativo"
+        parent="helpdesk_ticket_menu_documentation"
+        action="action_document_page_informativo"
+        sequence="23"
+    />
+
+    <menuitem
+        id="helpdesk_ticket_menu_escalonamento"
+        name="Escalonamento da Operadora"
+        parent="helpdesk_ticket_menu_documentation"
+        action="action_document_page_escalonamento"
+        sequence="24"
+    />
+
+    <record id="action_document_page_guia_consulta_cae" model="ir.actions.act_window">
+        <field name="name">Guia de Consulta CAE</field>
+        <field name="res_model">document.page</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[("parent_id.name", "=", "Guia de Consulta CAE")]</field>
+    </record>
+
+    <record id="action_document_page_notas_atualizacao" model="ir.actions.act_window">
+        <field name="name">Notas de Atualização</field>
+        <field name="res_model">document.page</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[("parent_id.name", "=", "Notas de Atualização")]</field>
+    </record>
+
+    <record id="action_document_page_template_tacacs" model="ir.actions.act_window">
+        <field name="name">Template TACACS</field>
+        <field name="res_model">document.page</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[("parent_id.name", "=", "Template TACACS")]</field>
+    </record>
+
+    <menuitem
+        id="helpdesk_ticket_menu_guia_consulta_cae"
+        name="Guia de Consulta CAE"
+        parent="helpdesk_ticket_menu_documentation"
+        action="action_document_page_guia_consulta_cae"
+        sequence="25"
+    />
+
+    <menuitem
+        id="helpdesk_ticket_menu_notas_atualizacao"
+        name="Notas de Atualização"
+        parent="helpdesk_ticket_menu_documentation"
+        action="action_document_page_notas_atualizacao"
+        sequence="26"
+    />
+
+    <menuitem
+        id="helpdesk_ticket_menu_template_tacacs"
+        name="Template TACACS"
+        parent="helpdesk_ticket_menu_documentation"
+        action="action_document_page_template_tacacs"
+        sequence="27"
+    />
+
+    <!-- Menu Dashboards -->
+    <record id="action_network_helpdesk_dashboard" model="ir.actions.client">
+        <field name="name">Dashboard de Falhas de Link</field>
+        <field name="tag">network_helpdesk_dashboard</field>
+        <field name="target">current</field>
+    </record>
+
+    <menuitem
+        id="helpdesk_ticket_menu_dashboards"
+        name="Dashboards"
+        parent="helpdesk_mgmt.helpdesk_ticket_main_menu"
+        action="action_network_helpdesk_dashboard"
+        sequence="2"
+    />
+
+    <menuitem
+        id="helpdesk_ticket_menu_contacts"
+        name="Contatos"
+        parent="helpdesk_mgmt.helpdesk_ticket_main_menu"
+        sequence="30"
+    />
+
+    <menuitem
+        id="helpdesk_ticket_menu_contacts_clients"
+        name="Clientes"
+        parent="helpdesk_ticket_menu_contacts"
+        action="noc_contacts.action_contacts_customers"
+        sequence="31"
+    />
+
+    <menuitem
+        id="helpdesk_ticket_menu_contacts_providers"
+        name="Operadoras"
+        parent="helpdesk_ticket_menu_contacts"
+        action="noc_contacts.action_contacts_providers"
+        sequence="31"
+    />
+
+    <menuitem
+        id="helpdesk_engine_url_menu"
+        name="Engine Monitoring"
+        parent="helpdesk_mgmt.helpdesk_ticket_main_menu"
+        action="engine_url_action"
+        sequence="4"
+    />
+
+</odoo>

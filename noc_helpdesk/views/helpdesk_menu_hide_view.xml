@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+        <record id="document_knowledge.menu_document_root" model="ir.ui.menu">
+            <field name="active" eval="False" />
+        </record>
+        <record id="mail.menu_root_discuss" model="ir.ui.menu">
+            <field name="active" eval="False" />
+        </record>
+        <record id="helpdesk_mgmt.helpdesk_ticket_dashboard_menu" model="ir.ui.menu">
+            <field name="active" eval="False" />
+        </record>
+        <record id="helpdesk_mgmt.helpdesk_ticket_reporting_menu" model="ir.ui.menu">
+            <field name="active" eval="False" />
+        </record>
+</odoo>

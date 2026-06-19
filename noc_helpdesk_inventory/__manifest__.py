@@ -1,0 +1,27 @@
+﻿{
+    "name": "NOC Network Inventory",
+    "version": "16.0.1.5.0",
+    "summary": "Network equipment and circuit inventory integrated with helpdesk",
+    "author": "Tanatielly Serafim",
+    "category": "Helpdesk",
+    "license": "LGPL-3",
+    "depends": [
+        "helpdesk_mgmt",
+        "noc_contacts",
+        "mail",
+    ],
+    "data": [
+        "security/ir.model.access.csv",
+        "views/network_site_views.xml",
+        "views/network_equipment_views.xml",
+        "views/helpdesk_ticket_views.xml",
+        "views/network_circuit_type_views.xml",
+        "views/network_circuit_views.xml",
+        "views/res_partner_views.xml",
+        "views/res_config_settings_views.xml",
+        "views/menu_views.xml",
+    ],
+    "application": False,
+    "installable": True,
+    "auto_install": True,
+}

@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_network_equipment_form_topology" model="ir.ui.view">
+        <field name="name">network.equipment.form.topology</field>
+        <field name="model">network.equipment</field>
+        <field
+            name="inherit_id"
+            ref="noc_helpdesk_inventory.view_network_equipment_form"
+        />
+        <field name="arch" type="xml">
+
+            <!-- Coordenadas geocodificadas, exibidas abaixo do campo location -->
+            <xpath expr="//field[@name='location']" position="after">
+                <label string="Coordenadas" for="geo_coords_display" />
+                <div>
+                    <field
+                        name="geo_coords_display"
+                        readonly="1"
+                        nolabel="1"
+                        class="text-muted"
+                    />
+                    <button
+                        name="action_geocode"
+                        type="object"
+                        string="↺ Re-geocodificar"
+                        class="btn btn-link btn-sm p-0 ms-2 text-muted"
+                        title="Buscar coordenadas pelo endereço via OpenStreetMap"
+                    />
+                </div>
+            </xpath>
+
+            <!-- Botão "Geocodificar todos" na barra de stat buttons -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button
+                    name="action_geocode_all"
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-globe"
+                    title="Geocodificar todos os equipamentos sem coordenadas"
+                >
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_text">Geocodificar</span>
+                        <span class="o_stat_text">todos</span>
+                    </div>
+                </button>
+            </xpath>
+
+</field>
+    </record>
+</odoo>

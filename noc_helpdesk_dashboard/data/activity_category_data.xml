@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="activity_cat_1" model="noc.activity.category">
+        <field name="name">ALERT HANDLING</field>
+        <field name="sequence">1</field>
+        <field name="capacidade_mensal">0</field>
+        <field name="tipo_contagem">ticket_count</field>
+    </record>
+
+    <record id="activity_cat_2" model="noc.activity.category">
+        <field name="name">SHIFT HANDOVER</field>
+        <field name="sequence">2</field>
+        <field name="capacidade_mensal">0</field>
+        <field name="tipo_contagem">plantao_count</field>
+    </record>
+
+    <record id="activity_cat_3" model="noc.activity.category">
+        <field name="name">IT EVENTS</field>
+        <field name="sequence">3</field>
+        <field name="capacidade_mensal">0</field>
+        <field name="tipo_contagem">ticket_count</field>
+    </record>
+
+    <record id="activity_cat_4" model="noc.activity.category">
+        <field name="name">NETWORK CONFIGURATION</field>
+        <field name="sequence">4</field>
+        <field name="capacidade_mensal">0</field>
+        <field name="tipo_contagem">ticket_count</field>
+    </record>
+
+    <record id="activity_cat_5" model="noc.activity.category">
+        <field name="name">ACCESS CONTROL</field>
+        <field name="sequence">5</field>
+        <field name="capacidade_mensal">0</field>
+        <field name="tipo_contagem">ticket_count</field>
+    </record>
+
+    <record id="activity_cat_6" model="noc.activity.category">
+        <field name="name">CREDENTIAL MANAGEMENT</field>
+        <field name="sequence">6</field>
+        <field name="capacidade_mensal">0</field>
+        <field name="tipo_contagem">ticket_count</field>
+    </record>
+
+    <record id="activity_cat_7" model="noc.activity.category">
+        <field name="name">COORDINATION</field>
+        <field name="sequence">7</field>
+        <field name="capacidade_mensal">0</field>
+        <field name="tipo_contagem">ticket_count</field>
+    </record>
+
+    <record id="activity_cat_8" model="noc.activity.category">
+        <field name="name">IMPROVEMENT ACTIONS</field>
+        <field name="sequence">8</field>
+        <field name="capacidade_mensal">0</field>
+        <field name="tipo_contagem">ticket_count</field>
+    </record>
+
+    <record id="activity_cat_9" model="noc.activity.category">
+        <field name="name">CRITICAL EVENT</field>
+        <field name="sequence">9</field>
+        <field name="capacidade_mensal">0</field>
+        <field name="tipo_contagem">ticket_count</field>
+    </record>
+
+    <record id="activity_cat_10" model="noc.activity.category">
+        <field name="name">MASSIVE FAILURE</field>
+        <field name="sequence">10</field>
+        <field name="capacidade_mensal">0</field>
+        <field name="tipo_contagem">ticket_count</field>
+    </record>
+
+</odoo>

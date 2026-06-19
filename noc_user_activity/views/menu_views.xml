@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <menuitem
+        id="menu_user_activity_root"
+        name="Atividade de Usuários"
+        parent="helpdesk_mgmt.helpdesk_ticket_main_menu"
+        sequence="40"
+        groups="base.group_system"
+    />
+
+    <menuitem
+        id="menu_user_session_log"
+        name="Histórico de Sessões"
+        parent="menu_user_activity_root"
+        action="action_res_users_session_log"
+        sequence="10"
+    />
+
+</odoo>

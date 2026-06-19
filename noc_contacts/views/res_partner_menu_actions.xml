@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="action_contacts_customers" model="ir.actions.act_window">
+        <field name="name">Clientes</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('noc_type', '=', 'client')]</field>
+        <field name="context">{'default_noc_type': 'client'}</field>
+    </record>
+
+    <record id="action_contacts_providers" model="ir.actions.act_window">
+        <field name="name">Operadoras</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field
+            name="domain"
+        >[('noc_type', '=', 'provider'), ('user_ids', '=', False)]</field>
+        <field name="context">{'default_noc_type': 'provider'}</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="ir_cron_network_monitor_pull" model="ir.cron">
+        <field name="name">Monitor de Rede - Pull de Dados</field>
+        <field name="model_id" ref="noc_network_monitor.model_network_monitor_log" />
+        <field name="state">code</field>
+        <field name="code">model.cron_pull_monitor()</field>
+        <field name="interval_number">5</field>
+        <field name="interval_type">minutes</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+        <field name="priority">10</field>
+    </record>
+</odoo>

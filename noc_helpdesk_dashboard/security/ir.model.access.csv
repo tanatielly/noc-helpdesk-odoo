@@ -1,0 +1,4 @@
+﻿id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_noc_activity_category_manager,noc.activity.category manager,model_noc_acupacao_categoria,helpdesk_mgmt.group_helpdesk_manager,1,1,1,1
+access_noc_monthly_report_user,noc.monthly.report user,model_noc_monthly_report,base.group_user,1,0,0,0
+access_noc_monthly_report_manager,noc.monthly.report manager,model_noc_monthly_report,helpdesk_mgmt.group_helpdesk_manager,1,1,1,1

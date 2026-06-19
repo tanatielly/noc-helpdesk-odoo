@@ -1,0 +1,64 @@
+﻿<!-- Cria menu extra na aba tickets para filtro-->
+<templates xml:space="preserve">
+
+<t
+        t-name="noc_helpdesk.ListView.Buttons"
+        t-inherit="web.ListView.Buttons"
+        t-inherit-mode="extension"
+    >
+
+   <xpath expr="//div[hasclass('o_list_buttons')]" position="inside">
+        <div class="btn-group ms-2" t-if="props.resModel === 'helpdesk.ticket'">
+            <button
+                    t-att-class="isFilterActive('all') ? 'btn btn-primary' : 'btn btn-outline-primary'"
+                    t-on-click="filterAll"
+                >
+                Todos
+            </button>
+
+            <button
+                    t-att-class="isFilterActive('open') ? 'btn btn-primary' : 'btn btn-outline-primary'"
+                    t-on-click="filterOpen"
+                >
+                Abertos
+            </button>
+
+            <button
+                    t-att-class="isFilterActive('high_latency') ? 'btn btn-primary' : 'btn btn-outline-primary'"
+                    t-on-click="filterHighLatency"
+                >
+                Alta Latência
+            </button>
+
+            <button
+                    t-att-class="isFilterActive('unavailable') ? 'btn btn-primary' : 'btn btn-outline-primary'"
+                    t-on-click="filterUnavailable"
+                >
+                Indisponíveis
+            </button>
+
+            <button
+                    t-att-class="isFilterActive('discarded_packet') ? 'btn btn-primary' : 'btn btn-outline-primary'"
+                    t-on-click="filterDiscardedPacket"
+                >
+                Descarte de Pacote
+            </button>
+
+            <button
+                    t-att-class="isFilterActive('closed') ? 'btn btn-primary' : 'btn btn-outline-primary'"
+                    t-on-click="filterClosed"
+                >
+                Fechados
+            </button>
+
+            <button
+                    t-att-class="isFilterActive('mine') ? 'btn btn-primary' : 'btn btn-outline-primary'"
+                    t-on-click="filterMine"
+                >
+                Meus Tickets
+            </button>
+        </div>
+   </xpath>
+</t>
+
+</templates>

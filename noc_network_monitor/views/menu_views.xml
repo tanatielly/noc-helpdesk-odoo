@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <menuitem
+        id="menu_network_monitor_root"
+        name="Monitor de Rede"
+        parent="helpdesk_mgmt.helpdesk_ticket_main_menu"
+        sequence="33"
+    />
+
+    <menuitem
+        id="menu_network_monitor_log"
+        name="Logs de Monitoramento"
+        parent="menu_network_monitor_root"
+        action="action_network_monitor_log"
+        sequence="10"
+    />
+
+</odoo>

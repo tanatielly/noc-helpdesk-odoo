@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- ── Form View ── -->
+    <record id="view_helpdesk_ferias_form" model="ir.ui.view">
+        <field name="name">helpdesk.ferias.form</field>
+        <field name="model">helpdesk.ferias</field>
+        <field name="arch" type="xml">
+            <form string="Solicitação de Férias">
+                <header>
+                    <button
+                        name="action_submit"
+                        string="Enviar para Aprovação"
+                        type="object"
+                        class="btn-primary"
+                        attrs="{'invisible': [('state', '!=', 'draft')]}"
+                    />
+                    <button
+                        name="action_approve"
+                        string="Aprovar"
+                        type="object"
+                        class="btn-success"
+                        attrs="{'invisible': ['|', ('state', '!=', 'submitted'), ('can_approve', '=', False)]}"
+                    />
+                    <button
+                        name="action_refuse"
+                        string="Recusar"
+                        type="object"
+                        class="btn-danger"
+                        attrs="{'invisible': ['|', ('state', '!=', 'submitted'), ('can_approve', '=', False)]}"
+                    />
+                    <button
+                        name="action_reset"
+                        string="Redefinir para Rascunho"
+                        type="object"
+                        attrs="{'invisible': [('state', 'not in', ['approved', 'refused'])]}"
+                        groups="helpdesk_mgmt.group_helpdesk_manager"
+                    />
+                    <field name="can_approve" invisible="1" />
+                    <field name="is_own_record" invisible="1" />
+                    <field name="is_plantao_member" invisible="1" />
+                    <field
+                        name="state"
+                        widget="statusbar"
+                        statusbar_visible="draft,submitted,approved"
+                    />
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Informações">
+                            <field
+                                name="user_id"
+                                attrs="{'readonly': ['|', ('is_own_record', '=', False), ('state', '!=', 'draft')]}"
+                            />
+                            <field
+                                name="date_from"
+                                attrs="{'readonly': ['|', ('is_own_record', '=', False), ('state', '!=', 'draft')]}"
+                            />
+                            <field
+                                name="date_to"
+                                attrs="{'readonly': ['|', ('is_own_record', '=', False), ('state', '!=', 'draft')]}"
+                            />
+                            <field name="duration" readonly="1" />
+                        </group>
+                        <group string="Aprovação">
+                            <field name="approver_id" readonly="1" />
+                            <field
+                                name="substitute_id"
+                                attrs="{
+                                    'invisible': [('is_plantao_member', '=', False)],
+                                    'readonly': ['|', ('can_approve', '=', False), ('state', '!=', 'submitted')]
+                                }"
+                            />
+                        </group>
+                    </group>
+                    <group string="Observações">
+                        <field
+                            name="notes"
+                            nolabel="1"
+                            placeholder="Observações opcionais..."
+                            attrs="{'readonly': [('is_own_record', '=', False)]}"
+                        />
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" />
+                    <field name="activity_ids" />
+                    <field name="message_ids" />
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- ── List View ── -->
+    <record id="view_helpdesk_ferias_list" model="ir.ui.view">
+        <field name="name">helpdesk.ferias.list</field>
+        <field name="model">helpdesk.ferias</field>
+        <field name="arch" type="xml">
+            <tree
+                decoration-success="state == 'approved'"
+                decoration-warning="state == 'submitted'"
+                decoration-danger="state == 'refused'"
+                decoration-muted="state == 'draft'"
+            >
+                <field name="user_id" />
+                <field name="date_from" />
+                <field name="date_to" />
+                <field name="duration" string="Dias" />
+                <field name="approver_id" optional="show" />
+                <field
+                    name="state"
+                    widget="badge"
+                    decoration-success="state == 'approved'"
+                    decoration-warning="state == 'submitted'"
+                    decoration-danger="state == 'refused'"
+                />
+            </tree>
+        </field>
+    </record>
+
+    <!-- ── Calendar View ── -->
+    <record id="view_helpdesk_ferias_calendar" model="ir.ui.view">
+        <field name="name">helpdesk.ferias.calendar</field>
+        <field name="model">helpdesk.ferias</field>
+        <field name="arch" type="xml">
+            <calendar
+                string="Férias"
+                date_start="date_from"
+                date_stop="date_to"
+                color="state"
+                quick_add="False"
+                mode="month"
+            >
+                <field name="user_id" />
+                <field name="state" />
+                <field name="duration" />
+            </calendar>
+        </field>
+    </record>
+
+    <!-- ── Search View ── -->
+    <record id="view_helpdesk_ferias_search" model="ir.ui.view">
+        <field name="name">helpdesk.ferias.search</field>
+        <field name="model">helpdesk.ferias</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Férias">
+                <field name="user_id" string="Colaborador" />
+                <separator />
+                <filter
+                    name="my_ferias"
+                    string="Minhas Férias"
+                    domain="[('user_id', '=', uid)]"
+                />
+                <filter
+                    name="submitted"
+                    string="Aguardando Aprovação"
+                    domain="[('state', '=', 'submitted')]"
+                />
+                <filter
+                    name="approved"
+                    string="Aprovadas"
+                    domain="[('state', '=', 'approved')]"
+                />
+                <filter
+                    name="refused"
+                    string="Recusadas"
+                    domain="[('state', '=', 'refused')]"
+                />
+                <separator />
+                <group expand="0" string="Agrupar por">
+                    <filter
+                        name="group_user"
+                        string="Colaborador"
+                        context="{'group_by': 'user_id'}"
+                    />
+                    <filter
+                        name="group_state"
+                        string="Status"
+                        context="{'group_by': 'state'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ── Action ── -->
+    <record id="action_helpdesk_ferias" model="ir.actions.act_window">
+        <field name="name">Férias</field>
+        <field name="res_model">helpdesk.ferias</field>
+        <field name="view_mode">calendar,list,form</field>
+        <field name="search_view_id" ref="view_helpdesk_ferias_search" />
+        <field name="context">{'search_default_my_ferias': 1}</field>
+    </record>
+
+    <!-- ── Menus ── -->
+    <menuitem
+        id="helpdesk_ticket_menu_ferias"
+        name="Férias"
+        parent="helpdesk_mgmt.helpdesk_ticket_main_menu"
+        action="action_helpdesk_ferias"
+        sequence="36"
+        groups="helpdesk_mgmt.group_helpdesk_user"
+    />
+
+</odoo>

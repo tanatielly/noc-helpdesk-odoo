@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="ir_cron_user_activity_timeout" model="ir.cron">
+        <field name="name">Usuários - Encerrar Sessões por Inatividade</field>
+        <field name="model_id" ref="noc_user_activity.model_res_users_session_log" />
+        <field name="state">code</field>
+        <field name="code">model.cron_mark_timed_out_sessions()</field>
+        <field name="interval_number">5</field>
+        <field name="interval_type">minutes</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+        <field name="priority">10</field>
+    </record>
+</odoo>

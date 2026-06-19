@@ -1,0 +1,14 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_helpdesk_ticket_user,helpdesk.ticket user,model_helpdesk_ticket,helpdesk_mgmt.group_helpdesk_user,1,1,1,0
+access_helpdesk_ticket_manager,helpdesk.ticket manager,model_helpdesk_ticket,helpdesk_mgmt.group_helpdesk_manager,1,1,1,1
+access_helpdesk_ticket_tag_user,helpdesk.ticket.tag user,model_helpdesk_ticket_tag,helpdesk_mgmt.group_helpdesk_user,1,0,0,0
+access_helpdesk_ticket_tag_manager,helpdesk.ticket.tag manager,model_helpdesk_ticket_tag,helpdesk_mgmt.group_helpdesk_manager,1,1,1,1
+access_helpdesk_plantao_user,helpdesk.plantao user,model_helpdesk_plantao,helpdesk_mgmt.group_helpdesk_user,1,0,0,0
+access_helpdesk_plantao_manager,helpdesk.plantao manager,model_helpdesk_plantao,helpdesk_mgmt.group_helpdesk_manager,1,1,1,1
+access_helpdesk_escala_config_user,helpdesk.escala.config user,model_helpdesk_escala_config,helpdesk_mgmt.group_helpdesk_user,1,0,0,0
+access_helpdesk_escala_config_manager,helpdesk.escala.config manager,model_helpdesk_escala_config,helpdesk_mgmt.group_helpdesk_manager,1,1,1,1
+access_helpdesk_escala_user,helpdesk.escala user,model_helpdesk_escala,helpdesk_mgmt.group_helpdesk_user,1,0,0,0
+access_helpdesk_escala_manager,helpdesk.escala manager,model_helpdesk_escala,helpdesk_mgmt.group_helpdesk_manager,1,1,1,1
+access_helpdesk_ferias_user,helpdesk.ferias user,model_helpdesk_ferias,helpdesk_mgmt.group_helpdesk_user,1,1,1,0
+access_helpdesk_ferias_manager,helpdesk.ferias manager,model_helpdesk_ferias,helpdesk_mgmt.group_helpdesk_manager,1,1,1,1
+access_ir_model_data_internal_user,ir.model.data read,base.model_ir_model_data,base.group_user,1,0,0,0

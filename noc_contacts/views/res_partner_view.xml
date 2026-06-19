@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- Company view client/provider -->
+    <record id="view_partner_company_form_inherit_noc" model="ir.ui.view">
+        <field name="name">res.partner.company.form.inherit.noc</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='parent_id']" position="after">
+                    <div>
+                        <!-- <label for='noc_type'>Tipo NOC</label> -->
+                        <field
+                        name='noc_type'
+                        widget='radio'
+                        attrs="{'invisible': [('company_type', '!=', 'company')]}"
+                    />
+                        <field
+                        name="escalation_type"
+                        widget='radio'
+                        attrs="{'invisible': [('company_type', '=', 'company')]}"
+                    />
+                    </div>
+            </xpath>
+
+            <xpath expr="//div[hasclass('o_address_format')]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//span[@name='address_name']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='function']/.." position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='vat']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//page[@name='sales_purchases']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//page[@name='internal_notes']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//page[@name='contact_addresses']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='parent_id']" position="after">
+                    <group
+                    attrs="{'invisible': ['|', ('noc_type', '!=', 'client'), ('company_type', '!=', 'company')]}"
+                >
+                        <field name="circuit_id" />
+                        <field name="designation" />
+                        <field name="bandwidth" />
+                        <field name="ticket_count" />
+                        <field name="provider_id" />
+                    </group>
+                </xpath>
+
+                <xpath expr="//notebook" position="inside">
+                    <page
+                    string="Clientes"
+                    name="page_clients"
+                    attrs="{'invisible': [('noc_type', '!=', 'provider')]}"
+                >
+                        <field name="client_ids" mode="tree" nolabel="1">
+                            <tree create="0">
+                                <field name="name" string="Nome" />
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+
+                <xpath expr="//notebook" position="inside">
+                    <page
+                    string="Contatos (Escalation)"
+                    name="page_escalation_contacts"
+                    attrs="{'invisible': [('noc_type', '!=', 'provider')]}"
+                >
+                        <field name="sorted_child_ids" mode="tree" nolabel="1">
+                            <tree create="0">
+                                <field name="name" string="Nome" />
+                                <field
+                                name="escalation_type"
+                                string="Tipo de Escalation"
+                            />
+                                <field name="contact_type" string="Tipo de Contato" />
+                                <field name="email" string="Email" />
+                                <field name="phone" string="Telefone" />
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+
+                <xpath
+                expr="//div[hasclass('o_row')][.//field[@name='parent_id']]"
+                position="after"
+            >
+                    <group attrs="{'invisible': [('company_type', '!=', 'person')]}">
+                        <field name="contact_type" />
+                        <field
+                        name="email"
+                        attrs="{'invisible': [('contact_type', '!=', 'email')]}"
+                    />
+                        <field
+                        name="phone"
+                        attrs="{'invisible': [('contact_type', '!=', 'phone')]}"
+                    />
+                    </group>
+                </xpath>
+
+
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="res_config_settings_view_form_monitor" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.monitor</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div
+                    class="app_settings_block"
+                    data-string="Monitor de Rede"
+                    string="Monitor de Rede"
+                    data-key="noc_network_monitor"
+                >
+                    <h2>Monitor de Rede</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label
+                                    for="network_monitor_url"
+                                    string="URL do Servidor"
+                                />
+                                <div class="text-muted">
+                                    Endpoint GET que retorna o JSON de monitoramento.
+                                </div>
+                                <div class="content-group mt8">
+                                    <field
+                                        name="network_monitor_url"
+                                        class="o_light_label"
+                                        placeholder="https://monitor.exemplo.com/api/results"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label
+                                    for="network_monitor_token"
+                                    string="Token de Autenticação"
+                                />
+                                <div class="text-muted">
+                                    Header Authorization: Bearer &lt;token&gt; (opcional).
+                                </div>
+                                <div class="content-group mt8">
+                                    <field
+                                        name="network_monitor_token"
+                                        password="True"
+                                        class="o_light_label"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label
+                                    for="network_monitor_team_id"
+                                    string="Equipe do Helpdesk"
+                                />
+                                <div class="text-muted">
+                                    Equipe que receberá os chamados gerados automaticamente.
+                                </div>
+                                <div class="content-group mt8">
+                                    <field
+                                        name="network_monitor_team_id"
+                                        class="o_light_label"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label
+                                    for="network_monitor_close_delay"
+                                    string="Delay para Fechar (min)"
+                                />
+                                <div class="text-muted">
+                                    Minutos normalizado antes de fechar o chamado. Padrão: 30.
+                                </div>
+                                <div class="content-group mt8">
+                                    <field
+                                        name="network_monitor_close_delay"
+                                        class="o_light_label"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label
+                                    for="network_monitor_reopen_window"
+                                    string="Janela de Reabertura (horas)"
+                                />
+                                <div class="text-muted">
+                                    Se o circuito falhar novamente dentro deste período, reabre o chamado. Padrão: 6h.
+                                </div>
+                                <div class="content-group mt8">
+                                    <field
+                                        name="network_monitor_reopen_window"
+                                        class="o_light_label"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

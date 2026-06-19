@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_res_partner_form_inherit_noc_helpdesk" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit.noc.helpdesk</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                    <page string="Chamados" name="page_tickets">
+                        <field name="ticket_ids" mode="tree" nolabel="1">
+                            <tree
+                            create="0"
+                            decoration-muted="is_equipamento_isolado"
+                            decoration-warning="is_falha_massiva"
+                            decoration-danger="is_unavailable or is_porta_agregada"
+                            decoration-info="is_high_latency"
+                            decoration-bf="is_discarded_packet"
+                            decoration-success="is_sinergia"
+                            decoration-primary="is_sistemas_ti"
+                        >
+                                <field name="name" string="Título" />
+                                <field name="description" string="Descrição" />
+                                <field name="stage_id" string="Status" />
+                                <field
+                                name="tag_ids"
+                                string="Tipo de Evento"
+                                widget="many2many_tags"
+                            />
+                                <field name="user_id" string="Responsável" />
+                                <field name="is_equipamento_isolado" invisible="1" />
+                                <field name="is_falha_massiva" invisible="1" />
+                                <field name="is_unavailable" invisible="1" />
+                                <field name="is_porta_agregada" invisible="1" />
+                                <field name="is_high_latency" invisible="1" />
+                                <field name="is_discarded_packet" invisible="1" />
+                                <field name="is_sinergia" invisible="1" />
+                                <field name="is_sistemas_ti" invisible="1" />
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+        </field>
+    </record>
+
+</odoo>
